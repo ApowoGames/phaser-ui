@@ -3,15 +3,16 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 19:18:49
+ * @Last Modified time: 2020-03-12 00:37:42
  */
 
 import { Button, ButtonConfig } from "./button";
 import { IListConfig, Transform } from "../interface/AbstractUI";
 import { Pos } from "../tool/pos";
+import { Event } from "../interface/eventType";
+import { ButtonState } from "../../../../button";
 export interface ITabsGroupConfig extends IListConfig {
     tabTransform: Transform;
-    displayTransform: Transform;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class TabGroup {
@@ -19,17 +20,28 @@ export class TabGroup {
      * tabButton的位置信息
      */
     private mTabsTransform: Transform;
-    /**
-     * tabButton对应显示容器的位置信息
-     */
-    private mDisplayTransform: Transform;
     private mSelectIndex: number;
     private mConfig: ITabsGroupConfig;
-    constructor(config: ITabsGroupConfig) {
+    private mContainer: Phaser.GameObjects.Container;
+    private mList: any[];
+    private mWorld;
+    constructor(config: ITabsGroupConfig, world: any) {
         this.mConfig = config;
+        this.mWorld = world;
         const transform: Transform = config.transform;
         const posX = this.getPos(transform).x;
         const posY = this.getPos(transform).y;
+        const scene = transform.scene;
+        const baseWidth = transform.width;
+        const baseHeight = transform.height;
+        const dpr = world.dpr;
+        // tab主容器
+        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth * dpr, height: baseHeight * dpr }, false);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth * dpr, baseHeight * dpr), Phaser.Geom.Rectangle.Contains);
+
+        this.mList = [];
+        this.mTabsTransform = config.tabTransform;
+
     }
 
     public set tabsTransform(tranform: Transform) {
@@ -39,18 +51,32 @@ export class TabGroup {
         return this.mTabsTransform;
     }
 
-    public set displayTransform(tranform: Transform) {
-        this.mDisplayTransform = tranform;
-    }
-    public get displayTransform(): Transform {
-        return this.mDisplayTransform;
-    }
-
     public set selectIndex(select: number) {
         this.mSelectIndex = select;
     }
     public get selectIndex(): number {
         return this.mSelectIndex;
+    }
+
+    public addTab(tab: any) {
+        this.mList.push(tab);
+        this.refreshList();
+    }
+    public replace(index: number, tab: any) {
+        this.mList.splice(index, 0, tab);
+        this.refreshList();
+    }
+
+    private refreshList() {
+        this.mContainer.removeAll();
+        const tranform: Transform = this.tabsTransform;
+        const scene = this.mConfig.transform.scene;
+        let baseX: number = this.getPos(tranform).x;
+        let baseY: number = this.getPos(tranform).y;
+        for (let i: number = 0, len = this.mList.length; i < len; i++) {
+            const tab: TabButton = new TabButton(this.mList[i], this.mWorld);
+            this.mContainer.add(tab.skin);
+        }
     }
 
     private getPos(transform: Transform): Pos {
@@ -77,5 +103,37 @@ export class TabGroup {
 export class TabButton extends Button {
     constructor(config: ButtonConfig, world: any) {
         super(config, world);
+    }
+    public set selected(value: boolean) {
+        this.mSelected = value;
+        const buttonState = value ? ButtonState.Select : ButtonState.Normal;
+        this.buttonStateChange(buttonState);
+    }
+
+    protected onPointerDownHandler(pointer) {
+        if (!this.mEnabled) return;
+        this.mDownTime = Date.now();
+        this.mPressDelay = setTimeout(() => {
+            this.emit(Event.Hold, this);
+        }, this.mPressTime);
+        this.emit(Event.Down);
+    }
+
+    protected onPointerUpHandler(pointer) {
+        if (!this.mEnabled) return;
+        this.buttonStateChange(ButtonState.Select);
+        // 移动端用tap替换click
+        if (!this.mWorld.game.device.os.desktop) {
+            // 在没有发生移动或点击时间超过200毫秒发送tap事件
+            if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
+                // events.push(MouseEvent.Tap);
+                this.emit(Event.Tap, pointer, this.mContainer);
+            }
+        } else {
+            this.emit(Event.Click, pointer, this);
+        }
+        clearTimeout(this.mPressDelay);
+        this.mIsMove = false;
+        this.mDownTime = 0;
     }
 }

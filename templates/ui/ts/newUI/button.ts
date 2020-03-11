@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 19:18:14
+ * @Last Modified time: 2020-03-12 00:37:31
  */
 
 import { AbstractInteractiveObject, UIProvider, Transform } from "../interface/AbstractUI";
@@ -27,17 +27,17 @@ export interface ButtonConfig {
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class Button extends Phaser.Events.EventEmitter implements AbstractInteractiveObject {
-    private mSelected: boolean;
-    private mEnabled: boolean;
-    private mContainer: Phaser.GameObjects.Container;
-    private mFrameSkin: FramesSkin;
-    private mText: Phaser.GameObjects.Text;
-    private mConfig: ButtonConfig;
-    private mPressTime: number = 2000;
-    private mPressDelay: any;
-    private mDownTime: number = 0;
-    private mIsMove: boolean = false;
-    private mWorld;
+    protected mSelected: boolean;
+    protected mEnabled: boolean;
+    protected mContainer: Phaser.GameObjects.Container;
+    protected mFrameSkin: FramesSkin;
+    protected mText: Phaser.GameObjects.Text;
+    protected mConfig: ButtonConfig;
+    protected mPressTime: number = 2000;
+    protected mPressDelay: any;
+    protected mDownTime: number = 0;
+    protected mIsMove: boolean = false;
+    protected mWorld;
     public constructor(btnConfig: ButtonConfig, world: any) {
         super();
         this.mConfig = btnConfig;
@@ -81,11 +81,8 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
 
     public set selected(value: boolean) {
         this.mSelected = value;
-        const buttonState: string = value ? ButtonState.Select : ButtonState.Normal;
-        const frameName: string = this.mConfig.framesSkinData.background.frameObj[buttonState];
-        if (this.mFrameSkin) {
-            this.mFrameSkin.changeFrame(frameName);
-        }
+        // const buttonState = value ? ButtonState.Select : ButtonState.Normal;
+        // this.buttonStateChange(buttonState);
     }
     public get selected(): boolean {
         return this.mSelected;
@@ -93,11 +90,8 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
 
     public set enabled(value: boolean) {
         this.mEnabled = value;
-        const buttonState: string = value ? ButtonState.Normal : ButtonState.Disable;
-        const frameName: string = this.mConfig.framesSkinData.background.frameObj[buttonState];
-        if (this.mFrameSkin) {
-            this.mFrameSkin.changeFrame(frameName);
-        }
+        const buttonState = value ? ButtonState.Normal : ButtonState.Disable;
+        this.buttonStateChange(buttonState);
     }
 
     public get enabled(): boolean {
@@ -108,6 +102,10 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         if (this.mText) this.mText.text = val;
     }
 
+    public get skin(): Phaser.GameObjects.Container {
+        return this.mContainer;
+    }
+
     public destroy() {
         this.mContainer.off("pointerDown", this.onPointerDownHandler, this)
         this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
@@ -115,6 +113,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         if (this.mPressDelay) {
             clearTimeout(this.mPressDelay);
         }
+        this.mDownTime = 0;
         this.mIsMove = false;
         super.destroy();
     }
@@ -139,6 +138,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
     protected onPointerUpHandler(pointer) {
         if (!this.mEnabled) return;
+        this.buttonStateChange(ButtonState.Normal);
         // 移动端用tap替换click
         if (!this.mWorld.game.device.os.desktop) {
             // 在没有发生移动或点击时间超过200毫秒发送tap事件
@@ -156,6 +156,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
 
     protected onPointerDownHandler(pointer) {
         if (!this.mEnabled) return;
+        this.buttonStateChange(ButtonState.Select);
         this.mDownTime = Date.now();
         this.mPressDelay = setTimeout(() => {
             this.emit(Event.Hold, this);
@@ -167,5 +168,12 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         if (!this.mEnabled) return;
         this.mIsMove = true;
         this.emit(Event.Move);
+    }
+
+    protected buttonStateChange(state: ButtonState) {
+        const frameName: string = this.mConfig.framesSkinData.background.frameObj[state];
+        if (this.mFrameSkin) {
+            this.mFrameSkin.changeFrame(frameName);
+        }
     }
 }
