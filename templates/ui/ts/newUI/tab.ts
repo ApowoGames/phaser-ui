@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 00:37:42
+ * @Last Modified time: 2020-03-12 00:57:39
  */
 
 import { Button, ButtonConfig } from "./button";
@@ -12,14 +12,9 @@ import { Pos } from "../tool/pos";
 import { Event } from "../interface/eventType";
 import { ButtonState } from "../../../../button";
 export interface ITabsGroupConfig extends IListConfig {
-    tabTransform: Transform;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class TabGroup {
-    /**
-     * tabButton的位置信息
-     */
-    private mTabsTransform: Transform;
     private mSelectIndex: number;
     private mConfig: ITabsGroupConfig;
     private mContainer: Phaser.GameObjects.Container;
@@ -40,15 +35,7 @@ export class TabGroup {
         this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth * dpr, baseHeight * dpr), Phaser.Geom.Rectangle.Contains);
 
         this.mList = [];
-        this.mTabsTransform = config.tabTransform;
 
-    }
-
-    public set tabsTransform(tranform: Transform) {
-        this.mTabsTransform = tranform;
-    }
-    public get tabsTransform(): Transform {
-        return this.mTabsTransform;
     }
 
     public set selectIndex(select: number) {
@@ -67,12 +54,21 @@ export class TabGroup {
         this.refreshList();
     }
 
+    public destroy() {
+        if (this.mList) {
+            this.mList.length = 0;
+            this.mList = null;
+        }
+        if (this.mContainer) {
+            if (this.mContainer.parentContainer)
+                this.mContainer.parentContainer.remove(this.mContainer);
+            this.mContainer.destroy();
+            this.mContainer = null;
+        }
+    }
+
     private refreshList() {
         this.mContainer.removeAll();
-        const tranform: Transform = this.tabsTransform;
-        const scene = this.mConfig.transform.scene;
-        let baseX: number = this.getPos(tranform).x;
-        let baseY: number = this.getPos(tranform).y;
         for (let i: number = 0, len = this.mList.length; i < len; i++) {
             const tab: TabButton = new TabButton(this.mList[i], this.mWorld);
             this.mContainer.add(tab.skin);
