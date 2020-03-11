@@ -2,10 +2,8 @@
  * @Author: gxm
  * @Date: 2020-03-06 13:53:28
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 14:06:49
+ * @Last Modified time: 2020-03-11 18:30:19
  */
-
-import { IFramesSkinData } from "./IUISkin";
 
 export enum UIType {
     permanent, // 场景内常驻ui
@@ -36,7 +34,6 @@ export interface Transform {
     align: Align;
     width: number;
     height: number;
-    dpr: number; // 屏幕设备像素密度 默认为1
     orientation?: OrientationType; // 0水平 1竖直
 }
 export interface AbstractUI {
@@ -48,7 +45,6 @@ export interface AbstractUI {
 export interface AbstractInteractiveObject {
     selected: boolean;
     enabled: boolean;
-    setViewData(viewData: IFramesSkinData);
 }
 export interface AbstractItem extends AbstractInteractiveObject {
     index: number; // 列表类ui索引

@@ -2,8 +2,8 @@ import { Transform } from "./AbstractUI";
 
 export interface ResourceData {
     transForm: Transform;
-    key: string;
-    texture: string; // [ texture,..]
+    key: string; // 用于从内存取texture
+    frameObj: {} //key:buttnstate  value:frameName
 }
 export interface IFramesSkinData {
     background: ResourceData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;

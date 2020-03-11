@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 15:12:45
+ * @Last Modified time: 2020-03-11 19:18:49
  */
 
 import { Button, ButtonConfig } from "./button";
@@ -75,7 +75,7 @@ export class TabGroup {
 }
 
 export class TabButton extends Button {
-    constructor(config: ButtonConfig) {
-        super(config);
+    constructor(config: ButtonConfig, world: any) {
+        super(config, world);
     }
 }
