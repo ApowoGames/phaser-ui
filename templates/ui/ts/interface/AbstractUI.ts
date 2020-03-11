@@ -2,7 +2,7 @@
  * @Author: gxm
  * @Date: 2020-03-06 13:53:28
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 18:30:19
+ * @Last Modified time: 2020-03-12 01:06:08
  */
 
 export enum UIType {
@@ -56,4 +56,8 @@ export interface UIProvider {
 export interface IListConfig {
     transform: Transform;
     autoHideBar: boolean;
+}
+export interface INinePatchConfig {
+    key: string; // texture Key
+    align: Align;
 }
