@@ -1,8 +1,9 @@
-import { INinePatchSkinData } from "../interface/iNinePatchSkinData";
-import { INinePatchConfig } from "../interface/iNinePatchConfig";
-import { Align } from "../interface/align";
-import { Transform } from "../interface/transform";
+
 import { Tool } from "../tool/tool";
+import { INinePatchSkinData } from "../interface/ninepatch/iNinePatchSkinData";
+import { INinePatchConfig } from "../interface/ninepatch/iNinePatchConfig";
+import { Transform } from "../interface/pos/transform";
+import { Align } from "../interface/pos/align";
 
 const RenderTexture = Phaser.GameObjects.RenderTexture;
 const GetValue = Phaser.Utils.Objects.GetValue;

@@ -1,5 +1,5 @@
-import { TextConfig } from "./textConfig";
-import { Transform } from "./transform";
+import { Transform } from "../pos/transform";
+import { TextConfig } from "../text/textConfig";
 
 export interface IInputPanelConfig {
     transform?: Transform;

@@ -1,9 +1,10 @@
-import { IInputPanelConfig } from "../interface/iInputPanelConfig";
 import { InputFieldText } from "./inputFieldText";
-import { Transform } from "../interface/transform";
 import { Tool } from "../tool/tool";
-import { TextConfig } from "../interface/textConfig";
-import { InputTextEvent } from "../interface/inputTextEvent";
+import { IInputPanelConfig } from "../interface/inputtext/iInputPanelConfig";
+import { Transform } from "../interface/pos/transform";
+import { TextConfig } from "../interface/text/textConfig";
+import { InputTextEvent } from "../interface/event/inputTextEvent";
+
 
 export class InputTextPanel extends Phaser.GameObjects.Container {
     private mInputText: InputFieldText;

@@ -1,5 +1,3 @@
-import { Transform } from "./transform";
-
 export interface TextConfig {
     x: number;
     y: number;

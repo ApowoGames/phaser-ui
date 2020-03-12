@@ -1,9 +1,7 @@
 
 import InputText from "../../../../plugins/gameobjects/inputtext/InputText";
-import { TextConfig } from "../interface/textConfig";
-import { Tool } from "../tool/tool";
-import { Transform } from "../interface/transform";
-import { InputTextEvent } from "../interface/inputTextEvent";
+import { InputTextEvent } from "../interface/event/inputTextEvent";
+import { TextConfig } from "../interface/text/textConfig";
 export class InputFieldText extends InputText {
     private mScene: Phaser.Scene;
     constructor(scene: Phaser.Scene, config: TextConfig) {

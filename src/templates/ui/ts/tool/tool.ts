@@ -1,4 +1,4 @@
-import { Transform } from "../interface/transform";
+import { Transform } from "../interface/pos/transform";
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class Tool {

@@ -3,16 +3,16 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 18:24:10
+ * @Last Modified time: 2020-03-12 20:09:17
  */
 
-import { FramesSkin } from "./frameSkin";
+import { FramesSkin } from "../interface/button/frameSkin";
 import { Tool } from "../tool/tool";
-import { Event } from "../interface/eventType";
-import { TextConfig } from "../interface/textConfig";
-import { Transform } from "../interface/transform";
-import { AbstractInteractiveObject } from "../interface/abstructInteractiveObject";
-import { ResourceData } from "../interface/resourceData";
+import { Event } from "../interface/event/mouseEvent";
+import { TextConfig } from "../interface/text/textConfig";
+import { Transform } from "../interface/pos/transform";
+import { AbstractInteractiveObject } from "../interface/baseUI/abstructInteractiveObject";
+import { ResourceData } from "../interface/baseUI/resourceData";
 
 export enum ButtonState {
     Normal = "normal",

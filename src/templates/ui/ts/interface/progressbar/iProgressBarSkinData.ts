@@ -1,4 +1,4 @@
-import { ResourceData } from "./resourceData";
+import { ResourceData } from "../baseUI/resourceData";
 
 export interface IProgressBarSkinData {
     background: ResourceData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;

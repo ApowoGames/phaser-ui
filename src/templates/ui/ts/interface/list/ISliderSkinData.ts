@@ -1,4 +1,4 @@
-import { ResourceData } from "./resourceData";
+import { ResourceData } from "../baseUI/resourceData";
 
 export interface ISlidrSkinData {
     background: ResourceData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
