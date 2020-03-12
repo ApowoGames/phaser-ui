@@ -1,4 +1,5 @@
-import { Transform } from "./AbstractUI";
+import { Transform } from "./transform";
+
 export interface TextConfig {
     transform: Transform;
     style: {

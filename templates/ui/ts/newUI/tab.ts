@@ -3,14 +3,15 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 00:57:39
+ * @Last Modified time: 2020-03-12 17:02:05
  */
 
 import { Button, ButtonConfig } from "./button";
-import { IListConfig, Transform } from "../interface/AbstractUI";
-import { Pos } from "../tool/pos";
+import { Tool } from "../tool/tool";
 import { Event } from "../interface/eventType";
 import { ButtonState } from "../../../../button";
+import { Transform } from "../interface/transform";
+import { IListConfig } from "../interface/iListConfig";
 export interface ITabsGroupConfig extends IListConfig {
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -20,22 +21,25 @@ export class TabGroup {
     private mContainer: Phaser.GameObjects.Container;
     private mList: any[];
     private mWorld;
-    constructor(config: ITabsGroupConfig, world: any) {
+    private mScene: Phaser.Scene;
+    constructor(scene: Phaser.Scene, config: ITabsGroupConfig, world: any) {
         this.mConfig = config;
         this.mWorld = world;
-        const transform: Transform = config.transform;
-        const posX = this.getPos(transform).x;
-        const posY = this.getPos(transform).y;
-        const scene = transform.scene;
-        const baseWidth = transform.width;
-        const baseHeight = transform.height;
-        const dpr = world.dpr;
+        this.mScene = scene;
+        const transform: Transform = !config ? undefined : config.transform;
+        const posX = Tool.getPos(transform).x;
+        const posY = Tool.getPos(transform).y;
+        const baseWidth = !transform && !transform.width ? 0 : transform.width;
+        const baseHeight = !transform && !transform.height ? 0 : transform.height;
         // tab主容器
-        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth * dpr, height: baseHeight * dpr }, false);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth * dpr, baseHeight * dpr), Phaser.Geom.Rectangle.Contains);
-
+        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
         this.mList = [];
+    }
 
+    public setSize(width: number, height: number) {
+        this.mContainer.setSize(width, height);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
     }
 
     public set selectIndex(select: number) {
@@ -70,35 +74,15 @@ export class TabGroup {
     private refreshList() {
         this.mContainer.removeAll();
         for (let i: number = 0, len = this.mList.length; i < len; i++) {
-            const tab: TabButton = new TabButton(this.mList[i], this.mWorld);
+            const tab: TabButton = new TabButton(this.mScene, this.mList[i], this.mWorld);
             this.mContainer.add(tab.skin);
         }
     }
-
-    private getPos(transform: Transform): Pos {
-        const pos: Pos = new Pos();
-        let tmpValue: string;
-        if (typeof (transform.x) === "string") {
-            tmpValue = GetValue(transform, "x", "100%");
-            pos.x = Number(tmpValue.split("%")[0]) * transform.width;
-        } else {
-            pos.x = GetValue(transform, "x", 0);
-        }
-
-        if (typeof (transform.y) === "string") {
-            tmpValue = GetValue(transform, "y", "100%");
-            pos.y = Number(tmpValue.split("%")[0]) * transform.width;
-        } else {
-            pos.y = GetValue(transform, "y", 0);
-        }
-        return pos;
-    }
-
 }
 
 export class TabButton extends Button {
-    constructor(config: ButtonConfig, world: any) {
-        super(config, world);
+    constructor(scene: Phaser.Scene, config: ButtonConfig, world: any) {
+        super(scene, config, world);
     }
     public set selected(value: boolean) {
         this.mSelected = value;

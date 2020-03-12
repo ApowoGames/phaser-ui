@@ -3,11 +3,11 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:27
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-11 17:22:28
+ * @Last Modified time: 2020-03-12 16:00:57
  */
 
-import { IFramesSkinData } from "../interface/ISkinData";
 import { ButtonState } from "./button";
+import { IFramesSkinData } from "../interface/iFramesSkinData";
 export enum SkinEvent {
     LoadComplete = "LOAD_COMPLETE",
     LoadError = "LOAD_ERROR",

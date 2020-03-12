@@ -3,15 +3,16 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 00:37:31
+ * @Last Modified time: 2020-03-12 16:55:13
  */
 
-import { AbstractInteractiveObject, UIProvider, Transform } from "../interface/AbstractUI";
-import { IFramesSkinData } from "../interface/ISkinData";
-import { FramesSkin } from "./baseSkin";
-import { Pos } from "../tool/pos";
-import { TextConfig } from "../interface/TextConfig";
+import { FramesSkin } from "./frameSkin";
+import { Tool } from "../tool/tool";
 import { Event } from "../interface/eventType";
+import { IFramesSkinData } from "../interface/iFramesSkinData";
+import { TextConfig } from "../interface/textConfig";
+import { Transform } from "../interface/transform";
+import { AbstractInteractiveObject } from "../interface/abstructInteractiveObject";
 
 export enum ButtonState {
     Normal = "normal",
@@ -20,9 +21,9 @@ export enum ButtonState {
     Disable = "disable",
 }
 export interface ButtonConfig {
-    transform: Transform;
     framesSkinData: IFramesSkinData;
-    textconfig: TextConfig;
+    transform?: Transform;
+    textconfig?: TextConfig;
     text?: string;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -38,39 +39,38 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
     protected mWorld;
-    public constructor(btnConfig: ButtonConfig, world: any) {
+    public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig, world: any) {
         super();
         this.mConfig = btnConfig;
         this.mWorld = world;
-        const transform: Transform = btnConfig.transform;
-        const posX = this.getPos(transform).x;
-        const posY = this.getPos(transform).y;
-        const scene = transform.scene;
-        const baseWidth = transform.width;
-        const baseHeight = transform.height;
-        const dpr = world.dpr;
+        const transform: Transform = !btnConfig ? undefined : btnConfig.transform;
+        const pos: any = Tool.getPos(transform);
+        const posX = pos.x;
+        const posY = pos.y;
+        const baseWidth = !transform && !transform.width ? 0 : transform.width;
+        const baseHeight = !transform && !transform.height ? 0 : transform.height;
         // 按钮容器
-        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth * dpr, height: baseHeight * dpr }, false);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth * dpr, baseHeight * dpr), Phaser.Geom.Rectangle.Contains);
+        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
         this.mFrameSkin = new FramesSkin(scene, btnConfig.framesSkinData);
         //按钮背景
         const bgTransform: Transform = this.mConfig.framesSkinData.background.transForm;
-        this.mFrameSkin.BackGround.x = this.getPos(bgTransform).x;
-        this.mFrameSkin.BackGround.y = this.getPos(bgTransform).y;
+        this.mFrameSkin.BackGround.x = Tool.getPos(bgTransform).x;
+        this.mFrameSkin.BackGround.y = Tool.getPos(bgTransform).y;
         this.mContainer.add(this.mFrameSkin.BackGround);
         //按钮icon
         if (this.mFrameSkin.Icon) {
             const iconTransform: Transform = this.mConfig.framesSkinData.icon.transForm;
-            this.mFrameSkin.Icon.x = this.getPos(iconTransform).x;
-            this.mFrameSkin.Icon.y = this.getPos(iconTransform).y;
+            this.mFrameSkin.Icon.x = Tool.getPos(iconTransform).x;
+            this.mFrameSkin.Icon.y = Tool.getPos(iconTransform).y;
             this.mContainer.add(this.mFrameSkin.Icon);
         }
         //按钮文本
         const textconfig = {};
         const txtTransform: Transform = btnConfig.textconfig.transform;
         this.mText = scene.make.text({
-            x: this.getPos(txtTransform).x,
-            y: this.getPos(txtTransform).y,
+            x: Tool.getPos(txtTransform).x,
+            y: Tool.getPos(txtTransform).y,
             style: Object.assign(textconfig, btnConfig.textconfig.style)
         }, false);
         this.mContainer.add(this.mText);
@@ -98,6 +98,11 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         return this.mEnabled;
     }
 
+    public setSize(width: number, height: number) {
+        this.mContainer.setSize(width, height);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
+    }
+
     public setText(val: string) {
         if (this.mText) this.mText.text = val;
     }
@@ -107,7 +112,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     public destroy() {
-        this.mContainer.off("pointerDown", this.onPointerDownHandler, this)
+        this.mContainer.off("pointerDown", this.onPointerDownHandler, this);
         this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
         if (this.mPressDelay) {
@@ -118,24 +123,6 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         super.destroy();
     }
 
-    protected getPos(transform: Transform): Pos {
-        const pos: Pos = new Pos();
-        let tmpValue: string;
-        if (typeof (transform.x) === "string") {
-            tmpValue = GetValue(transform, "x", "100%");
-            pos.x = Number(tmpValue.split("%")[0]) * transform.width;
-        } else {
-            pos.x = GetValue(transform, "x", 0);
-        }
-
-        if (typeof (transform.y) === "string") {
-            tmpValue = GetValue(transform, "y", "100%");
-            pos.y = Number(tmpValue.split("%")[0]) * transform.height;
-        } else {
-            pos.y = GetValue(transform, "y", 0);
-        }
-        return pos;
-    }
     protected onPointerUpHandler(pointer) {
         if (!this.mEnabled) return;
         this.buttonStateChange(ButtonState.Normal);
