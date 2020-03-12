@@ -4,16 +4,16 @@ import RoundRectangleFactory from './roundrectangle/Factory.js';
 import BBCodeTextFactory from './bbcodetext/Factory.js';
 import TagTextFactory from './tagtext/Factory.js';
 import ContainerFactory from './container/Factory.js';
-import ChartFactory from './chart/Factory.js';
+import CanvasFactory from './canvas/Factory.js';
 import CircleMaskImageFactory from './circlemaskimage/Factory.js';
+import ChartFactory from './chart/Factory.js';
 import NinePatchFactory from './ninepatch/Factory.js';
-import VideoFactory from './video/Factory.js';
-import VideoCanvasFactory from './video/Factory.js';
 import YoutubePlayerFactory from './youtubeplayer/Factory.js';
 
 import SizerFactory from './sizer/Factory.js';
 import GridSizerFactory from './gridsizer/Factory.js';
 import FixWidthSizerFactory from './fixwidthsizer/Factory.js';
+import OverlapSizerFactory from './overlapsizer/Factory.js';
 
 import LabelFactory from './label/Factory.js';
 import ButtonsFactory from './buttons/Factory.js';
@@ -30,6 +30,7 @@ import TextAreaFactory from './textarea/Factory.js';
 import ScrollableBlockFactory from './scrollableblock/Factory.js';
 import ScrollablePanelFactory from './scrollablepanel/Factory.js';
 import ToastFactory from './toast/Factory.js';
+import SidesFactory from './sides/Factory.js';
 
 import TapFactory from './tap/Factory.js';
 import PressFactory from './press/Factory.js';
@@ -39,6 +40,9 @@ import PinchFactory from './pinch/Factory.js';
 import RotateFactory from './rotate/Factory.js';
 import FlipFactory from './flip/Factory.js';
 
+import GetParentSizer from './utils/GetParentSizer.js'
+import GetTopmostSizer from './utils/GetTopmostSizer.js';
+import IsPointerInBounds from '../../plugins/utils/input/IsPointerInBounds.js';
 import {
     Show,
     Hide,
@@ -55,10 +59,13 @@ class UIPlugin extends Phaser.Plugins.ScenePlugin {
 }
 
 var methods = {
+    getParentSizer: GetParentSizer,
+    getTopmostSizer: GetTopmostSizer,
     hide: Hide,
     show: Show,
     isShown: IsShown,
     edit: Edit,
+    isInTouching: IsPointerInBounds
 }
 
 Object.assign(

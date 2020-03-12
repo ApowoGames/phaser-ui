@@ -46,7 +46,7 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         if (isArcCorner(radius)) {
             var centerX = geom.width - radius.x;
             var centerY = geom.height - radius.y;
-            ArcTo(centerX, centerY, radius, 0, 90, false, iteration, pathData);
+            ArcTo(centerX, centerY, radius.x, radius.y, 0, 90, false, iteration, pathData);
         } else {
             LineTo(geom.width, geom.height, pathData);
         }
@@ -56,7 +56,7 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         if (isArcCorner(radius)) {
             var centerX = radius.x;
             var centerY = geom.height - radius.y;
-            ArcTo(centerX, centerY, radius, 90, 180, false, iteration, pathData);
+            ArcTo(centerX, centerY, radius.x, radius.y, 90, 180, false, iteration, pathData);
         } else {
             LineTo(0, geom.height, pathData);
         }
@@ -66,7 +66,7 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         if (isArcCorner(radius)) {
             var centerX = radius.x;
             var centerY = radius.y;
-            ArcTo(centerX, centerY, radius, 180, 270, false, iteration, pathData);
+            ArcTo(centerX, centerY, radius.x, radius.y, 180, 270, false, iteration, pathData);
         } else {
             LineTo(0, 0, pathData);
         }
@@ -76,7 +76,7 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         if (isArcCorner(radius)) {
             var centerX = geom.width - radius.x;
             var centerY = radius.y;
-            ArcTo(centerX, centerY, radius, 270, 360, false, iteration, pathData);
+            ArcTo(centerX, centerY, radius.x, radius.y, 270, 360, false, iteration, pathData);
         } else {
             LineTo(geom.width, 0, pathData);
         }
@@ -90,26 +90,14 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         return this.geom.width;
     }
     set width(value) {
-        // Change width value
-        if (this.width === value) {
-            return;
-        }
-        this.geom.width = value;
-        this.updateDisplayOrigin();
-        this.updateData();
+        this.resize(value, this.height);
     }
 
     get height() {
         return this.geom.height;
     }
     set height(value) {
-        // Change height value
-        if (this.height === value) {
-            return;
-        }
-        this.geom.height = value;
-        this.updateDisplayOrigin();
-        this.updateData();
+        this.resize(this.width, value);
     }
 
     resize(width, height) {
@@ -123,6 +111,12 @@ class RoundRectangle extends Phaser.GameObjects.Shape {
         this.geom.width = width
         this.updateDisplayOrigin();
         this.updateData();
+
+        var input = this.input;
+        if (input && !input.customHitArea) {
+            input.hitArea.width = width;
+            input.hitArea.height = height;
+        }
         return this;
     }
 

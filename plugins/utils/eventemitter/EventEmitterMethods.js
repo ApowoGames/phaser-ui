@@ -12,6 +12,7 @@ export default {
         if (this._eventEmitter && this._privateEE) {
             this._eventEmitter.shutdown();
         }
+        return this;
     },
 
     getEventEmitter() {
@@ -39,8 +40,8 @@ export default {
         return this;
     },
 
-    emit: function () {
-        if (this._eventEmitter) {
+    emit: function (event) {
+        if (this._eventEmitter && event) {
             this._eventEmitter.emit.apply(this._eventEmitter, arguments);
         }
         return this;

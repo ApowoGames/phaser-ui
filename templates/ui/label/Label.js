@@ -16,6 +16,8 @@ class Label extends Sizer {
         var text = GetValue(config, 'text', undefined);
         var action = GetValue(config, 'action', undefined);
         var actionMask = GetValue(config, 'actionMask', undefined);
+        // Align
+        var align = GetValue(config, 'align', undefined); // undefined/left/top: no space
         // Space
         var paddingLeft = GetValue(config, 'space.left', 0);
         var paddingRight = GetValue(config, 'space.right', 0);
@@ -26,6 +28,15 @@ class Label extends Sizer {
 
         if (background) {
             this.addBackground(background);
+        }
+
+        // Add space
+        if (
+            (align === 'right') ||
+            (align === 'bottom') ||
+            (align === 'center')
+        ) {
+            this.addSpace();
         }
 
         if (icon) {
@@ -51,7 +62,7 @@ class Label extends Sizer {
             if (iconMask) {
                 iconMask = new DefaultMask(icon, 1); // Circle mask
                 icon.setMask(iconMask.createGeometryMask());
-                this.add(iconMask, null);
+                this.pin(iconMask);
             }
         }
 
@@ -103,8 +114,13 @@ class Label extends Sizer {
             if (actionMask) {
                 actionMask = new DefaultMask(action, 1); // Circle mask
                 icon.setMask(actionMask.createGeometryMask());
-                this.add(actionMask, null);
+                this.pin(actionMask);
             }
+        }
+
+        // Add space
+        if (align === 'center') {
+            this.addSpace();
         }
 
         this.addChildrenMap('background', background);

@@ -1,14 +1,14 @@
 import RunChildrenWrap from './RunChildrenWrap.js';
 import GlobZone from '../../../plugins/utils/actions/GlobZone.js';
-
-const AlignIn = Phaser.Display.Align.In.QuickSet;
+import AlignIn from '../../../plugins/utils/align/align/in/QuickSet.js';
+import { GetDisplayWidth, GetDisplayHeight } from '../../../plugins/utils/size/GetDisplaySize.js';
 
 var Layout = function (parent, newWidth, newHeight) {
     if (this.rexSizer.hidden) {
         return this;
     }
 
-    this.layoutInit(parent);
+    this.preLayout(parent);
 
     // Set size
     if (newWidth === undefined) {
@@ -69,9 +69,9 @@ var Layout = function (parent, newWidth, newHeight) {
                 }
 
                 y = (itemY + padding.top);
-                width = child.width;
-                height = child.height;
-                itemX = x + child.width + padding.right;
+                width = GetDisplayWidth(child);
+                height = GetDisplayHeight(child);
+                itemX = x + width + padding.right;
             } else { // y
                 x = (itemX + padding.left);
 
@@ -82,9 +82,9 @@ var Layout = function (parent, newWidth, newHeight) {
                     y += this.itemSpacing;
                 }
 
-                width = child.width;
-                height = child.height;
-                itemY = y + child.height + padding.bottom;
+                width = GetDisplayWidth(child);
+                height = GetDisplayHeight(child);
+                itemY = y + height + padding.bottom;
             }
 
             GlobZone.setPosition(x, y).setSize(width, height);
@@ -104,7 +104,7 @@ var Layout = function (parent, newWidth, newHeight) {
     // Layout background children
     this.layoutBackgrounds();
 
-    return this;
+    return this.postLayout();
 }
 
 export default Layout;

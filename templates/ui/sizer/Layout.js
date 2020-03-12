@@ -2,8 +2,8 @@ import GetExpandedChildWidth from './GetExpandedChildWidth.js';
 import GetExpandedChildHeight from './GetExpandedChildHeight.js';
 import ResizeGameObject from '../../../plugins/utils/size/ResizeGameObject.js';
 import GlobZone from '../../../plugins/utils/actions/GlobZone.js';
-
-const AlignIn = Phaser.Display.Align.In.QuickSet;
+import AlignIn from '../../../plugins/utils/align/align/in/QuickSet.js';
+import { GetDisplayWidth, GetDisplayHeight } from '../../../plugins/utils/size/GetDisplaySize.js';
 
 var Layout = function (parent, newWidth, newHeight) {
     // Skip invisible sizer
@@ -11,7 +11,7 @@ var Layout = function (parent, newWidth, newHeight) {
         return this;
     }
 
-    this.layoutInit(parent);
+    this.preLayout(parent);
 
     // Set size
     if (newWidth === undefined) {
@@ -69,10 +69,10 @@ var Layout = function (parent, newWidth, newHeight) {
         }
 
         if (childWidth === undefined) {
-            childWidth = child.width;
+            childWidth = GetDisplayWidth(child);
         }
         if (childHeight === undefined) {
-            childHeight = child.height;
+            childHeight = GetDisplayHeight(child);
         }
 
         // Set position
@@ -112,7 +112,7 @@ var Layout = function (parent, newWidth, newHeight) {
     // Layout background children
     this.layoutBackgrounds();
 
-    return this;
+    return this.postLayout();
 }
 
 export default Layout;

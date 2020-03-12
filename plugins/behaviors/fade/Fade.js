@@ -1,18 +1,16 @@
-import GetSceneObject from '../../utils/system/GetSceneObject.js';
+import TweenBase from '../../utils/tween/TweenBase.js';
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 const GetAdvancedValue = Phaser.Utils.Objects.GetAdvancedValue;
 
-class Fade {
+class Fade extends TweenBase {
     constructor(gameObject, config) {
+        super(gameObject);
         this.gameObject = gameObject;
-        this.scene = GetSceneObject(gameObject);
 
         this.alphaStart = undefined;
         this.alphaEnd = undefined;
-        this.tween = undefined;
         this.resetFromJSON(config);
-        this.boot();
     }
 
     resetFromJSON(o) {
@@ -36,21 +34,9 @@ class Fade {
         };
     }
 
-    boot() {
-        if (this.gameObject.once) { // oops, bob object does not have event emitter
-            this.gameObject.once('destroy', this.destroy, this);
-        }
-    }
-
     shutdown() {
-        this.stop();
+        super.shutdown();
         this.gameObject = undefined;
-        this.scene = undefined;
-        return this;
-    }
-
-    destroy() {
-        this.shutdown();
         return this;
     }
 
@@ -61,33 +47,30 @@ class Fade {
         this.mode = m;
         return this;
     }
+
     setAlphaRange(start, end) {
         this.alphaStart = start;
         this.alphaEnd = end;
         return this;
     }
+
     setDelay(time) {
         this.delay = time;
         return this;
     }
+
     setDuration(time) {
         this.duration = time;
         return this;
     }
 
     start() {
-        if (this.tween) {
-            return this;
-        }
-
-        if (this.duration === 0) {
-            this.gameObject.setAlpha(this.alphaEnd);
-            this.complete();
+        if (this.isRunning) {
             return this;
         }
 
         this.gameObject.setAlpha(this.alphaStart);
-        this.tween = this.scene.tweens.add({
+        super.start({
             targets: this.gameObject,
             alpha: this.alphaEnd,
 
@@ -95,30 +78,13 @@ class Fade {
             duration: this.duration,
             ease: 'Linear',
             yoyo: (this.mode == 2),
-            repeat: ((this.mode == 2) ? -1 : 0),
-            onComplete: this.complete,
-            onCompleteScope: this
+            repeat: ((this.mode == 2) ? -1 : 0)
         });
         return this;
     }
 
-    restart() {
-        this.stop().start();
-        return this;
-    }
-
-    stop() {
-        if (!this.tween) {
-            return this;
-        }
-
-        this.tween.remove();
-        this.tween = undefined;
-        return this;
-    }
-
     complete() {
-        this.stop();
+        super.complete();
         if (this.mode === 1) {
             this.gameObject.destroy();
         }

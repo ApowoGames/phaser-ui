@@ -1,19 +1,11 @@
 import Container from '../container/Container.js';
 import Methods from './Methods.js';
-import Anchor from '../../../plugins/behaviors/anchor/Anchor.js';
+import { GetDisplayWidth, GetDisplayHeight } from '../../../plugins/utils/size/GetDisplaySize.js';
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 
 class Base extends Container {
     constructor(scene, x, y, minWidth, minHeight, config) {
-        var anchorX, anchorY;
-        if (typeof (x) === 'string') {
-            anchorX = x;
-            anchorY = y;
-            x = 0;
-            y = 0;
-        }
-
         super(scene, x, y, 2, 2);
 
         this.isRexSizer = true;
@@ -22,11 +14,9 @@ class Base extends Container {
         this.rexSizer = {};
         this.backgroundChildren = undefined;
 
-        if (anchorX !== undefined) {
-            this._anchor = new Anchor(this, {
-                x: anchorX,
-                y: anchorY,
-            });;
+        var anchorConfig = GetValue(config, 'anchor', undefined);
+        if (anchorConfig) {
+            this.setAnchor(anchorConfig);
         }
 
         this.setDraggable(GetValue(config, 'draggable', false));
@@ -79,7 +69,7 @@ class Base extends Container {
     }
 
     get left() {
-        return this.x - (this.displayWidth * this.originX);
+        return this.x - (GetDisplayWidth(this) * this.originX);
     }
 
     set left(value) {
@@ -92,7 +82,7 @@ class Base extends Container {
     }
 
     get right() {
-        return (this.x - (this.displayWidth * this.originX)) + this.displayWidth;
+        return this.left + GetDisplayWidth(this);
     }
 
     set right(value) {
@@ -105,7 +95,7 @@ class Base extends Container {
     }
 
     get centerX() {
-        return (this.left + this.right) / 2;
+        return this.left + (GetDisplayWidth(this) / 2);
     }
 
     set centerX(value) {
@@ -118,7 +108,7 @@ class Base extends Container {
     }
 
     get top() {
-        return this.y - (this.displayHeight * this.originY);
+        return this.y - (GetDisplayHeight(this) * this.originY);
     }
 
     set top(value) {
@@ -131,7 +121,7 @@ class Base extends Container {
     }
 
     get bottom() {
-        return (this.y - (this.displayHeight * this.originY)) + this.displayHeight;
+        return this.top + GetDisplayHeight(this);
     }
 
     set bottom(value) {
@@ -144,7 +134,7 @@ class Base extends Container {
     }
 
     get centerY() {
-        return (this.top + this.bottom) / 2;
+        return this.top + (GetDisplayHeight(this) / 2);
     }
 
     set centerY(value) {
@@ -161,7 +151,7 @@ class Base extends Container {
         return this;
     }
 
-    addBackground(gameObject) {
+    addBackground(gameObject, childKey) {
         if (this.backgroundChildren === undefined) {
             this.backgroundChildren = [];
         }
@@ -171,6 +161,10 @@ class Base extends Container {
         var config = this.getSizerConfig(gameObject);
         config.parent = this;
         this.backgroundChildren.push(gameObject);
+
+        if (childKey !== undefined) {
+            this.addChildrenMap(childKey, gameObject)
+        }
         return this;
     }
 }

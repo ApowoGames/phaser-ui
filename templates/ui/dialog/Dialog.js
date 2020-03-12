@@ -1,6 +1,5 @@
 import Sizer from '../sizer/Sizer.js';
 import Buttons from '../buttons/Buttons.js';
-import Space from '../utils/Space.js';
 import ButtonMethods from './ButtonMethods.js';
 
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -22,6 +21,10 @@ class Dialog extends Sizer {
         var toolbar = GetValue(config, 'toolbar', undefined);
         if (toolbar && toolbar.length === 0) {
             toolbar = undefined;
+        }
+        var leftToolbar = GetValue(config, 'leftToolbar', undefined);
+        if (leftToolbar && leftToolbar.length === 0) {
+            leftToolbar = undefined;
         }
         var content = GetValue(config, 'content', undefined);
         var description = GetValue(config, 'description', undefined);
@@ -47,20 +50,6 @@ class Dialog extends Sizer {
             this.addBackground(background);
         }
 
-        // title only
-        if (title && !toolbar) {
-            var align = GetValue(config, 'align.title', 'center');
-            var titleSpace = GetValue(config, 'space.title', 0);
-            var padding = {
-                left: paddingLeft,
-                right: paddingRight,
-                top: paddingTop,
-                bottom: (content || description || choices || actions) ? titleSpace : paddingBottom
-            }
-            var expand = GetValue(config, 'expand.title', true);
-            this.add(title, 0, align, padding, expand);
-        }
-
         var toolbarSizer;
         if (toolbar) {
             toolbarSizer = new Buttons(scene, {
@@ -73,8 +62,34 @@ class Dialog extends Sizer {
             });
         }
 
+        var leftToolbarSizer;
+        if (leftToolbar) {
+            leftToolbarSizer = new Buttons(scene, {
+                groupName: 'leftToolbar',
+                buttons: leftToolbar,
+                orientation: 0, // Left-right
+                space: GetValue(config, 'space.leftToolbarItem', 0),
+                click: clickConfig,
+                eventEmitter: this.eventEmitter,
+            });
+        }
+
+        // title only
+        if (title && !toolbar && !leftToolbar) {
+            var align = GetValue(config, 'align.title', 'center');
+            var titleSpace = GetValue(config, 'space.title', 0);
+            var padding = {
+                left: paddingLeft,
+                right: paddingRight,
+                top: paddingTop,
+                bottom: (content || description || choices || actions) ? titleSpace : paddingBottom
+            }
+            var expand = GetValue(config, 'expand.title', true);
+            this.add(title, 0, align, padding, expand);
+        }
+
         // toolbar only
-        if (toolbar && !title) {
+        if (toolbar && !title && !leftToolbar) {
             var titleSpace = GetValue(config, 'space.title', 0);
             var padding = {
                 left: paddingLeft,
@@ -83,14 +98,31 @@ class Dialog extends Sizer {
                 bottom: (content || description || choices || actions) ? titleSpace : paddingBottom
             }
             var expand = GetValue(config, 'expand.toolbar', true);
-            this.add(toolbarSizer, 0, 'center', padding, expand);
+            this.add(toolbarSizer, 0, 'right', padding, expand);
         }
 
-        // tilte and toolbar
-        if (title && toolbar) {
+        // leftToolbar only
+        if (leftToolbar && !title && !toolbar) {
+            var titleSpace = GetValue(config, 'space.title', 0);
+            var padding = {
+                left: paddingLeft,
+                right: paddingRight,
+                top: paddingTop,
+                bottom: (content || description || choices || actions) ? titleSpace : paddingBottom
+            }
+            var expand = GetValue(config, 'expand.leftToolbar', true);
+            this.add(leftToolbarSizer, 0, 'left', padding, expand);
+        }
+
+        // tilte and (toolbar or leftToolbar)
+        if (title && (toolbar || leftToolbar)) {
             var titleSizer = new Sizer(scene, {
                 orientation: 0
             });
+            // Add leftToolbar
+            if (leftToolbarSizer) {
+                titleSizer.add(leftToolbarSizer, 0, 'right', 0, false);
+            }
             // Add title
             var align = GetValue(config, 'align.title', 'left');
             var expand = GetValue(config, 'expand.title', true);
@@ -99,7 +131,7 @@ class Dialog extends Sizer {
                 !expand &&
                 ((align === 'right') || (align === 'center'))
             ) {
-                titleSizer.add(Space(scene), 1, 'center', 0, false);
+                titleSizer.addSpace();
             }
             var padding = {
                 left: GetValue(config, 'space.titleLeft', 0),
@@ -113,10 +145,12 @@ class Dialog extends Sizer {
                 !expand &&
                 ((align === 'left') || (align === 'center'))
             ) {
-                titleSizer.add(Space(scene), 1, 'center', 0, false);
+                titleSizer.addSpace();
             }
             // Add toolbar
-            titleSizer.add(toolbarSizer, 0, 'right', 0, false);
+            if (toolbarSizer) {
+                titleSizer.add(toolbarSizer, 0, 'right', 0, false);
+            }
             // Add sizer to dialog
             var titleSpace = GetValue(config, 'space.title', 0);
             var padding = {
@@ -163,6 +197,9 @@ class Dialog extends Sizer {
                 space: GetValue(config, 'space.choice', 0),
                 click: clickConfig,
                 eventEmitter: this.eventEmitter,
+                type: GetValue(config, 'choicesType', undefined),
+                setValueCallback: GetValue(config, 'choicesSetValueCallback', undefined),
+                setValueCallbackScope: GetValue(config, 'choicesSetValueCallbackScope', undefined)
             });
             var choicesSpace = GetValue(config, 'space.choices', 0);
             var padding = {
@@ -181,6 +218,7 @@ class Dialog extends Sizer {
                 buttons: actions,
                 orientation: 0, // Left-right
                 space: GetValue(config, 'space.action', 0),
+                expand: GetValue(config, 'expand.actions', false),
                 align: GetValue(config, 'align.actions', 'center'),
                 click: clickConfig,
                 eventEmitter: this.eventEmitter,
@@ -191,24 +229,26 @@ class Dialog extends Sizer {
                 top: (title || toolbar || content || description || choices) ? 0 : paddingTop,
                 bottom: paddingBottom
             }
-            var expand = GetValue(config, 'expand.actions', true);
-            this.add(actionsSizer, 0, 'center', padding, expand);
+            this.add(actionsSizer, 0, 'center', padding, true);
         }
 
         this.addChildrenMap('background', background);
         this.addChildrenMap('title', title);
         this.addChildrenMap('toolbar', toolbar);
+        this.addChildrenMap('leftToolbar', leftToolbar);
         this.addChildrenMap('content', content);
         this.addChildrenMap('choices', choices);
         this.addChildrenMap('actions', actions);
         this.addChildrenMap('choicesSizer', choicesSizer);
         this.addChildrenMap('actionsSizer', actionsSizer);
+        this.addChildrenMap('toolbarSizer', toolbarSizer);
+        this.addChildrenMap('leftToolbarSizer', leftToolbarSizer);
     }
 }
 
 Object.assign(
     Dialog.prototype,
-    ButtonMethods,
+    ButtonMethods
 );
 
 export default Dialog;

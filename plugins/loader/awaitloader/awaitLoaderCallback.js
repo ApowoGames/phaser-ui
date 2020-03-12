@@ -1,25 +1,27 @@
-import AwaitFile from './awaitFile.js';
+import AwaitFile from './AwaitFile.js';
+import IsFunction from '../../utils/object/IsFunction.js';
 
 const IsPlainObject = Phaser.Utils.Objects.IsPlainObject;
 
 const loaderCallback = function (key, config) {
-    if (IsPlainObject(key)) {
+    if (IsFunction(key)) {
+        var callback = key;
+        var scope = config;
+        config = {
+            config: {
+                callback: callback,
+                scope: scope,
+            }
+        };
+    } else if (IsPlainObject(key)) {
         config = key;
-        if (config.hasOwnProperty('config')) {
-            config.type = 'await';
-            config.url = '';
-        } else {
+        if (!config.hasOwnProperty('config')) {
             config = {
-                key: 'await',
-                type: 'await',
-                url: '',
                 config: config
             };
         }
     } else {
         config = {
-            type: 'await',
-            url: '',
             key: key,
             config: config
         };

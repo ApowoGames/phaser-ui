@@ -1,31 +1,23 @@
-import Parse from 'parse';
-
 var QuickLogin = function (userName, password) {
-    return new Promise(function (resolve, reject) {
-        // Log-out first
-        Parse.User.logOut()
-            .then(function () {
-                // Try login
-                return Parse.User.logIn(userName, password)
-            })
-            .then(
-                resolve, // Login success            
-                function () { // Login fail
-                    // Try sign-up, then login again
-                    var user = new Parse.User();
-                    user
-                        .set('username', userName)
-                        .set('password', password)
-                        .signUp()
-                        .then(function () {
-                            // Sign up success, try login again
-                            return Parse.User.logIn(userName, password);
-                        })
-                        .then(resolve)
-                        .catch(reject);
-                }
-            );
-    });
+    return Parse.User.logOut() // // Log-out first
+        .then(function () {
+            return Parse.User.logIn(userName, password); // Try login
+        })
+        .catch(function () {  // Login fail, try sign-up, then login again
+            return SignUpThenLogin(userName, password);
+        })
+}
+
+var SignUpThenLogin = function (userName, password) {
+    var user = new Parse.User();
+    user
+        .set('username', userName)
+        .set('password', password);
+
+    return user.signUp()
+        .then(function () {  // Sign up success, try login again                        
+            return Parse.User.logIn(userName, password);
+        })
 }
 
 export default QuickLogin;

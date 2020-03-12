@@ -3,6 +3,7 @@ import Methods from './Methods.js';
 import GetBoundsConfig from '../utils/GetBoundsConfig.js';
 import ORIENTATIONMODE from '../utils/OrientationConst.js';
 import ALIGNMODE from '../utils/AlignConst.js';
+import Space from '../utils/Space.js';
 
 const IsPlainObject = Phaser.Utils.Objects.IsPlainObject;
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -10,8 +11,7 @@ const RemoveItem = Phaser.Utils.Array.Remove;
 const ALIGN_CENTER = Phaser.Display.Align.CENTER;
 
 class Sizer extends BaseSizer {
-    constructor(scene, x, y, minWidth, minHeight, orientation) {
-        var config;
+    constructor(scene, x, y, minWidth, minHeight, orientation, config) {
         if (IsPlainObject(x)) {
             config = x;
             x = GetValue(config, 'x', 0);
@@ -56,7 +56,7 @@ class Sizer extends BaseSizer {
         return this;
     }
 
-    add(gameObject, proportion, align, paddingConfig, expand) {
+    add(gameObject, proportion, align, paddingConfig, expand, childKey) {
         super.add(gameObject);
 
         var proportionType = typeof (proportion);
@@ -72,6 +72,7 @@ class Sizer extends BaseSizer {
             align = GetValue(config, 'align', ALIGN_CENTER);
             paddingConfig = GetValue(config, 'padding', 0);
             expand = GetValue(config, 'expand', false);
+            childKey = GetValue(config, 'key', undefined);
         }
 
         if (typeof (align) === 'string') {
@@ -98,6 +99,18 @@ class Sizer extends BaseSizer {
         config.padding = GetBoundsConfig(paddingConfig);
         config.expand = expand;
         this.sizerChildren.push(gameObject);
+
+        if (childKey !== undefined) {
+            this.addChildrenMap(childKey, gameObject)
+        }
+        return this;
+    }
+
+    addSpace(proportion) {
+        if (proportion === undefined) {
+            proportion = 1;
+        }
+        this.add(Space(this.scene), proportion);
         return this;
     }
 

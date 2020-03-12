@@ -1,8 +1,7 @@
 import ResizeText from './ResizeText.js';
 import ResetTextObjectPosition from './ResetTextObjectPosition.js';
 import GlobZone from '../../../plugins/utils/actions/GlobZone.js';
-
-const AlignIn = Phaser.Display.Align.In.QuickSet;
+import AlignIn from '../../../plugins/utils/align/align/in/QuickSet.js';
 
 var Layout = function (parent, newWidth, newHeight) {
     // Skip invisible sizer
@@ -10,7 +9,7 @@ var Layout = function (parent, newWidth, newHeight) {
         return this;
     }
 
-    this.layoutInit(parent);
+    this.preLayout(parent);
 
     // Set size
     if (newWidth === undefined) {
@@ -41,20 +40,20 @@ var Layout = function (parent, newWidth, newHeight) {
         GlobZone.setPosition(x, y).setSize(width, height);
         AlignIn(child, GlobZone, childConfig.align);
 
-        // Layout text mask before reset text position
+        childConfig.preOffsetY = 0; // Clear preOffsetY
+        ResetTextObjectPosition.call(this);
+
         if (this.textMask) {
             this.textMask.setPosition().resize();
             this.resetChildPositionState(this.textMask);
         }
 
-        childConfig.preOffsetY = 0; // Clear preOffsetY
-        ResetTextObjectPosition.call(this);
     }
 
     // Layout background children
     this.layoutBackgrounds();
 
-    return this;
+    return this.postLayout();
 }
 
 export default Layout;

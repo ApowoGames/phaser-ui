@@ -1,10 +1,7 @@
 import Sizer from '../sizer/Sizer.js';
-import Space from '../utils/Space.js';
-import {
-    ButtonSetInteractive,
-    FireEvent
-} from './ButtonSetInteractive.js';
+import { ButtonSetInteractive } from './ButtonSetInteractive.js';
 import ButtonMethods from './ButtonMethods.js';
+import SetType from './types/SetType.js';
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 
@@ -34,16 +31,20 @@ class Buttons extends Sizer {
         }
 
         if (buttons) {
+            var expand = GetValue(config, 'expand', false);
+            var proportion = (expand) ? 1 : 0;
             var buttonsAlign = GetValue(config, 'align', undefined); // undefined/left/top: no space
             var clickConfig = GetValue(config, 'click', undefined);
 
             // Add space
-            if (
-                (buttonsAlign === 'right') ||
-                (buttonsAlign === 'bottom') ||
-                (buttonsAlign === 'center')
+            if ((!expand) &&
+                (
+                    (buttonsAlign === 'right') ||
+                    (buttonsAlign === 'bottom') ||
+                    (buttonsAlign === 'center')
+                )
             ) {
-                this.add(Space(scene), 1, 'center', 0, false);
+                this.addSpace();
             }
 
             var button, padding;
@@ -65,24 +66,26 @@ class Buttons extends Sizer {
                         bottom: 0
                     }
                 }
-                this.add(button, 0, 'center', padding, true);
+                this.add(button, proportion, 'center', padding, true);
                 ButtonSetInteractive.call(this, button, clickConfig);
             }
 
             // Add space
-            if (buttonsAlign === 'center') {
-                this.add(Space(scene), 1, 'center', 0, false);
+            if ((!expand) && (buttonsAlign === 'center')) {
+                this.addSpace();
             }
         }
 
         this.addChildrenMap('background', background);
         this.addChildrenMap('buttons', (buttons) ? buttons : []);
+
+        SetType.call(this, config);
     }
 }
 
 Object.assign(
     Buttons.prototype,
-    ButtonMethods,
+    ButtonMethods
 );
 
 export default Buttons;

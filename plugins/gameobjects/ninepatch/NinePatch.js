@@ -1,12 +1,13 @@
 import TextureMethods from './texture/TextureMethods.js';
 import DefaultGetFrameNameCallback from './utils/DefaultGetFrameNameCallback.js';
+import IsArray from '../../utils/object/IsArray.js';
 
 const RenderTexture = Phaser.GameObjects.RenderTexture;
 const IsPlainObject = Phaser.Utils.Objects.IsPlainObject;
 const GetValue = Phaser.Utils.Objects.GetValue;
 
 class NinePatch extends RenderTexture {
-    constructor(scene, x, y, width, height, key, columns, rows, config) {
+    constructor(scene, x, y, width, height, key, baseFrame, columns, rows, config) {
         if (IsPlainObject(x)) {
             config = x;
             x = GetValue(config, 'x', 0);
@@ -14,6 +15,7 @@ class NinePatch extends RenderTexture {
             width = GetValue(config, 'width', 1);
             height = GetValue(config, 'height', 1);
             key = GetValue(config, 'key', undefined);
+            baseFrame = GetValue(config, 'baseFrame', undefined);
             columns = GetValue(config, 'columns', undefined);
             rows = GetValue(config, 'rows', undefined);
         } else if (IsPlainObject(width)) {
@@ -21,11 +23,27 @@ class NinePatch extends RenderTexture {
             width = GetValue(config, 'width', 1);
             height = GetValue(config, 'height', 1);
             key = GetValue(config, 'key', undefined);
+            baseFrame = GetValue(config, 'baseFrame', undefined);
             columns = GetValue(config, 'columns', undefined);
             rows = GetValue(config, 'rows', undefined);
         } else if (IsPlainObject(key)) {
             config = key;
             key = GetValue(config, 'key', undefined);
+            baseFrame = GetValue(config, 'baseFrame', undefined);
+            columns = GetValue(config, 'columns', undefined);
+            rows = GetValue(config, 'rows', undefined);
+        } else if (IsPlainObject(baseFrame)) {
+            config = baseFrame;
+            baseFrame = GetValue(config, 'baseFrame', undefined);
+            columns = GetValue(config, 'columns', undefined);
+            rows = GetValue(config, 'rows', undefined);
+        } else if (IsArray(baseFrame)) {
+            config = rows;
+            rows = columns;
+            columns = baseFrame;
+            baseFrame = GetValue(config, 'baseFrame', undefined);
+        } else if (IsPlainObject(columns)) {
+            config = columns;
             columns = GetValue(config, 'columns', undefined);
             rows = GetValue(config, 'rows', undefined);
         }
@@ -34,26 +52,13 @@ class NinePatch extends RenderTexture {
         this.columns = {};
         this.rows = {};
         this.stretchMode = {};
-        this.redraw = false;
-        this._image = undefined;
-        this._tileSprite = undefined;
+        this._tileSprite = undefined; // Reserved for drawing image
+        this._image = undefined; // Reserved for drawing image
 
         this.setOrigin(0.5, 0.5);
         this.setGetFrameNameCallback(GetValue(config, 'getFrameNameCallback', undefined));
-        this.setTexture(key, columns, rows);
         this.setStretchMode(GetValue(config, 'stretchMode', 0));
-    }
-
-    preDestroy() {
-        if (this._image) {
-            this._image.destroy();
-            this._image = undefined;
-        }
-        if (this._tileSprite) {
-            this._tileSprite.destroy();
-            this._tileSprite = undefined;
-        }
-        super.preDestroy();
+        this.setTexture(key, baseFrame, columns, rows); // Also update render texture
     }
 
     setGetFrameNameCallback(callback) {
@@ -73,26 +78,19 @@ class NinePatch extends RenderTexture {
     }
 
     resize(width, height) {
-        this.redraw = true;
+        if ((this.width === width) && (this.height === height)) {
+            return this;
+        }
+
         super.resize(width, height);
-        this.updateDisplayOrigin(); // Add this code into RenderTexture
+        this.updateTexture();
         return this;
-    }
-
-    renderWebGL(renderer, src, interpolationPercentage, camera, parentMatrix) {
-        this.updateTexture();
-        super.renderWebGL(renderer, src, interpolationPercentage, camera, parentMatrix);
-    }
-
-    renderCanvas(renderer, src, interpolationPercentage, camera, parentMatrix) {
-        this.updateTexture();
-        super.renderCanvas(renderer, src, interpolationPercentage, camera, parentMatrix);
     }
 }
 
 Object.assign(
     NinePatch.prototype,
-    TextureMethods,
+    TextureMethods
 );
 
 export default NinePatch;

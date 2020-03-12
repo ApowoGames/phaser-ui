@@ -1,16 +1,20 @@
-import Parse from 'parse';
 import GetValue from '../../utils/object/GetValue.js';
-import PageLoader from '../utils/PageLoader.js';
-import Copy from '../../utils/array/Copy.js'
+import PageLoader from '../pageloader/PageLoader.js';
+import GetQuery from './GetQuery.js';
+import LoadMethods from './LoadMethods.js';
+import DeleteMethods from './DeleteMethods.js';
+import Copy from '../../utils/array/Copy.js';
 import Save from './Save.js';
 import SaveItems from './SaveItems.js';
-import Remove from '../utils/Remove.js';
-import LoadRandomItems from './LoadRandomItems.js';
 import GetItemCount from './GetItemCount.js';
 
 class ItemTable {
     constructor(config) {
+        this.pageLoader = new PageLoader();
+
         this.setClassName(GetValue(config, 'className', 'Item'));
+        this.setItemCount(GetValue(config, 'itemCount', 100));
+        this.setQuery();  // Reset to base query
         this.primaryKeys = [];
         var primaryKeys = GetValue(config, 'primaryKeys', undefined);
         if (primaryKeys) {
@@ -20,9 +24,6 @@ class ItemTable {
         this.setOwnerReadMode(GetValue(config, 'ownerRead', undefined));
         this.setOwnerWriteMode(GetValue(config, 'ownerWrite', undefined));
 
-        this.pageLoader = new PageLoader({
-            lines: GetValue(config, 'lines', 10)
-        });
     }
 
     setClassName(className) {
@@ -56,40 +57,21 @@ class ItemTable {
         return new this.customClass();
     }
 
-    createQuery() {
-        return new Parse.Query(this.customClass);
+    setItemCount(itemCount) {
+        this.pageLoader.setItemCount(itemCount);
+        return this;
     }
 
-    // Load methods
-    loadItem(itemId) {
-        return this.createQuery().get(itemId);
-    }
-
-    loadPage(query, pageIndex) {
-        return this.pageLoader.loadPage(query, pageIndex);
-    }
-
-    loadCurrentPage(query) {
-        return this.pageLoader.loadCurrentPage(query);
-    }
-
-    loadNextPage(query) {
-        return this.pageLoader.loadNextPage(query);
-    }
-
-    loadPreviousPage(query) {
-        return this.pageLoader.loadPreviousPage(query);
-    }
-
-    loadLines(query, startIndex, linesCnt) {
-        return this.pageLoader.loadLines(query, startIndex, linesCnt);
-    }
-
-    loadAll(query) {
+    setQuery(query) {
         if (query === undefined) {
-            query = this.createQuery();
+            query = this.baseQuery;
         }
-        return this.pageLoader.loadLines(query);
+        this.pageLoader.setQuery(query);
+        return this;
+    }
+
+    get baseQuery() {
+        return new Parse.Query(this.customClass);
     }
 
     get startIndex() {
@@ -103,22 +85,18 @@ class ItemTable {
     get isLastPage() {
         return this.pageLoader.isLastPage;
     }
-
-    // Remove
-    removeItem(itemId) {
-        return this.createItem().set('id', itemId).destroy();
-    }
 }
 
 var methods = {
+    getQuery: GetQuery,
     save: Save,
     saveItems: SaveItems,
-    remove: Remove,
-    loadRandomItems: LoadRandomItems,
     getItemCount: GetItemCount,
 }
 Object.assign(
     ItemTable.prototype,
+    LoadMethods,
+    DeleteMethods,
     methods
 );
 

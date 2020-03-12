@@ -15,6 +15,19 @@ class Swipe extends OnePointerTracer {
         var stateConfig = {
             states: {
                 IDLE: {
+                    enter: function () {
+                        self.x = 0;
+                        self.y = 0;
+                        self.worldX = 0;
+                        self.worldY = 0;
+                    },
+                    exit: function () {
+                        var pointer = self.lastPointer;
+                        self.x = pointer.x;
+                        self.y = pointer.y;
+                        self.worldX = pointer.worldX;
+                        self.worldY = pointer.worldY;
+                    }
                 },
                 BEGIN: {
                     enter: function () {
@@ -84,8 +97,8 @@ class Swipe extends OnePointerTracer {
     get dragVelocity() {
         var velocity;
         switch (this.dirMode) {
-            case 0: velocity = this.getVelocityX(); break; // up & down
-            case 1: velocity = this.getVelocityY(); break; // left & right
+            case 0: velocity = this.getVelocityY(); break; // up & down
+            case 1: velocity = this.getVelocityX(); break; // left & right
             default: velocity = this.getVelocity(); break; // 4 dir, 8 dir
         }
         return velocity;
@@ -126,7 +139,7 @@ class Swipe extends OnePointerTracer {
 
 Object.assign(
     Swipe.prototype,
-    VelocityMethods,
+    VelocityMethods
 );
 
 const IDLE = 'IDLE';

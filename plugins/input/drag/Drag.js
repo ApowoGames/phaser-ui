@@ -1,5 +1,5 @@
 import GetSceneObject from '../../utils/system/GetSceneObject.js';
-import IsObjectBelowPointer from '../../utils/input/IsObjectBelowPointer.js';
+import IsPointerInHitArea from '../../utils/input/IsPointerInHitArea.js';
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 const DistanceBetween = Phaser.Math.Distance.Between;
@@ -36,7 +36,7 @@ class Drag {
         gameObject.on('dragstart', this.onDragStart, this);
         gameObject.on('drag', this.onDrag, this);
         gameObject.on('dragend', this.onDragEnd, this);
-        gameObject.once('destroy', this.destroy, this);
+        gameObject.on('destroy', this.destroy, this);
     }
 
     shutdown() {
@@ -91,7 +91,7 @@ class Drag {
             if (
                 (!pointer.primaryDown) ||
                 (inputPlugin.getDragState(pointer) !== 0) ||
-                (!IsObjectBelowPointer(this.gameObject, pointer))
+                (!IsPointerInHitArea(this.gameObject, pointer))
             ) {
                 continue;
             }

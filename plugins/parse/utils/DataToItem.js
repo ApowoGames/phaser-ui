@@ -1,13 +1,8 @@
-var DataToItem = function (data, itemClass) {
-    var item;
-    if (data instanceof itemClass) {
-        item = data;
-    } else {
+var DataToItem = function (data, itemClass, item) {
+    if (!item) {
         item = new itemClass();
-        for (var key in data) {
-            item.set(key, data[key]);
-        }
-    }    
+    }
+    item.set(data);
     return item;
 }
 

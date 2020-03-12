@@ -1,5 +1,7 @@
+import { GetDisplayHeight } from '../../../plugins/utils/size/GetDisplaySize.js';
+
 var GetChildHeight = function (child) {
     var padding = child.rexSizer.padding;
-    return child.height + padding.top + padding.bottom;
+    return GetDisplayHeight(child) + padding.top + padding.bottom;
 }
 export default GetChildHeight;

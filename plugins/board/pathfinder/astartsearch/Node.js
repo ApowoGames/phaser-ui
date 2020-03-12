@@ -14,6 +14,7 @@ class Node {
         this.key = undefined;
         this.x = undefined;
         this.y = undefined;
+        this.isTileXYZ = true;
         // overwrite
 
         this._px = undefined;
@@ -53,14 +54,14 @@ class Node {
     }
 
     getNeighborNodes() {
-        var neighborsLXY = this.board.getNeighborTileXY(this);
+        var neighborsTileXY = this.board.getNeighborTileXY(this);
         if (this.pathFinder.shuffleNeighbors) {
-            Shuffle(neighborsLXY);
+            Shuffle(neighborsTileXY);
         }
 
         var node, neighborNodes = [];
-        for (var i = 0, cnt = neighborsLXY.length; i < cnt; i++) {
-            node = this.manager.getNode(neighborsLXY[i], true);
+        for (var i = 0, cnt = neighborsTileXY.length; i < cnt; i++) {
+            node = this.manager.getNode(neighborsTileXY[i], true);
             neighborNodes.push(node)
         }
         return neighborNodes;
@@ -107,4 +108,5 @@ class Node {
         return this.g;
     }
 }
+
 export default Node;

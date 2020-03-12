@@ -7,20 +7,21 @@ import GetChildrenWidth from './GetChildrenWidth.js';
 import GetChildrenHeight from './GetChildrenHeight.js';
 import GetAllChildrenSizers from './GetAllChildrenSizers.js';
 import GetChildrenSizers from './GetChildrenSizers.js';
+import PreLayout from './PreLayout.js';
 import Layout from './Layout.js';
-import LayoutInit from './LayoutInit.js';
+import PostLayout from './PostLayout.js';
 import _layoutInit from './_layoutInit.js';
 
-import PopUp from './PopUp.js';
-import ScaleDownDestroy from './ScaleDownDestroy.js';
-import FadeIn from './FadeIn.js';
-import FadeOutDestroy from './FadeOutDestroy.js';
+import SetAnchor from './SetAnchor.js';
+import ScaleMethods from './ScaleMethods.js';
+import FadeMethode from './FadeMethods.js';
 import IsInTouching from './IsInTouching.js';
+import GetParentSizer from './GetParentSizer.js';
 import GetTopmostSizer from './GetTopmostSizer.js';
 import LayoutBackgrounds from './LayoutBackgrounds.js';
 import SetDraggable from './SetDraggable.js';
 
-export default {
+var methods = {
     getSizerConfig: GetSizerConfig,
     pushIntoBounds: PushIntoBounds,
     drawBounds: DrawBounds,
@@ -31,16 +32,23 @@ export default {
     getElement: GetElement,
     getAllChildrenSizers: GetAllChildrenSizers,
     getChildrenSizers: GetChildrenSizers,
+    preLayout: PreLayout,
+    _layoutInit: _layoutInit,
     layout: Layout,
     layoutBackgrounds: LayoutBackgrounds,
-    layoutInit: LayoutInit,
-    _layoutInit: _layoutInit,
+    postLayout: PostLayout,
 
-    popUp: PopUp,
-    scaleDownDestroy: ScaleDownDestroy,
-    fadeIn: FadeIn,
-    fadeOutDestroy: FadeOutDestroy,
+    setAnchor: SetAnchor,
     isInTouching: IsInTouching,
+    getParentSizer: GetParentSizer,
     getTopmostSizer: GetTopmostSizer,
     setDraggable: SetDraggable,
 };
+
+Object.assign(
+    methods,
+    FadeMethode,
+    ScaleMethods
+);
+
+export default methods;

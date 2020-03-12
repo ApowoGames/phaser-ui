@@ -1,6 +1,5 @@
 import GetViewport from './GetViewport.js';
 
-const GetValue = Phaser.Utils.Objects.GetValue;
 const Rectangle = Phaser.Geom.Rectangle;
 
 class Anchor {
@@ -12,38 +11,64 @@ class Anchor {
     }
 
     resetFromJSON(o) {
-        var configX, configY;
-        if (typeof (o) === 'string') {
-            var configXY = o.split(',');
-            configX = configXY[0];
-            configY = configXY[1];
-        } else {
-            configX = GetValue(o, 'x', '0%+0');
-            configY = GetValue(o, 'y', '0%+0');
+        var alignX, configX;
+        if (o.x !== undefined) {
+            alignX = null;
+            configX = o.x;
+        } else if (o.left !== undefined) {
+            alignX = 0;
+            configX = o.left;
+        } else if (o.right !== undefined) {
+            alignX = 1;
+            configX = o.right;
+        } else if (o.centerX !== undefined) {
+            alignX = 0.5;
+            configX = o.centerX;
         }
 
-        configX = configX.replace('left', '0%').replace('right', '100%').replace('center', '50%').split('%');
-        var percentageX = parseFloat(configX[0]) / 100;
-        var offsetX = (configX[1] === '') ? 0 : parseFloat(configX[1]);
+        var alignY, configY;
+        if (o.y !== undefined) {
+            alignY = null;
+            configY = o.y;
+        } else if (o.top !== undefined) {
+            alignY = 0;
+            configY = o.top;
+        } else if (o.bottom !== undefined) {
+            alignY = 1;
+            configY = o.bottom;
+        } else if (o.centerY !== undefined) {
+            alignY = 0.5;
+            configY = o.centerY;
+        }
 
-        configY = configY.replace('top', '0%').replace('bottom', '100%').replace('center', '50%').split('%');
-        var percentageY = parseFloat(configY[0]) / 100;
-        var offsetY = (configY[1] === '') ? 0 : parseFloat(configY[1]);
+        var percentageX, offsetX;
+        if (configX !== undefined) {
+            configX = configX.replace('left', '0%').replace('right', '100%').replace('center', '50%').split('%');
+            percentageX = parseFloat(configX[0]) / 100;
+            offsetX = (configX[1] === '') ? 0 : parseFloat(configX[1]);
+        }
+        var percentageY, offsetY;
+        if (configY !== undefined) {
+            configY = configY.replace('top', '0%').replace('bottom', '100%').replace('center', '50%').split('%');
+            percentageY = parseFloat(configY[0]) / 100;
+            offsetY = (configY[1] === '') ? 0 : parseFloat(configY[1]);
+        }
 
+        this.setAlign(alignX, alignY);
         this.setPercentage(percentageX, percentageY);
         this.setOffset(offsetX, offsetY);
         return this;
     }
 
     boot() {
-        this.scaleManamger.on('resize', this.onResize, this);
-        this.gameObject.once('destroy', this.destroy, this);
+        this.scaleManamger.on('resize', this.anchor, this);
+        this.gameObject.on('destroy', this.destroy, this);
 
-        this.onResize();
+        this.anchor();
     }
 
     shutdown() {
-        this.scaleManamger.off('resize', this.onResize, this);
+        this.scaleManamger.off('resize', this.anchor, this);
         this.gameObject = undefined;
     }
 
@@ -51,37 +76,44 @@ class Anchor {
         this.shutdown();
     }
 
-    setOffset(x, y) {
-        if (x === undefined) {
-            x = 0;
-        }
-        if (y === undefined) {
-            y = x;
-        }
-        this.offsetX = x;
-        this.offsetY = y;
+    setAlign(x, y) {
+        this.alignX = x;
+        this.alignY = y;
         return this;
     }
 
     setPercentage(x, y) {
-        if (x === undefined) {
-            x = 0;
-        }
-        if (y === undefined) {
-            y = x;
-        }
         this.percentageX = x;
         this.percentageY = y;
         return this;
     }
 
-    onResize() {
+    setOffset(x, y) {
+        this.offsetX = x;
+        this.offsetY = y;
+        return this;
+    }
+
+    anchor() {
         GetViewport(this.scaleManamger, this.viewport);
         this.updatePosition();
+        return this;
     }
 
     updatePosition() {
-        this.gameObject.setPosition(this.x, this.y);
+        var gameObject = this.gameObject;
+
+        if (this.alignX === null) {
+            gameObject.x = this.anchorX;
+        } else if (this.alignX !== undefined) {
+            gameObject.x = this.anchorX + (gameObject.displayWidth * (gameObject.originX - this.alignX));
+        }
+
+        if (this.alignY === null) {
+            this.gameObject.y = this.anchorY;
+        } else if (this.alignY !== undefined) {
+            gameObject.y = this.anchorY + (gameObject.displayHeight * (gameObject.originY - this.alignY));
+        }
         return this;
     }
 
@@ -89,11 +121,11 @@ class Anchor {
         return this.gameObject.scene.scale;
     }
 
-    get x() {
+    get anchorX() {
         return this.viewport.x + (this.viewport.width * this.percentageX) + this.offsetX;
     }
 
-    get y() {
+    get anchorY() {
         return this.viewport.y + (this.viewport.height * this.percentageY) + this.offsetY;
     }
 }
