@@ -3,11 +3,11 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:27
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 16:00:57
+ * @Last Modified time: 2020-03-12 17:44:47
  */
 
 import { ButtonState } from "./button";
-import { IFramesSkinData } from "../interface/iFramesSkinData";
+import { ResourceData } from "../interface/resourceData";
 export enum SkinEvent {
     LoadComplete = "LOAD_COMPLETE",
     LoadError = "LOAD_ERROR",
@@ -15,11 +15,10 @@ export enum SkinEvent {
     Init = "INIT",
 }
 export class FramesSkin extends Phaser.Events.EventEmitter {
-    protected mSkinData: IFramesSkinData;
-    protected mBgSprite: Phaser.GameObjects.Sprite;
-    protected mIconSprite: Phaser.GameObjects.Sprite;
+    protected mSkinData: ResourceData;
+    protected mSprite: Phaser.GameObjects.Sprite;
     protected mScene: Phaser.Scene;
-    constructor(scene: Phaser.Scene, skinData: IFramesSkinData) {
+    constructor(scene: Phaser.Scene, skinData: ResourceData) {
         super();
         this.mScene = scene;
         this.setSkinData(skinData);
@@ -30,48 +29,47 @@ export class FramesSkin extends Phaser.Events.EventEmitter {
      * @param frameState
      */
     public changeFrame(frameState: string) {
-        if (this.mSkinData.background) this.setSpriteRes(frameState, this.mBgSprite);
-        if (this.mSkinData.icon) this.setSpriteRes(frameState, this.mIconSprite);
-    }
-
-    public get BackGround(): Phaser.GameObjects.Sprite {
-        return this.mBgSprite;
-    }
-
-    public get Icon(): Phaser.GameObjects.Sprite {
-        return this.mIconSprite;
+        if (this.mSkinData) {
+            this.setSpriteRes(frameState, this.mSprite);
+        }
     }
 
     public destroy() {
-        if (this.mBgSprite) {
-            this.mBgSprite.destroy();
-            this.mBgSprite = null;
-        }
-        if (this.mIconSprite) {
-            this.mIconSprite.destroy();
-            this.mIconSprite = null;
-        }
-        if (this.mSkinData) {
-            if (this.mSkinData.background) this.mSkinData.background = null;
-            if (this.mSkinData.icon) this.mSkinData.icon = null;
-            this.mSkinData = null;
+        if (this.mSprite) {
+            this.mSprite.destroy();
+            this.mSprite = null;
         }
         super.destroy();
     }
 
-    public get skin(): Phaser.GameObjects.Sprite {
-        return this.mBgSprite;
+    public set x(value: number) {
+        if (this.mSprite) {
+            this.mSprite.x = value;
+        }
     }
 
-    public setSkinData(skinData: IFramesSkinData) {
-        this.mSkinData = skinData;
-        if (this.mSkinData.background) this.setSpriteRes(ButtonState.Normal, this.mBgSprite);
-        if (this.mSkinData.icon) this.setSpriteRes(ButtonState.Normal, this.mIconSprite);
+    public set y(value: number) {
+        if (this.mSprite) {
+            this.mSprite.y = value;
+        }
     }
+
+    public get skin(): Phaser.GameObjects.Sprite {
+        return this.mSprite;
+    }
+
+    public setSkinData(skinData: ResourceData) {
+        this.mSkinData = !skinData ? {} : skinData;
+        if (this.mSkinData) {
+            this.setSpriteRes(ButtonState.Normal, this.mSprite);
+        }
+    }
+
     private setSpriteRes(frameName: string, sprite: Phaser.GameObjects.Sprite) {
-        const texture_Key: string = this.mSkinData.background.key;
+        if (!this.mSkinData) return;
+        const texture_Key: string = this.mSkinData.key;
         const framesObj: {} = this.mScene.textures.get(texture_Key).frames;
-        const textureFrame = framesObj[frameName];
+        const textureFrame = framesObj ? framesObj[frameName] : null;
         if (!sprite) {
             sprite = this.mScene.make.sprite({ key: undefined }, false);
         }

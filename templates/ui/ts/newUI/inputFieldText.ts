@@ -7,13 +7,7 @@ import { InputTextEvent } from "../interface/inputTextEvent";
 export class InputFieldText extends InputText {
     private mScene: Phaser.Scene;
     constructor(scene: Phaser.Scene, config: TextConfig) {
-        const transform: Transform = !config ? undefined : config.transform;
-        const pos: any = Tool.getPos(transform);
-        const posX: number = pos.x;
-        const posY: number = pos.y;
-        const baseWidth = !transform && !transform.width ? 0 : transform.width;
-        const baseHeight = !transform && !transform.height ? 0 : transform.height;
-        super(scene, posX, posY, baseWidth, baseHeight);
+        super(scene, config.x, config.y, config.width, config.height);
         this.mScene = scene;
         this.on("textchange", this.onTextChange, this);
         this.on("onclick", this.onTextClick, this);
@@ -21,6 +15,11 @@ export class InputFieldText extends InputText {
         this.on("focus", this.onTextFocus, this);
         this.on("blur", this.onTextBlur, this);
         this.mScene.input.on("gameobjectdown", this.sceneDown, this);
+    }
+
+    public set pos(value: any) {
+        this.x = value.x;
+        this.y = value.y;
     }
 
     public destroy() {

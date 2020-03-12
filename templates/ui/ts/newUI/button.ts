@@ -3,16 +3,16 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 16:55:13
+ * @Last Modified time: 2020-03-12 18:24:10
  */
 
 import { FramesSkin } from "./frameSkin";
 import { Tool } from "../tool/tool";
 import { Event } from "../interface/eventType";
-import { IFramesSkinData } from "../interface/iFramesSkinData";
 import { TextConfig } from "../interface/textConfig";
 import { Transform } from "../interface/transform";
 import { AbstractInteractiveObject } from "../interface/abstructInteractiveObject";
+import { ResourceData } from "../interface/resourceData";
 
 export enum ButtonState {
     Normal = "normal",
@@ -21,7 +21,8 @@ export enum ButtonState {
     Disable = "disable",
 }
 export interface ButtonConfig {
-    framesSkinData: IFramesSkinData;
+    bgFrames?: ResourceData;
+    iconFrames?: ResourceData;
     transform?: Transform;
     textconfig?: TextConfig;
     text?: string;
@@ -31,7 +32,8 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected mSelected: boolean;
     protected mEnabled: boolean;
     protected mContainer: Phaser.GameObjects.Container;
-    protected mFrameSkin: FramesSkin;
+    protected mBgFramesSkin: FramesSkin;
+    protected mIconFramesSkin: FramesSkin;
     protected mText: Phaser.GameObjects.Text;
     protected mConfig: ButtonConfig;
     protected mPressTime: number = 2000;
@@ -49,31 +51,28 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         const posY = pos.y;
         const baseWidth = !transform && !transform.width ? 0 : transform.width;
         const baseHeight = !transform && !transform.height ? 0 : transform.height;
+        const bgFrames: ResourceData = !btnConfig ? undefined : btnConfig.bgFrames;
+        const iconFrames: ResourceData = !btnConfig ? undefined : btnConfig.iconFrames;
         // 按钮容器
         this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
         this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
-        this.mFrameSkin = new FramesSkin(scene, btnConfig.framesSkinData);
         //按钮背景
-        const bgTransform: Transform = this.mConfig.framesSkinData.background.transForm;
-        this.mFrameSkin.BackGround.x = Tool.getPos(bgTransform).x;
-        this.mFrameSkin.BackGround.y = Tool.getPos(bgTransform).y;
-        this.mContainer.add(this.mFrameSkin.BackGround);
+        this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
+        const bgTransform: Transform = bgFrames.transForm;
+        this.mBgFramesSkin.x = Tool.getPos(bgTransform).x;
+        this.mBgFramesSkin.y = Tool.getPos(bgTransform).y;
+        if (this.mBgFramesSkin.skin) this.mContainer.add(this.mBgFramesSkin.skin);
         //按钮icon
-        if (this.mFrameSkin.Icon) {
-            const iconTransform: Transform = this.mConfig.framesSkinData.icon.transForm;
-            this.mFrameSkin.Icon.x = Tool.getPos(iconTransform).x;
-            this.mFrameSkin.Icon.y = Tool.getPos(iconTransform).y;
-            this.mContainer.add(this.mFrameSkin.Icon);
-        }
+        this.mIconFramesSkin = new FramesSkin(scene, iconFrames);
+        const iconTransform: Transform = iconFrames.transForm;
+        this.mIconFramesSkin.x = Tool.getPos(iconTransform).x;
+        this.mIconFramesSkin.y = Tool.getPos(iconTransform).y;
+        if (this.mIconFramesSkin.skin) this.mContainer.add(this.mIconFramesSkin.skin);
         //按钮文本
         const textconfig = {};
-        const txtTransform: Transform = btnConfig.textconfig.transform;
         this.mText = scene.make.text({
-            x: Tool.getPos(txtTransform).x,
-            y: Tool.getPos(txtTransform).y,
-            style: Object.assign(textconfig, btnConfig.textconfig.style)
+            style: Object.assign(textconfig, btnConfig.textconfig)
         }, false);
-        this.mContainer.add(this.mText);
         this.mContainer.on("pointerDown", this.onPointerDownHandler, this)
         this.mContainer.on("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.on("pointerMove", this.onPointerMoveHandler, this);
@@ -103,8 +102,21 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
     }
 
+    public setBgTexture(resData: ResourceData) {
+        this.mBgFramesSkin.setSkinData(resData);
+        if (!this.mBgFramesSkin.skin.parentContainer) this.mContainer.add(this.mBgFramesSkin.skin);
+    }
+
+    public setIconTexture(resData: ResourceData) {
+        this.mIconFramesSkin.setSkinData(resData);
+        if (!this.mIconFramesSkin.skin.parentContainer) this.mContainer.add(this.mIconFramesSkin.skin);
+    }
+
     public setText(val: string) {
-        if (this.mText) this.mText.text = val;
+        if (this.mText) {
+            this.mText.text = val;
+            if (!this.mText.parentContainer) this.mContainer.add(this.mText);
+        }
     }
 
     public get skin(): Phaser.GameObjects.Container {
@@ -115,6 +127,17 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mContainer.off("pointerDown", this.onPointerDownHandler, this);
         this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
+        if (this.mBgFramesSkin) {
+            this.mBgFramesSkin.destroy();
+            this.mBgFramesSkin = null;
+        }
+        if (this.mIconFramesSkin) {
+            this.mIconFramesSkin.destroy();
+            this.mIconFramesSkin = null;
+        }
+        if (this.mContainer) {
+            this.mContainer.destroy();
+        }
         if (this.mPressDelay) {
             clearTimeout(this.mPressDelay);
         }
@@ -158,9 +181,18 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     protected buttonStateChange(state: ButtonState) {
-        const frameName: string = this.mConfig.framesSkinData.background.frameObj[state];
-        if (this.mFrameSkin) {
-            this.mFrameSkin.changeFrame(frameName);
+        if (this.mConfig.bgFrames) {
+            const frameName: string = this.mConfig.bgFrames.frameObj[state];
+            if (this.mBgFramesSkin) {
+                this.mBgFramesSkin.changeFrame(frameName);
+            }
         }
+        if (this.mConfig.iconFrames) {
+            const frameName: string = this.mConfig.iconFrames.frameObj[state];
+            if (this.mIconFramesSkin) {
+                this.mIconFramesSkin.changeFrame(frameName);
+            }
+        }
+
     }
 }

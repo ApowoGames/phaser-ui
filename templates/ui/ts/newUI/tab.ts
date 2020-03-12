@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 17:02:05
+ * @Last Modified time: 2020-03-12 18:01:48
  */
 
 import { Button, ButtonConfig } from "./button";
@@ -35,6 +35,15 @@ export class TabGroup {
         this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
         this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
         this.mList = [];
+    }
+
+    public get skin(): Phaser.GameObjects.Container {
+        return this.mContainer;
+    }
+
+    public setPos(pos: any) {
+        this.mContainer.x = pos.x;
+        this.mContainer.y = pos.y;
     }
 
     public setSize(width: number, height: number) {
