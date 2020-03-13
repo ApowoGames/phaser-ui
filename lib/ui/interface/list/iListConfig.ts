@@ -1,12 +1,10 @@
-// import { Transform } from "../pos/transform";
-// import { ISliderSkinData } from "./iSliderSkinData";
+import { Transform } from "../pos/transform";
+import { ISliderSkinData } from "./iSliderSkinData";
 
-// export interface IListConfig {
-//     transform: Transform;
-    
-//     slider?: ISliderSkinData;
-//     back
-// }
+export interface IListConfig {
+    transform: Transform;
+    slider?: ISliderSkinData;
+}
 // // x: 0,
 // // y: 0,
 // // anchor: undefined,
