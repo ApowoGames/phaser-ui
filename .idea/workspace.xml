@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="66cf63f5-1eb8-402a-8908-e25a43581be6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/phaser3-rexui.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectId" id="1Z11fviForCQ0lChiFv478mbeym" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.16.1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path" value="wsl://UBUNTU1804@/usr/bin/node" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="66cf63f5-1eb8-402a-8908-e25a43581be6" name="Default Changelist" comment="" />
+      <created>1583991892432</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583991892432</updated>
+      <workItem from="1583991898020" duration="2825000" />
+      <workItem from="1583996902780" duration="2800000" />
+      <workItem from="1584000189419" duration="1958000" />
+      <workItem from="1584004289043" duration="238000" />
+      <workItem from="1584008254974" duration="2414000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="803" y="158" width="1837" height="1114" key="DiffContextDialog" timestamp="1584010372538">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state x="803" y="158" width="1837" height="1114" key="DiffContextDialog/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584010372538" />
+    <state width="1633" height="472" key="GridCell.Tab.0.bottom" timestamp="1584009777517">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state width="1633" height="472" key="GridCell.Tab.0.bottom/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584009777517" />
+    <state width="1633" height="472" key="GridCell.Tab.0.center" timestamp="1584009777517">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state width="1633" height="472" key="GridCell.Tab.0.center/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584009777517" />
+    <state width="1633" height="472" key="GridCell.Tab.0.left" timestamp="1584009777516">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state width="1633" height="472" key="GridCell.Tab.0.left/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584009777516" />
+    <state width="1633" height="472" key="GridCell.Tab.0.right" timestamp="1584009777517">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state width="1633" height="472" key="GridCell.Tab.0.right/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584009777517" />
+    <state x="1440" y="260" key="SettingsEditor" timestamp="1584000573975">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state x="1440" y="260" key="SettingsEditor/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584000573975" />
+    <state x="2011" y="601" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1584010099683">
+      <screen x="0" y="0" width="3440" height="1410" />
+    </state>
+    <state x="2011" y="601" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.3440.1410/-1200.-465.1200.1890@0.0.3440.1410" timestamp="1584010099683" />
+  </component>
+</project>
