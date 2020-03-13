@@ -12,8 +12,6 @@ module.exports = {
         // game objects
         'bbcodetextplugin': './plugins/bbcodetext-plugin.js',
         'bbcodetext': './plugins/bbcodetext.js',
-        'tagtextplugin': './plugins/tagtext-plugin.js',
-        'tagtext': './plugins/tagtext.js',
         'canvasplugin': './plugins/canvas-plugin.js',
         'canvas': './plugins/canvas.js',
         'circlemaskimageplugin': './plugins/circlemaskimage-plugin.js',
