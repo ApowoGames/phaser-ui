@@ -1,5 +1,5 @@
 
-import InputText from "../../../../plugins/gameobjects/inputtext/InputText";
+import InputText from "../../plugins/gameobjects/inputtext/InputText";
 import { InputTextEvent } from "../interface/event/inputTextEvent";
 import { TextConfig } from "../interface/text/textConfig";
 export class InputFieldText extends InputText {
