@@ -1,8 +1,9 @@
 import { Align } from "./align";
+import { OrientationType } from "./orientationType";
 
 export interface Transform {
-    x: number | string;
-    y: number | string;
+    x: number;
+    y: number;
     align?: Align;
     width?: number;
     height?: number;
