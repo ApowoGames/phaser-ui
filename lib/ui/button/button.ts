@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 20:09:17
+ * @Last Modified time: 2020-03-17 16:50:39
  */
 
 import { FramesSkin } from "../interface/button/frameSkin";
@@ -73,9 +73,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mText = scene.make.text({
             style: Object.assign(textconfig, btnConfig.textconfig)
         }, false);
-        this.mContainer.on("pointerDown", this.onPointerDownHandler, this)
-        this.mContainer.on("pointerUp", this.onPointerUpHandler, this);
-        this.mContainer.on("pointerMove", this.onPointerMoveHandler, this);
+        this.addListen();
     }
 
     public set selected(value: boolean) {
@@ -123,10 +121,20 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         return this.mContainer;
     }
 
-    public destroy() {
+    public addListen() {
+        this.mContainer.on("pointerDown", this.onPointerDownHandler, this)
+        this.mContainer.on("pointerUp", this.onPointerUpHandler, this);
+        this.mContainer.on("pointerMove", this.onPointerMoveHandler, this);
+    }
+
+    public removeListen() {
         this.mContainer.off("pointerDown", this.onPointerDownHandler, this);
         this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
+    }
+
+    public destroy() {
+        this.removeAllListeners();
         if (this.mBgFramesSkin) {
             this.mBgFramesSkin.destroy();
             this.mBgFramesSkin = null;

@@ -1,7 +1,11 @@
 import { Transform } from "../interface/pos/transform";
+import { Align } from "../interface/pos/align";
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class Tool {
+    public static getTransfrom(config: any): any {
+        return !config ? undefined : config.transform;
+    }
     public static getPos(transform: Transform): any {
         const pos: any = { x: 0, y: 0 };
         if (!transform) {
@@ -30,6 +34,13 @@ export class Tool {
             pos.y = GetValue(transform, "y", 0);
         }
         return pos;
+    }
+
+    public static checkNinePatch(align: Align): boolean {
+        if (align.top || align.bottom || align.right || align.left) {
+            return true;
+        }
+        return false;
     }
 }
 

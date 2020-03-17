@@ -1,42 +1,59 @@
 import { IPatchesConfig, normalizePatchesConfig } from "../interface/baseUI/patches.config";
-
+import { INinePatchConfig } from "../interface/ninepatch/iNinePatchConfig";
+import { Tool } from "../tool/tool";
+import { Transform } from "../../ui/interface/pos/transform";
+import { INinePatchSkinData } from "../interface/ninepatch/iNinePatchSkinData";
+import { Align } from "../interface/pos/align";
 export class NinePatch extends Phaser.GameObjects.Container {
     private static readonly __BASE: string = "__BASE";
     private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];
 
     protected originTexture: Phaser.Textures.Texture;
     protected originFrame: Phaser.Textures.Frame;
-    protected config: IPatchesConfig;
+    protected patchesConfig: IPatchesConfig;
     protected finalXs: number[];
     protected finalYs: number[];
     protected internalTint: number;
 
-    constructor(
-        scene: Phaser.Scene,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        key: string, frame: string | number,
-        config?: IPatchesConfig) {
-        super(scene, x, y);
-        this.config = config || this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key);
-        normalizePatchesConfig(this.config);
-        this.setSize(width, height);
+    constructor(scene: Phaser.Scene, config: INinePatchConfig) {
+        super(scene);
+        this.refreshNinePath(config);
+    }
+
+    public refreshNinePath(config: INinePatchConfig) {
+        const transform: Transform = Tool.getTransfrom(config.transform);
+        this.x = Tool.getPos(transform).x;
+        this.y = Tool.getPos(transform).y;
+        const baseWidth: number = transform.width;
+        const baseHeight: number = transform.height;
+        const skinData: INinePatchSkinData = config.skinData;
+        const frame = skinData.frame ? skinData.frame : NinePatch.__BASE;
+        const key = skinData.key;
+        const aligin: Align = transform.align;
+        this.patchesConfig = this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
+            ? this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
+            : {
+                top: aligin.top || 0,
+                left: aligin.left || 0,
+                right: aligin.right || 0,
+                bottom: aligin.bottom || 0,
+            };
+        normalizePatchesConfig(this.patchesConfig);
+        this.setSize(baseWidth, baseHeight);
         this.setTexture(key, frame);
     }
 
     public resize(width: number, height: number) {
         width = Math.round(width);
         height = Math.round(height);
-        if (!this.config) {
+        if (!this.patchesConfig) {
             return this;
         }
         if (this.width === width && this.height === height) {
             return this;
         }
-        width = Math.max(width, this.config.left + this.config.right);
-        height = Math.max(height, this.config.top + this.config.bottom);
+        width = Math.max(width, this.patchesConfig.left + this.patchesConfig.right);
+        height = Math.max(height, this.patchesConfig.top + this.patchesConfig.bottom);
         this.setSize(width, height);
         this.drawPatches();
         return;
@@ -57,8 +74,8 @@ export class NinePatch extends Phaser.GameObjects.Container {
 
     public setSize(width: number, height: number): this {
         super.setSize(width, height);
-        this.finalXs = [0, this.config.left, this.width - this.config.right, this.width];
-        this.finalYs = [0, this.config.top, this.height - this.config.bottom, this.height];
+        this.finalXs = [0, this.patchesConfig.left, this.width - this.patchesConfig.right, this.width];
+        this.finalYs = [0, this.patchesConfig.top, this.height - this.patchesConfig.bottom, this.height];
         return this;
     }
 
@@ -92,8 +109,8 @@ export class NinePatch extends Phaser.GameObjects.Container {
 
     protected createPatches(): void {
         // The positions we want from the base texture
-        const textureXs: number[] = [0, this.config.left, this.originFrame.width - this.config.right, this.originFrame.width];
-        const textureYs: number[] = [0, this.config.top, this.originFrame.height - this.config.bottom, this.originFrame.height];
+        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
+        const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
         let patchIndex: number = 0;
         for (let yi: number = 0; yi < 3; yi++) {
             for (let xi: number = 0; xi < 3; xi++) {
