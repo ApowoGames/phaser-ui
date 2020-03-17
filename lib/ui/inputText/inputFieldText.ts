@@ -7,11 +7,7 @@ export class InputFieldText extends InputText {
     constructor(scene: Phaser.Scene, config: TextConfig) {
         super(scene, config.x, config.y, config.width, config.height);
         this.mScene = scene;
-        this.on("textchange", this.onTextChange, this);
-        this.on("onclick", this.onTextClick, this);
-        this.on("ondblclick", this.onTextDbclick, this);
-        this.on("focus", this.onTextFocus, this);
-        this.on("blur", this.onTextBlur, this);
+        this.addListen();
         this.mScene.input.on("gameobjectdown", this.sceneDown, this);
     }
 
@@ -21,12 +17,23 @@ export class InputFieldText extends InputText {
     }
 
     public destroy() {
+        this.removeListen();
+        super.destroy();
+    }
+
+    public addListen() {
+        this.on("textchange", this.onTextChange, this);
+        this.on("onclick", this.onTextClick, this);
+        this.on("ondblclick", this.onTextDbclick, this);
+        this.on("focus", this.onTextFocus, this);
+        this.on("blur", this.onTextBlur, this);
+    }
+    public removeListen() {
         this.off("textchange", this.onTextChange, this);
         this.off("onclick", this.onTextClick, this);
         this.off("ondblclick", this.onTextDbclick, this);
         this.off("focus", this.onTextFocus, this);
         this.off("blur", this.onTextBlur, this);
-        super.destroy();
     }
 
     private sceneDown() {
