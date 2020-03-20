@@ -1,9 +1,9 @@
 /*
  * 进度条ui
- * @Author: gxm 
- * @Date: 2020-03-17 20:59:46 
- * @Last Modified by:   gxm 
- * @Last Modified time: 2020-03-17 20:59:46 
+ * @Author: gxm
+ * @Date: 2020-03-17 20:59:46
+ * @Last Modified by: gxm
+ * @Last Modified time: 2020-03-20 13:58:57
  */
 import { ProgressBarConfig } from "../interface/progressbar/iProgressBarConfig";
 import { Transform } from "../../ui/interface/pos/transform";
@@ -44,7 +44,7 @@ export class ProgressBar extends Phaser.Events.EventEmitter {
         const barSkinData: INinePatchSkinData = !skinData ? undefined : skinData.bar;
         this.mBgSkin = new NinePatchSkin(scene, bgSkinData);
         this.mBarSkin = new NinePatchSkin(scene, barSkinData);
-        //按钮文本
+        // 按钮文本
         const textconfig = {};
         this.mText = scene.make.text({
             style: Object.assign(textconfig, config.textConfig)
