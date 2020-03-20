@@ -1,6 +1,6 @@
 import { ScrollerConfig } from "../interface/scroller/scrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
-import IsPointerInBounds from '../../plugins/utils/input/IsPointerInBounds.js';
+import IsPointerInBounds from "../../plugins/utils/input/IsPointerInBounds.js";
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
