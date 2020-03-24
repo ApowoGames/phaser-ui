@@ -1,5 +1,7 @@
 import { ScrollerConfig } from "../interface/scroller/scrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
+import { Pos } from "../../../../../src/utils/pos";
+import { Position45 } from "../../../../../src/utils/position45";
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
@@ -14,6 +16,10 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     private mCellDownHandler: Function;
     private mCellUpHandler: Function;
     /**
+     * 界面内滚动子对象偏移,根据横向和竖向来决定是x向还是y向
+     */
+    private mChildPad: number = 0;
+    /**
      * 是否在移动中
      */
     private mMoveing: boolean = false;
@@ -21,6 +27,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     private clickContainer: any;
     private mGameObject: any;
     private mRectangle: Phaser.Geom.Rectangle;
+    private mInteractiveList: any[];
     constructor(scene: Phaser.Scene, gameObject: any, config: ScrollerConfig) {
         super();
         this.mConfig = config;
@@ -29,6 +36,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         bg.fillRect(0, 0, config.width, config.height);
         bg.setPosition(config.x, config.y);
         gameObject.setMask(bg.createGeometryMask());
+        // this.parentContainer.x - w / 2,h/2
         const container: Phaser.GameObjects.Container = scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
         container.setSize(config.width, config.height);
         container.setInteractive(new Phaser.Geom.Rectangle(0, 0, config.width, config.height), Phaser.Geom.Rectangle.Contains);
@@ -46,10 +54,22 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         this.addListen();
     }
 
+    public clearInteractiveObject() {
+        if (!this.mInteractiveList) return;
+        this.mInteractiveList.length = 0;
+        this.mInteractiveList = [];
+    }
+
+    public setInteractiveObject(obj: any) {
+        if (!this.mInteractiveList) this.mInteractiveList = [];
+        this.mInteractiveList.push(obj);
+    }
+
     public addListen() {
+        this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
         this.mScene.input.on("pointerdown", this.pointerDownHandler, this);
         this.mScene.input.on("pointerup", this.pointerUpHandler, this);
-        this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
+
     }
 
     public removeListen() {
@@ -69,25 +89,41 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     }
 
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {
+        // this.mScene.input.off("pointermove", this.pointerMoveHandler, this);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellDownHandler && !this.mMoveing) {
-                this.mCellDownHandler(pointer);
+                if (!this.mInteractiveList) return;
+                for (let i: number = 0, len = this.mInteractiveList.length; i < len; i++) {
+                    const interactiveObj = this.mInteractiveList[i];
+                    if (this.checkPointerInBounds(interactiveObj, pointer, true)) {
+                        this.mCellDownHandler(interactiveObj);
+                        break;
+                    }
+                }
             }
             const eventName: string = inBound ? ScrollerEvent.downinBound : ScrollerEvent.downoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
     }
     private pointerUpHandler(pointer: Phaser.Input.Pointer) {
+        // this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
+        this.mMoveing = false;
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellUpHandler && !this.mMoveing) {
-                this.mCellUpHandler(pointer);
+                if (!this.mInteractiveList) return;
+                for (let i: number = 0, len = this.mInteractiveList.length; i < len; i++) {
+                    const interactiveObj = this.mInteractiveList[i];
+                    if (this.checkPointerInBounds(interactiveObj, pointer, true)) {
+                        this.mCellUpHandler(interactiveObj);
+                        break;
+                    }
+                }
             }
             const eventName: string = inBound ? ScrollerEvent.upinBound : ScrollerEvent.upoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
-        this.mMoveing = false;
     }
 
     private checkPointerDelection(pointer: Phaser.Input.Pointer) {
@@ -95,7 +131,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
             Math.abs(pointer.downY - pointer.upY) < this.mDisDelection;
     }
 
-    private checkPointerInBounds(gameObject, pointer): boolean {
+    private checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: Boolean = false): boolean {
         if (!this.mRectangle) {
             this.mRectangle = new Phaser.Geom.Rectangle(0, 0, 0, 0);
         }
@@ -104,11 +140,25 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         this.mRectangle.top = -gameObject.height / 2;
         this.mRectangle.bottom = gameObject.height / 2;
         if (pointer) {
-            if (!this.mRectangle.contains(pointer.x - gameObject.x, pointer.y - gameObject.y)) {
-                return false;
+            const worldMatrix: Phaser.GameObjects.Components.TransformMatrix = gameObject.getWorldTransformMatrix();
+            const x: number = pointer.x - worldMatrix.tx;
+            const y: number = pointer.y - worldMatrix.ty;
+            if (this.mRectangle.left <= x && this.mRectangle.right >= x && this.mRectangle.top <= y && this.mRectangle.bottom >= y) {
+                return true;
             }
-            return true;
+            return false;
         }
         return false;
+    }
+    private getWorldPosition(gameObject): Pos {
+        const pos: Pos = new Pos(gameObject.x, gameObject.y);
+        let obj = gameObject;
+        while (obj) {
+            if (!obj.parentContainer) break;
+            pos.x += obj.parentContainer.x;
+            pos.y += obj.parentContainer.y;
+            obj = obj.parentContainer;
+        }
+        return pos;
     }
 }
