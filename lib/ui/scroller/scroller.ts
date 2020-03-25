@@ -1,7 +1,5 @@
 import { ScrollerConfig } from "../interface/scroller/scrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
-import { Pos } from "../../../../../src/utils/pos";
-import { Position45 } from "../../../../../src/utils/position45";
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
@@ -32,18 +30,12 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         super();
         this.mConfig = config;
         const bg = scene.add.graphics(undefined);
-        bg.fillStyle(0, 0.2);
+        bg.fillStyle(0, 0);
         bg.fillRect(0, 0, config.width, config.height);
         bg.setPosition(config.x, config.y);
         gameObject.setMask(bg.createGeometryMask());
-        // this.parentContainer.x - w / 2,h/2
         const container: Phaser.GameObjects.Container = scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
         container.setSize(config.width, config.height);
-        container.setInteractive(new Phaser.Geom.Rectangle(0, 0, config.width, config.height), Phaser.Geom.Rectangle.Contains);
-        // const bg1 = scene.make.graphics(undefined);
-        // bg1.fillStyle(0x123, 0.2);
-        // bg1.fillRect(-config.width / 2, -config.height / 2, config.width, config.height);
-        // container.add(bg1);
         this.mGameObject = gameObject;
         this.mScroller = new Scroller(container, config);
         this.clickContainer = container;
@@ -73,6 +65,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     }
 
     public removeListen() {
+        this.mMoveing = false;
         this.mScene.input.off("pointerdown", this.pointerDownHandler, this);
         this.mScene.input.off("pointerup", this.pointerUpHandler, this);
         this.mScene.input.off("pointermove", this.pointerMoveHandler, this);
@@ -149,16 +142,5 @@ export class GameScroller extends Phaser.Events.EventEmitter {
             return false;
         }
         return false;
-    }
-    private getWorldPosition(gameObject): Pos {
-        const pos: Pos = new Pos(gameObject.x, gameObject.y);
-        let obj = gameObject;
-        while (obj) {
-            if (!obj.parentContainer) break;
-            pos.x += obj.parentContainer.x;
-            pos.y += obj.parentContainer.y;
-            obj = obj.parentContainer;
-        }
-        return pos;
     }
 }
