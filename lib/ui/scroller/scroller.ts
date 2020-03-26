@@ -29,8 +29,8 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     constructor(scene: Phaser.Scene, gameObject: any, config: ScrollerConfig) {
         super();
         this.mConfig = config;
-        const bg = scene.add.graphics(undefined);
-        bg.fillStyle(0, 0);
+        const bg = scene.make.graphics(undefined,false);
+        bg.fillStyle(0);
         bg.fillRect(0, 0, config.width, config.height);
         bg.setPosition(config.x, config.y);
         gameObject.setMask(bg.createGeometryMask());
@@ -74,6 +74,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     public destroy() {
         this.mMoveing = false;
         this.removeListen();
+        this.mGameObject.clearMask(true);
         this.mScroller.destroy();
     }
 
