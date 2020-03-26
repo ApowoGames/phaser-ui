@@ -45,13 +45,13 @@ export class NinePatchSkin extends Phaser.Events.EventEmitter {
         super.destroy();
     }
 
-    private setNinePatchRes(skinData: INinePatchSkinData, skin: any) {
-        if (!skinData) return;
-        const skinTransform: Transform = Tool.getTransfrom(skinData);
+    private setNinePatchRes(nineSkinData: INinePatchSkinData, skin: any) {
+        if (!nineSkinData) return;
+        const skinTransform: Transform = Tool.getTransfrom(nineSkinData);
         const config: INinePatchConfig = {
-            transform: skinData.transform,
-            skinData: skinData
-        }
+            transform: nineSkinData.transform,
+            skinData: nineSkinData
+        };
         if (skinTransform) {
             if (Tool.checkNinePatch(skinTransform.align)) {
                 if (!skin) {
@@ -63,7 +63,7 @@ export class NinePatchSkin extends Phaser.Events.EventEmitter {
                 const texture_Key: string = this.mSkinData.key;
                 const texture: Phaser.Textures.Texture = this.mScene.textures.get(texture_Key);
                 const framesObj: {} = texture.frames;
-                const frameName = skinData.frame;
+                const frameName = nineSkinData.frame;
                 const textureFrame = framesObj ? framesObj[frameName] : null;
                 if (!skin) {
                     if (texture.frameTotal > 1) {

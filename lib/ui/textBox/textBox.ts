@@ -15,11 +15,11 @@ export class TextBox extends Phaser.Events.EventEmitter {
         const str: string = config.text || "";
         const textChangeHandler: Function = config.onTextChanged || undefined;
         const closeHandler: Function = config.onClose || undefined;
-        const editConfig = { type: editType, text: str, onTextChanged: textChangeHandler }
+        const editConfig = { type: editType, text: str, onTextChanged: textChangeHandler };
         const styleConfig = {};
-        Object.assign(styleConfig, textConfig)
+        Object.assign(styleConfig, textConfig);
         this.mBBCodeText = new BBCodeText(scene, posX, posY, str, styleConfig);
-        (<any>this.mBBCodeText).setOrigin(0.5, 0.5)
+        (<any>this.mBBCodeText).setOrigin(0.5, 0.5);
         this.mBBCodeText.setInteractive();
         this.mBBCodeText.on("pointerdown", () => {
             if (!this.mTextEdit) {

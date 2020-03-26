@@ -1,4 +1,4 @@
-export interface AbstractInteractiveObject{
+export interface AbstractInteractiveObject {
     selected: boolean;
     enabled: boolean;
     addListen();

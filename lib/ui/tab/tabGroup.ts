@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 17:56:28
+ * @Last Modified time: 2020-03-26 18:10:50
  */
 
 import { Tool } from "../tool/Tool";
@@ -11,17 +11,16 @@ import { Tool } from "../tool/Tool";
 import { Transform } from "../interface/pos/Transform";
 import { IListConfig } from "../interface/list/IListConfig";
 import { TabButton } from "./TabButton";
-export interface ITabsGroupConfig extends IListConfig {
-}
+
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class TabGroup {
     private mSelectIndex: number;
-    private mConfig: ITabsGroupConfig;
+    private mConfig: IListConfig;
     private mContainer: Phaser.GameObjects.Container;
     private mList: any[];
     private mWorld;
     private mScene: Phaser.Scene;
-    constructor(scene: Phaser.Scene, config: ITabsGroupConfig, world: any) {
+    constructor(scene: Phaser.Scene, config: IListConfig, world: any) {
         this.mConfig = config;
         this.mWorld = world;
         this.mScene = scene;

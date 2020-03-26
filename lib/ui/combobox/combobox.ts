@@ -1,4 +1,4 @@
-import { IComboboxConfig } from "../interface/combobox/IcomboboxConfig";
+import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
 import { AbstractItem } from "../interface/baseUI/AbstructItem";
 
 export interface ISelectCallItemData extends AbstractItem {
@@ -212,8 +212,6 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         }, false);
 
         this.add([this.mBg, this.mArrow, this.mtxt]);
-
-
         this.mBg.setInteractive();
         this.mBg.on("pointerdown", this.openHandler, this);
         this.mInitialize = true;
@@ -277,4 +275,3 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         return bgGraphics;
     }
 }
-

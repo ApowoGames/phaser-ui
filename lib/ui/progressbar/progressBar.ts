@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 17:52:04
+ * @Last Modified time: 2020-03-26 18:09:38
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { Transform } from "../interface/pos/Transform";

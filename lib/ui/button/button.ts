@@ -56,19 +56,19 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         // 按钮容器
         this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
         this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
-        //按钮背景
+        // 按钮背景
         this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
         const bgTransform: Transform = bgFrames.transForm;
         this.mBgFramesSkin.x = Tool.getPos(bgTransform).x;
         this.mBgFramesSkin.y = Tool.getPos(bgTransform).y;
         if (this.mBgFramesSkin.skin) this.mContainer.add(this.mBgFramesSkin.skin);
-        //按钮icon
+        // 按钮icon
         this.mIconFramesSkin = new FramesSkin(scene, iconFrames);
         const iconTransform: Transform = iconFrames.transForm;
         this.mIconFramesSkin.x = Tool.getPos(iconTransform).x;
         this.mIconFramesSkin.y = Tool.getPos(iconTransform).y;
         if (this.mIconFramesSkin.skin) this.mContainer.add(this.mIconFramesSkin.skin);
-        //按钮文本
+        // 按钮文本
         const textconfig = {};
         this.mText = scene.make.text({
             style: Object.assign(textconfig, btnConfig.textconfig)
@@ -122,7 +122,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     public addListen() {
-        this.mContainer.on("pointerDown", this.onPointerDownHandler, this)
+        this.mContainer.on("pointerDown", this.onPointerDownHandler, this);
         this.mContainer.on("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.on("pointerMove", this.onPointerMoveHandler, this);
     }
