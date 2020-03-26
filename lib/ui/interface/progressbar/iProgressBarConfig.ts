@@ -1,4 +1,4 @@
-import { IProgressBarSkinData } from "./IProgressBarSkinData";
+import { IProgressBarSkinData } from "./iProgressBarSkinData";
 import { Transform } from "../pos/transform";
 import { TextConfig } from "../text/textConfig";
 

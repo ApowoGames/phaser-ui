@@ -8,7 +8,7 @@
 import { ProgressBarConfig } from "../interface/progressbar/iProgressBarConfig";
 import { Transform } from "../../ui/interface/pos/transform";
 import { Tool } from "../tool/tool";
-import { IProgressBarSkinData } from "../interface/progressbar/IProgressBarSkinData";
+import { IProgressBarSkinData } from "../interface/progressbar/iProgressBarSkinData";
 import { NinePatchSkin } from "../interface/ninepatch/ninePatchSkin";
 import { INinePatchSkinData } from "../interface/ninepatch/iNinePatchSkinData";
 export enum ProgressBarEvent {
