@@ -1,4 +1,4 @@
-import { UIType } from "./uiType";
+import { UIType } from "./UiType";
 
 export interface AbstractUI {
     id: number;

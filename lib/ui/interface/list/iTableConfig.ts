@@ -1,4 +1,4 @@
-import { Transform } from "../pos/transform";
+import { Transform } from "../pos/Transform";
 export interface ITableConfig {
     transform: Transform;
     cellWidth: number;

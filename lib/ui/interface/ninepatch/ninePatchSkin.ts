@@ -1,8 +1,8 @@
-import { INinePatchSkinData } from "./iNinePatchSkinData";
-import { NinePatch } from "../../ninepatch/ninePatch";
-import { INinePatchConfig } from "./iNinePatchConfig";
-import { Transform } from "../pos/transform";
-import { Tool } from "../../tool/tool";
+import { INinePatchSkinData } from "./INinePatchSkinData";
+import { NinePatch } from "../../ninepatch/NinePatch";
+import { INinePatchConfig } from "./INinePatchConfig";
+import { Transform } from "../pos/Transform";
+import { Tool } from "../../tool/Tool";
 
 export class NinePatchSkin extends Phaser.Events.EventEmitter {
     private mScene: Phaser.Scene;

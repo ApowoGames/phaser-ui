@@ -1,5 +1,5 @@
-import { IComboboxConfig } from "../interface/combobox/icomboboxConfig";
-import { AbstractItem } from "../interface/baseUI/abstructItem";
+import { IComboboxConfig } from "../interface/combobox/IcomboboxConfig";
+import { AbstractItem } from "../interface/baseUI/AbstructItem";
 
 export interface ISelectCallItemData extends AbstractItem {
     text: string;

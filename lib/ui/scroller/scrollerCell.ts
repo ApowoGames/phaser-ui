@@ -3,17 +3,15 @@
  * @Author: gxm
  * @Date: 2020-03-21 16:02:41
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-21 17:12:05
+ * @Last Modified time: 2020-03-26 17:54:21
  */
-
-import { Pos } from "../../../../../src/utils/pos";
 
 export class ScrollCell {
     private mIndex: number = 0;
-    private mPos: Pos;
+    private mPos: any;
     private mGameObject: Phaser.GameObjects.GameObject;
     constructor(object: Phaser.GameObjects.GameObject) {
-        this.mPos = new Pos((<any>object).x, (<any>object).y);
+        this.mPos = { x: (<any>object).x, y: (<any>object).y };
         this.mGameObject = object;
     }
     public set index(value: number) {
@@ -22,7 +20,7 @@ export class ScrollCell {
     public get index(): number {
         return this.mIndex;
     }
-    public get pos(): Pos {
+    public get pos(): any {
         return this.mPos;
     }
     public set gameobject(object: Phaser.GameObjects.GameObject) {

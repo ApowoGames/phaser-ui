@@ -1,5 +1,4 @@
-import { ResourceData } from "../baseUI/resourceData";
-import { INinePatchSkinData } from "../ninepatch/iNinePatchSkinData";
+import { INinePatchSkinData } from "../ninepatch/INinePatchSkinData";
 
 export interface IProgressBarSkinData {
     background: INinePatchSkinData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;

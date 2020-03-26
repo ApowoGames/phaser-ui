@@ -1,4 +1,4 @@
-import { Transform } from "../pos/transform";
+import { Transform } from "../pos/Transform";
 
 export interface ResourceData {
     transForm?: Transform;

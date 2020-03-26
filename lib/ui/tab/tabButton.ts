@@ -1,5 +1,5 @@
-import { Button, ButtonConfig, ButtonState } from "../button/button";
-import { Event } from "../interface/event/mouseEvent";
+import { Button, ButtonConfig, ButtonState } from "../button/Button";
+import { Event } from "../interface/event/MouseEvent";
 
 export class TabButton extends Button {
     constructor(scene: Phaser.Scene, config: ButtonConfig, world: any) {

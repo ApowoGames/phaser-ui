@@ -1,7 +1,7 @@
-import { TextEditConfig } from "../interface/textedit/texteditConfig";
+import { TextEditConfig } from "../interface/textedit/TexteditConfig";
 import BBCodeText from "../../plugins/bbcodetext";
-import { TextConfig } from "../interface/text/textConfig";
-import { TextType } from "../interface/text/textType";
+import { TextConfig } from "../interface/text/TextConfig";
+import { TextType } from "../interface/text/TextType";
 import TextEdit from "../../plugins/behaviors/textedit/TextEdit";
 export class TextBox extends Phaser.Events.EventEmitter {
     private mBBCodeText: BBCodeText;

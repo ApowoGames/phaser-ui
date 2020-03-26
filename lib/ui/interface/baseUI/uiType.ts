@@ -2,7 +2,7 @@
  * @Author: gxm
  * @Date: 2020-03-06 13:53:28
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 15:19:45
+ * @Last Modified time: 2020-03-26 17:47:31
  */
 export enum UIType {
     permanent, // 场景内常驻ui

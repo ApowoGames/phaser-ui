@@ -1,4 +1,4 @@
-import { ResourceData } from "../baseUI/resourceData";
+import { ResourceData } from "../baseUI/ResourceData";
 
 export interface ISliderConfig {
     track: ResourceData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image; // 轨道

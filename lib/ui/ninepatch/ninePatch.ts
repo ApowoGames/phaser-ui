@@ -1,9 +1,9 @@
-import { IPatchesConfig, normalizePatchesConfig } from "../interface/baseUI/patches.config";
-import { INinePatchConfig } from "../interface/ninepatch/iNinePatchConfig";
-import { Tool } from "../tool/tool";
-import { Transform } from "../../ui/interface/pos/transform";
-import { INinePatchSkinData } from "../interface/ninepatch/iNinePatchSkinData";
-import { Align } from "../interface/pos/align";
+import { IPatchesConfig, normalizePatchesConfig } from "../interface/baseUI/Patches.config";
+import { INinePatchConfig } from "../interface/ninepatch/INinePatchConfig";
+import { Tool } from "../tool/Tool";
+import { Transform } from "../interface/pos/Transform";
+import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
+import { Align } from "../interface/pos/Align";
 export class NinePatch extends Phaser.GameObjects.Container {
     private static readonly __BASE: string = "__BASE";
     private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];

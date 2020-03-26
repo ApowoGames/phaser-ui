@@ -1,5 +1,5 @@
-import { Align } from "./align";
-import { OrientationType } from "./orientationType";
+import { Align } from "./Align";
+import { OrientationType } from "./OrientationType";
 
 export interface Transform {
     x: number;

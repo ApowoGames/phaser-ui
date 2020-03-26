@@ -1,4 +1,4 @@
-import { ScrollCell } from "./scrollerCell";
+import { ScrollCell } from "./ScrollerCell";
 
 export class ScrollCellContainer extends Phaser.GameObjects.Container {
     protected itemList: ScrollCell[];

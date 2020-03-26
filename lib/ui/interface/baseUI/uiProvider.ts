@@ -1,4 +1,4 @@
-import { AbstractUI } from "./abstructUI";
+import { AbstractUI } from "./AbstructUI";
 
 export interface UIProvider {
     scene: Phaser.Scene;

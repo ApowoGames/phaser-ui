@@ -3,14 +3,14 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-20 13:58:57
+ * @Last Modified time: 2020-03-26 17:52:04
  */
-import { ProgressBarConfig } from "../interface/progressbar/iProgressBarConfig";
-import { Transform } from "../../ui/interface/pos/transform";
-import { Tool } from "../tool/tool";
-import { IProgressBarSkinData } from "../interface/progressbar/iProgressBarSkinData";
-import { NinePatchSkin } from "../interface/ninepatch/ninePatchSkin";
-import { INinePatchSkinData } from "../interface/ninepatch/iNinePatchSkinData";
+import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
+import { Transform } from "../interface/pos/Transform";
+import { Tool } from "../tool/Tool";
+import { IProgressBarSkinData } from "../interface/progressbar/IProgressBarSkinData";
+import { NinePatchSkin } from "../interface/ninepatch/NinePatchSkin";
+import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
 export enum ProgressBarEvent {
     tweenStart = "tweenStart",
     tweenComplete = "tweenComplete",

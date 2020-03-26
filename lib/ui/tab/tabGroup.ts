@@ -3,14 +3,14 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-12 20:09:08
+ * @Last Modified time: 2020-03-26 17:56:28
  */
 
-import { Tool } from "../tool/tool";
+import { Tool } from "../tool/Tool";
 
-import { Transform } from "../interface/pos/transform";
-import { IListConfig } from "../interface/list/iListConfig";
-import { TabButton } from "./tabButton";
+import { Transform } from "../interface/pos/Transform";
+import { IListConfig } from "../interface/list/IListConfig";
+import { TabButton } from "./TabButton";
 export interface ITabsGroupConfig extends IListConfig {
 }
 const GetValue = Phaser.Utils.Objects.GetValue;

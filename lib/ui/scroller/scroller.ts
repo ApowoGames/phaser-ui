@@ -1,4 +1,4 @@
-import { ScrollerConfig } from "../interface/scroller/scrollerConfig";
+import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
 export enum ScrollerEvent {
     downinBound = "downinBound",

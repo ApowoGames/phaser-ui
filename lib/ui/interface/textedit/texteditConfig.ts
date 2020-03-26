@@ -1,5 +1,5 @@
-import { TextConfig } from "../text/textConfig";
-import { TextType } from "../text/textType";
+import { TextConfig } from "../text/TextConfig";
+import { TextType } from "../text/TextType";
 
 export interface TextEditConfig {
     textConfig: TextConfig;

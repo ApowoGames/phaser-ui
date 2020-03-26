@@ -1,5 +1,5 @@
-import { Transform } from "../interface/pos/transform";
-import { Align } from "../interface/pos/align";
+import { Transform } from "../interface/pos/Transform";
+import { Align } from "../interface/pos/Align";
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class Tool {

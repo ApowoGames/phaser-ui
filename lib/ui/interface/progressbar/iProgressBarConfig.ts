@@ -1,6 +1,6 @@
-import { IProgressBarSkinData } from "./iProgressBarSkinData";
-import { Transform } from "../pos/transform";
-import { TextConfig } from "../text/textConfig";
+import { IProgressBarSkinData } from "./IProgressBarSkinData";
+import { Transform } from "../pos/Transform";
+import { TextConfig } from "../text/TextConfig";
 
 export interface ProgressBarConfig {
     transform: Transform;

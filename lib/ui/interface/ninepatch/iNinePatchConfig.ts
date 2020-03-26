@@ -1,5 +1,5 @@
-import { INinePatchSkinData } from "./iNinePatchSkinData";
-import { Transform } from "../pos/transform";
+import { INinePatchSkinData } from "./INinePatchSkinData";
+import { Transform } from "../pos/Transform";
 
 export interface INinePatchConfig {
     transform: Transform;
