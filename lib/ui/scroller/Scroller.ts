@@ -57,6 +57,13 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         this.mInteractiveList.push(obj);
     }
 
+    public removeInteractiveObject(obj: any) {
+        const index = this.mInteractiveList.indexOf(obj);
+        if (index > -1) {
+            this.mInteractiveList.splice(index, 1);
+        }
+    }
+
     public addListen() {
         this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
         this.mScene.input.on("pointerdown", this.pointerDownHandler, this);
@@ -122,7 +129,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     }
 
     private checkPointerDelection(pointer: Phaser.Input.Pointer) {
-        return Math.abs(pointer.downX - pointer.upX) < this.mDisDelection &&
+        return Math.abs(pointer.downX - pointer.upX) < this.mDisDelection ||
             Math.abs(pointer.downY - pointer.upY) < this.mDisDelection;
     }
 
