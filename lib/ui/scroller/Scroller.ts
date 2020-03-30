@@ -46,6 +46,11 @@ export class GameScroller extends Phaser.Events.EventEmitter {
         this.addListen();
     }
 
+    public setSize(width: number, height: number, value0: number, value1: number) {
+        this.mGameObject.setSize(width, height);
+        this.mScroller.setBounds(value0, value1);
+    }
+
     public clearInteractiveObject() {
         if (!this.mInteractiveList) return;
         this.mInteractiveList.length = 0;
