@@ -1,5 +1,6 @@
 import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
+
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
@@ -58,7 +59,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     }
 
     public setSize(width: number, height: number, value0: number, value1: number) {
-        this.mGameObject.setSize(width, height);
+        // this.mGameObject.setSize(width, height);
         this.mScroller.setBounds(value0, value1);
     }
 
@@ -124,7 +125,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
             (<any>this).emit(eventName, this.clickContainer);
         }
     }
-    private pointerUpHandler(pointer: Phaser.Input.Pointer) {
+    private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
         // this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
         this.mMoveing = false;
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
