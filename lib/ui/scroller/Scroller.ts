@@ -145,7 +145,7 @@ export class GameScroller extends Phaser.Events.EventEmitter {
     }
 
     private checkPointerDelection(pointer: Phaser.Input.Pointer) {
-        return Math.abs(pointer.downX - pointer.upX) < this.mDisDelection ||
+        return Math.abs(pointer.downX - pointer.upX) < this.mDisDelection &&
             Math.abs(pointer.downY - pointer.upY) < this.mDisDelection;
     }
 
