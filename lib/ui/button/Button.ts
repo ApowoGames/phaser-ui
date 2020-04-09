@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 18:00:09
+ * @Last Modified time: 2020-04-09 18:23:52
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -13,6 +13,8 @@ import { TextConfig } from "../interface/text/TextConfig";
 import { Transform } from "../interface/pos/Transform";
 import { AbstractInteractiveObject } from "../interface/baseUI/AbstructInteractiveObject";
 import { ResourceData } from "../interface/baseUI/ResourceData";
+import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISound } from "../interface/baseUI/ISound";
 
 export enum ButtonState {
     Normal = "normal",
@@ -26,9 +28,14 @@ export interface ButtonConfig {
     transform?: Transform;
     textconfig?: TextConfig;
     text?: string;
+    /**
+     * 默认 0位是点击音效，1位是不可点击音效，2，3根据具体ui实现
+     */
+    music?: ISoundConfig[];
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class Button extends Phaser.Events.EventEmitter implements AbstractInteractiveObject {
+export class Button extends Phaser.Events.EventEmitter implements AbstractInteractiveObject, ISound {
+    public soundMap: Map<string, Phaser.Sound.BaseSound>;
     protected mSelected: boolean;
     protected mEnabled: boolean;
     protected mContainer: Phaser.GameObjects.Container;
@@ -40,11 +47,12 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected mPressDelay: any;
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
-    protected mWorld;
-    public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig, world: any) {
+    protected mScene;
+    public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig) {
         super();
+        this.soundMap = new Map();
         this.mConfig = btnConfig;
-        this.mWorld = world;
+        this.mScene = scene;
         const transform: Transform = !btnConfig ? undefined : btnConfig.transform;
         const pos: any = Tool.getPos(transform);
         const posX = pos.x;
@@ -74,6 +82,33 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
             style: Object.assign(textconfig, btnConfig.textconfig)
         }, false);
         this.addListen();
+    }
+
+    public playSound(config: ISoundConfig) {
+        const key = config.key;
+        const urls = config.urls;
+        if (this.mScene.cache.audio.exists(key)) {
+            this.startPlay(config);
+        } else {
+            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
+                this.startPlay(config);
+            }, this);
+            this.mScene.load.audio(key, urls);
+            this.mScene.load.start();
+        }
+    }
+
+    public startPlay(config: ISoundConfig) {
+        const key = config.key;
+        let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
+        if (!sound) {
+            sound = this.mScene.sound.add(key, config.soundConfig);
+            this.soundMap.set(key, sound);
+        }
+        if (sound.isPlaying) {
+            return;
+        }
+        sound.play();
     }
 
     public set selected(value: boolean) {
@@ -149,6 +184,11 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         if (this.mPressDelay) {
             clearTimeout(this.mPressDelay);
         }
+        if (this.soundMap) {
+            this.soundMap.forEach((sound) => {
+                if (sound.isPlaying) sound.stop();
+            });
+        }
         this.mDownTime = 0;
         this.mIsMove = false;
         super.destroy();
@@ -157,29 +197,28 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected onPointerUpHandler(pointer) {
         if (!this.mEnabled) return;
         this.buttonStateChange(ButtonState.Normal);
-        // 移动端用tap替换click
-        if (!this.mWorld.game.device.os.desktop) {
-            // 在没有发生移动或点击时间超过200毫秒发送tap事件
-            if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-                // events.push(MouseEvent.Tap);
-                this.emit(Event.Tap, pointer, this.mContainer);
-            }
-        } else {
-            this.emit(Event.Click, pointer, this);
+        if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
+            // events.push(MouseEvent.Tap);
+            if (this.mConfig.music && this.mConfig.music[0]) this.playSound(this.mConfig.music[0]);
+            this.emit(Event.Tap, pointer, this);
         }
+
         clearTimeout(this.mPressDelay);
         this.mIsMove = false;
         this.mDownTime = 0;
     }
 
     protected onPointerDownHandler(pointer) {
-        if (!this.mEnabled) return;
+        if (!this.mEnabled) {
+            if (this.mConfig.music && this.mConfig.music[1]) this.playSound(this.mConfig.music[1]);
+            return;
+        }
         this.buttonStateChange(ButtonState.Select);
         this.mDownTime = Date.now();
         this.mPressDelay = setTimeout(() => {
             this.emit(Event.Hold, this);
         }, this.mPressTime);
-        this.emit(Event.Down);
+        this.emit(Event.Down, this);
     }
 
     protected onPointerMoveHandler(pointer) {

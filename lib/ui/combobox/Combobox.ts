@@ -1,5 +1,7 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
 import { AbstractItem } from "../interface/baseUI/AbstructItem";
+import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISound } from "../interface/baseUI/ISound";
 
 export interface ISelectCallItemData extends AbstractItem {
     text: string;
@@ -9,15 +11,17 @@ export interface ISelectCallUI {
     selectCall(data: ISelectCallItemData);
 }
 export class SelectCallItem extends Phaser.GameObjects.Container {
+    protected configList: ISoundConfig[];
     protected mText: Phaser.GameObjects.Text;
     protected mSelectBG: Phaser.GameObjects.Graphics;
     protected mData: ISelectCallItemData;
     protected mSelectCallUI: ISelectCallUI;
     private mSelect: boolean = false;
     private mEnable: boolean = true;
-    constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number) {
+    constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number, music?: ISoundConfig[]) {
         super(scene);
         this.mSelectCallUI = selectCallUI;
+        this.configList = music;
         this.mText = this.scene.make.text({
             x: -wid >> 1, y: -hei >> 1,
             style: { fill: "#F7EDED", fontSize: 18 }
@@ -90,7 +94,11 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
     }
 
     protected selectHandler() {
-        if (!this.mEnable) return;
+        if (!this.mEnable) {
+            if (this.configList && this.configList[1]) (this.mSelectCallUI as ComboBox).playSound(this.configList[1]);
+            return;
+        }
+        if (this.configList && this.configList[0]) (this.mSelectCallUI as ComboBox).playSound(this.configList[0]);
         this.overHandler();
         this.mSelectCallUI.selectCall(this.itemData);
     }
@@ -99,7 +107,8 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
         this.mSelectBG.visible = false;
     }
 }
-export class ComboBox extends Phaser.GameObjects.Container implements ISelectCallUI {
+export class ComboBox extends Phaser.GameObjects.Container implements ISelectCallUI, ISound {
+    public soundMap: Map<string, Phaser.Sound.BaseSound>;
     protected itemList: SelectCallItem[];
     private mScene: Phaser.Scene;
     private mConfig: IComboboxConfig;
@@ -110,10 +119,12 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     private mArrow: Phaser.GameObjects.Image;
     private mInitialize: boolean = false;
     private mData: any;
+    private mEnable: boolean = true;
     constructor(scene: Phaser.Scene, config: IComboboxConfig) {
         super(scene);
         this.mScene = scene;
         this.mConfig = config;
+        this.soundMap = new Map();
         this.init();
     }
 
@@ -125,6 +136,10 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         if (this.mConfig.clickCallBack) {
             this.mConfig.clickCallBack.call(this, itemData);
         }
+    }
+
+    public set enable(value: boolean) {
+        this.mEnable = value;
     }
 
     public set text(value: string[]) {
@@ -145,7 +160,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         this.itemList = [];
         const len: number = value.length;
         for (let i: number = 0; i < len; i++) {
-            const item: SelectCallItem = new SelectCallItem(this.mScene, this, this.mConfig.wid, this.mConfig.hei);
+            const item: SelectCallItem = new SelectCallItem(this.mScene, this, this.mConfig.wid, this.mConfig.hei, this.mConfig.itemMusic);
             const str: string = value[i];
             item.itemData = {
                 index: i,
@@ -164,6 +179,33 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         this.selectCall(this.itemList[0].itemData);
     }
 
+    public playSound(config: ISoundConfig) {
+        const key = config.key;
+        const urls = config.urls;
+        if (this.mScene.cache.audio.exists(key)) {
+            this.startPlay(config);
+        } else {
+            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
+                this.startPlay(config);
+            }, this);
+            this.mScene.load.audio(key, urls);
+            this.mScene.load.start();
+        }
+    }
+
+    public startPlay(config: ISoundConfig) {
+        const key = config.key;
+        let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
+        if (!sound) {
+            sound = this.mScene.sound.add(key, config.soundConfig);
+            this.soundMap.set(key, sound);
+        }
+        if (sound.isPlaying) {
+            return;
+        }
+        sound.play();
+    }
+
     public destroy() {
         this.removeAllListeners();
         if (this.itemList) {
@@ -175,6 +217,11 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
             }
             this.itemList.length = 0;
             this.itemList = null;
+        }
+        if (this.soundMap) {
+            this.soundMap.forEach((sound) => {
+                if (sound.isPlaying) sound.stop();
+            });
         }
         super.destroy(true);
     }
@@ -221,6 +268,11 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     }
 
     private openHandler() {
+        if (!this.mEnable) {
+            if (this.mConfig.boxMusic && this.mConfig.boxMusic[1]) this.playSound(this.mConfig.boxMusic[1]);
+            return;
+        }
+        if (this.mConfig.boxMusic && this.mConfig.boxMusic[0]) this.playSound(this.mConfig.boxMusic[0]);
         if (!this.itemList || this.itemList.length < 1) return;
         this.showTween(this.mIsopen);
     }

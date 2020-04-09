@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 18:09:38
+ * @Last Modified time: 2020-04-09 16:35:55
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { Transform } from "../interface/pos/Transform";
@@ -11,15 +11,16 @@ import { Tool } from "../tool/Tool";
 import { IProgressBarSkinData } from "../interface/progressbar/IProgressBarSkinData";
 import { NinePatchSkin } from "../interface/ninepatch/NinePatchSkin";
 import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
+import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISound } from "../interface/baseUI/ISound";
+import { BaseUI } from "../baseUI/BaseUI";
 export enum ProgressBarEvent {
     tweenStart = "tweenStart",
     tweenComplete = "tweenComplete",
     tweenUpdate = "tweenUpdate"
 }
-export class ProgressBar extends Phaser.Events.EventEmitter {
-    private mScene: Phaser.Scene;
+export class ProgressBar extends BaseUI {
     private mConfig: ProgressBarConfig;
-    private mWorld: any;
     private mBgSkin: NinePatchSkin;
     private mBarSkin: NinePatchSkin;
     private mContainer: Phaser.GameObjects.Container;
@@ -27,11 +28,9 @@ export class ProgressBar extends Phaser.Events.EventEmitter {
     private mBarMaskGraphics: Phaser.GameObjects.Graphics;
     private mTween: Phaser.Tweens.Tween;
     private barWid: number;
-    constructor(scene: Phaser.Scene, config: ProgressBarConfig, world: any) {
-        super();
-        this.mScene = scene;
+    constructor(scene: Phaser.Scene, config: ProgressBarConfig) {
+        super(scene);
         this.mConfig = config;
-        this.mWorld = world;
         const transform: Transform = Tool.getTransfrom(config);
         const skinData: IProgressBarSkinData = !config || !config.skinsData ? undefined : config.skinsData;
         const pos: any = Tool.getPos(transform);
@@ -92,6 +91,7 @@ export class ProgressBar extends Phaser.Events.EventEmitter {
     }
 
     public destory() {
+        super.destroy();
         if (this.mTween) {
             this.mTween.stop();
             this.mTween.remove();
@@ -108,6 +108,7 @@ export class ProgressBar extends Phaser.Events.EventEmitter {
     }
 
     private onTweenStart() {
+        if (this.mConfig.music && this.mConfig.music[0]) this.playSound(this.mConfig.music[0]);
         this.emit(ProgressBarEvent.tweenStart);
     }
 
