@@ -15,11 +15,11 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     protected mData: any;
     protected mPanelTween: Phaser.Tweens.Tween;
     protected dpr: number;
-    private mResources: Map<string, any>;
-    private mReLoadResources: Map<string, any>;
-    private mReloadTimes: number = 0;
-    private mTweenBoo: boolean = true;
-    private mMute: boolean = false;
+    protected mResources: Map<string, any>;
+    protected mReLoadResources: Map<string, any>;
+    protected mReloadTimes: number = 0;
+    protected mTweenBoo: boolean = true;
+    protected mMute: boolean = false;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
         super(scene);
         this.soundMap = new Map();
