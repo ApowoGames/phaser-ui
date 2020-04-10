@@ -120,6 +120,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     private mInitialize: boolean = false;
     private mData: any;
     private mEnable: boolean = true;
+    private mMute: boolean = false;
     constructor(scene: Phaser.Scene, config: IComboboxConfig) {
         super(scene);
         this.mScene = scene;
@@ -179,7 +180,12 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         this.selectCall(this.itemList[0].itemData);
     }
 
+    public mute(boo: boolean) {
+        this.mMute = boo;
+    }
+
     public playSound(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         const urls = config.urls;
         if (this.mScene.cache.audio.exists(key)) {
@@ -194,6 +200,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     }
 
     public startPlay(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
         if (!sound) {
@@ -204,6 +211,27 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
             return;
         }
         sound.play();
+    }
+
+    public stopSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPlaying) sound.stop();
+        });
+    }
+
+    public pauseSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (!sound.isPaused) sound.pause();
+        });
+    }
+
+    public resumeSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPaused) sound.resume();
+        });
     }
 
     public destroy() {
@@ -223,6 +251,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
                 if (sound.isPlaying) sound.stop();
             });
         }
+        this.mMute = false;
         super.destroy(true);
     }
 

@@ -4,4 +4,8 @@ export interface ISound {
     soundMap: Map<string, Phaser.Sound.BaseSound>;
     playSound(config: ISoundConfig);
     startPlay(config: ISoundConfig);
+    stopSound();
+    pauseSound();
+    resumeSound();
+    mute(boo);
 }

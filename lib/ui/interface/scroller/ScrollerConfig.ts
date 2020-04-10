@@ -1,3 +1,5 @@
+import { ISoundConfig } from "../sound/ISoundConfig";
+
 export interface ScrollerConfig {
     x: number;
     y: number;
@@ -20,6 +22,10 @@ export interface ScrollerConfig {
     slidingDeceleration?: number; // 拖动释放时是否减慢速度时间
     backDeceleration?: number; //  拖出视口范围的弹性效果时间
     enable?: boolean; // 是否能拖动
+    /**
+     * 0 点击音效  1滚动音效
+     */
+    music?: ISoundConfig[];
     valuechangeCallback?: Function; // 滚动条位置发生变化返回事件
     valuechangeCallbackScope?: Function; //
     overminCallback?: Function; // 超出视口最小范围返回事件

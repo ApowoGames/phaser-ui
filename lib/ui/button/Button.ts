@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-09 18:23:52
+ * @Last Modified time: 2020-04-10 14:57:40
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -48,6 +48,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
     protected mScene;
+    private mMute: boolean = false;
     public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig) {
         super();
         this.soundMap = new Map();
@@ -85,6 +86,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     public playSound(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         const urls = config.urls;
         if (this.mScene.cache.audio.exists(key)) {
@@ -99,6 +101,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     public startPlay(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
         if (!sound) {
@@ -109,6 +112,27 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
             return;
         }
         sound.play();
+    }
+
+    public stopSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPlaying) sound.stop();
+        });
+    }
+
+    public pauseSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (!sound.isPaused) sound.pause();
+        });
+    }
+
+    public resumeSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPaused) sound.resume();
+        });
     }
 
     public set selected(value: boolean) {
@@ -168,6 +192,10 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
     }
 
+    public mute(boo: boolean) {
+        this.mMute = boo;
+    }
+
     public destroy() {
         this.removeAllListeners();
         if (this.mBgFramesSkin) {
@@ -190,6 +218,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
             });
         }
         this.mDownTime = 0;
+        this.mMute = false;
         this.mIsMove = false;
         super.destroy();
     }

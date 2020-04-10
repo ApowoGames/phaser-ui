@@ -19,6 +19,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     private mReLoadResources: Map<string, any>;
     private mReloadTimes: number = 0;
     private mTweenBoo: boolean = true;
+    private mMute: boolean = false;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
         super(scene);
         this.soundMap = new Map();
@@ -56,6 +57,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
             this.mPanelTween.stop();
             this.mPanelTween.remove();
         }
+        this.mMute = false;
         this.mInitialized = false;
         this.mShowing = false;
         this.mWidth = 0;
@@ -95,6 +97,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     public playSound(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         const urls = config.urls;
         if (this.mScene.cache.audio.exists(key)) {
@@ -109,6 +112,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     public startPlay(config: ISoundConfig) {
+        if (this.mMute) return;
         const key = config.key;
         let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
         if (!sound) {
@@ -119,6 +123,31 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
             return;
         }
         sound.play();
+    }
+
+    public stopSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPlaying) sound.stop();
+        });
+    }
+
+    public pauseSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (!sound.isPaused) sound.pause();
+        });
+    }
+
+    public resumeSound() {
+        if (this.mMute) return;
+        this.soundMap.forEach((sound) => {
+            if (sound.isPaused) sound.resume();
+        });
+    }
+
+    public mute(boo: boolean) {
+        this.mMute = boo;
     }
 
     protected showTween(show: boolean) {

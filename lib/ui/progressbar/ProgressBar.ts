@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-09 16:35:55
+ * @Last Modified time: 2020-04-10 14:58:11
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { Transform } from "../interface/pos/Transform";
@@ -11,8 +11,6 @@ import { Tool } from "../tool/Tool";
 import { IProgressBarSkinData } from "../interface/progressbar/IProgressBarSkinData";
 import { NinePatchSkin } from "../interface/ninepatch/NinePatchSkin";
 import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
-import { ISoundConfig } from "../interface/sound/ISoundConfig";
-import { ISound } from "../interface/baseUI/ISound";
 import { BaseUI } from "../baseUI/BaseUI";
 export enum ProgressBarEvent {
     tweenStart = "tweenStart",
@@ -23,7 +21,6 @@ export class ProgressBar extends BaseUI {
     private mConfig: ProgressBarConfig;
     private mBgSkin: NinePatchSkin;
     private mBarSkin: NinePatchSkin;
-    private mContainer: Phaser.GameObjects.Container;
     private mText: Phaser.GameObjects.Text;
     private mBarMaskGraphics: Phaser.GameObjects.Graphics;
     private mTween: Phaser.Tweens.Tween;
