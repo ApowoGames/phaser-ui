@@ -2,8 +2,10 @@ import { Button, ButtonConfig, ButtonState } from "../button/Button";
 import { Event } from "../interface/event/MouseEvent";
 
 export class TabButton extends Button {
+    private mWorld;
     constructor(scene: Phaser.Scene, config: ButtonConfig, world: any) {
-        super(scene, config, world);
+        super(scene, config);
+        this.mWorld = world;
     }
     public set selected(value: boolean) {
         this.mSelected = value;
