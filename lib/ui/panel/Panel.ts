@@ -263,7 +263,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         // if (resource.data) this.scene.load.atlas(key, Url.getUIRes(resource.dpr, resource.texture), Url.getUIRes(resource.dpr, resource.data));
     }
 
-    private reload() {
+    protected reload() {
         if (!this.mReLoadResources || this.mReLoadResources.size <= 0) {
             return;
         }
@@ -276,7 +276,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         this.startLoad();
     }
 
-    private startLoad() {
+    protected startLoad() {
         if (!this.scene) {
             return;
         }
@@ -286,7 +286,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         this.scene.load.start();
     }
 
-    private offLoad() {
+    protected offLoad() {
         if (!this.scene) {
             return;
         }
