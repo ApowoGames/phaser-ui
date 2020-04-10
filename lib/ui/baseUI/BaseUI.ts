@@ -22,7 +22,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
             this.mContainer.setInteractive();
             this.mScene.input.off("pointerup", this.sceneClick, this);
             this.mContainer.on("pointerup", this.uiClick, this);
-        };
+        }
     }
 
     public disInteractive() {
@@ -67,7 +67,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         if (this.mMute) return;
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
-        });
+        })
     }
 
     public pauseSound() {
