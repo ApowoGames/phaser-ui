@@ -191,7 +191,10 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
         this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
     }
-
+    /**
+     * 是否静音
+     * @param boo 
+     */
     public mute(boo: boolean) {
         this.mMute = boo;
     }

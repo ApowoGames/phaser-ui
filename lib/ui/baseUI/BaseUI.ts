@@ -102,13 +102,13 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
 
     private sceneClick(pointer: Phaser.Input.Pointer) {
         if (Tool.checkPointerContains(this.mContainer, pointer) && this.checkPointerDelection(pointer)) {
-            this.emit("panelClick");
+            this.emit("uiClick");
         }
     }
 
     private uiClick(pointer: Phaser.Input.Pointer) {
         if (this.checkPointerDelection(pointer)) {
-            this.emit("panelClick");
+            this.emit("uiClick");
         }
     }
 

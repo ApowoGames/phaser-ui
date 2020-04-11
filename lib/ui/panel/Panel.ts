@@ -1,6 +1,7 @@
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
 import { IAbstractPanel } from "../interface/panel/IAbstractPanel";
 import { ISound } from "../interface/baseUI/ISound";
+import { Tool } from "../tool/Tool";
 
 export class Panel extends Phaser.GameObjects.Container implements IAbstractPanel, ISound {
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
@@ -20,6 +21,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     protected mReloadTimes: number = 0;
     protected mTweenBoo: boolean = true;
     protected mMute: boolean = false;
+    protected mEnabled: boolean = false;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
         super(scene);
         this.soundMap = new Map();
@@ -149,6 +151,19 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     public mute(boo: boolean) {
         this.mMute = boo;
     }
+
+    setEnabled(boo: boolean) {
+        this.mEnabled = boo;
+        if (boo) {
+            this.setInteractive();
+            this.mScene.input.off("pointerup", this.sceneClick, this);
+            this.on("pointerup", this.uiClick, this);
+        } else {
+            this.mScene.input.on("pointerup", this.sceneClick, this);
+            this.off("pointerup", this.uiClick, this);
+        }
+    }
+
 
     protected showTween(show: boolean) {
         this.mTweening = true;
@@ -293,5 +308,23 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         this.scene.load.off(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
         this.scene.load.off(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
         this.scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
+    }
+
+    private sceneClick(pointer: Phaser.Input.Pointer) {
+        if (Tool.checkPointerContains(this, pointer) && this.checkPointerDelection(pointer)) {
+            this.emit("panelClick");
+        }
+    }
+
+    private uiClick(pointer: Phaser.Input.Pointer) {
+        if (this.checkPointerDelection(pointer)) {
+            this.emit("panelClick");
+        }
+    }
+
+    private checkPointerDelection(pointer: Phaser.Input.Pointer) {
+        if (!this.mScene) return true;
+        return Math.abs(pointer.downX - pointer.upX) < 10 ||
+            Math.abs(pointer.downY - pointer.upY) < 10;
     }
 }
