@@ -47,6 +47,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     destroy() {
+        this.removeListen();
         if (this.soundMap) {
             this.soundMap.forEach((sound) => {
                 if (sound.isPlaying) sound.stop();
@@ -86,6 +87,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         } else {
             this.mShowing = true;
         }
+        this.addListen();
     }
 
     tweenView(show: boolean) {
@@ -150,6 +152,22 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
 
     public mute(boo: boolean) {
         this.mMute = boo;
+    }
+
+    public addListen() {
+        if (this.mEnabled) {
+            this.setInteractive();
+            this.mScene.input.off("pointerup", this.sceneClick, this);
+            this.on("pointerup", this.uiClick, this);
+        } else {
+            this.mScene.input.on("pointerup", this.sceneClick, this);
+            this.off("pointerup", this.uiClick, this);
+        }
+    }
+
+    public removeListen() {
+        this.mScene.input.off("pointerup", this.sceneClick, this);
+        this.off("pointerup", this.uiClick, this);
     }
 
     setEnabled(boo: boolean) {
