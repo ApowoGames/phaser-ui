@@ -173,6 +173,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     setEnabled(boo: boolean) {
+        this.removeListen();
         this.mEnabled = boo;
         if (boo) {
             this.setInteractive();
