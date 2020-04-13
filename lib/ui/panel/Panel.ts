@@ -184,7 +184,6 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
         }
     }
 
-
     protected showTween(show: boolean) {
         this.mTweening = true;
         this.scaleX = show ? 0 : this.mWorld.uiScale;
