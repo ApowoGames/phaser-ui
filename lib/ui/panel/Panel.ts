@@ -48,6 +48,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
 
     destroy() {
         this.removeListen();
+        this.removeAllListeners();
         if (this.soundMap) {
             this.soundMap.forEach((sound) => {
                 if (sound.isPlaying) sound.stop();
@@ -330,13 +331,13 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
 
     private sceneClick(pointer: Phaser.Input.Pointer) {
         if (Tool.checkPointerContains(this, pointer) && this.checkPointerDelection(pointer)) {
-            this.emit("panelClick");
+            this.emit("panelClick", pointer);
         }
     }
 
     private uiClick(pointer: Phaser.Input.Pointer) {
         if (this.checkPointerDelection(pointer)) {
-            this.emit("panelClick");
+            this.emit("panelClick", pointer);
         }
     }
 
