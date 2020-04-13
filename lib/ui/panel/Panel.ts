@@ -179,6 +179,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
             this.mScene.input.off("pointerup", this.sceneClick, this);
             this.on("pointerup", this.uiClick, this);
         } else {
+            this.disableInteractive();
             this.mScene.input.on("pointerup", this.sceneClick, this);
             this.off("pointerup", this.uiClick, this);
         }
