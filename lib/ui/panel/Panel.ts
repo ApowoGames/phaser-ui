@@ -54,6 +54,11 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
                 if (sound.isPlaying) sound.stop();
             });
         }
+        if (this.list) {
+            this.list.forEach((child) => {
+                child.destroy();
+            });
+        }
         if (this.parentContainer) {
             this.parentContainer.remove(this, true);
         }
