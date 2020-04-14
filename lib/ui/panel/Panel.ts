@@ -161,7 +161,8 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     public addListen() {
-        if (this.mEnabled) {
+        // 没有设置宽高则不需要设置交互
+        if (this.mEnabled || this.width === 0 || this.height === 0) {
             this.setInteractive();
             this.mScene.input.off("pointerup", this.sceneClick, this);
             this.on("pointerup", this.uiClick, this);
