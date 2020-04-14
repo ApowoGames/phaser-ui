@@ -1,14 +1,31 @@
+/*
+ * 基础组件（不带有加载过程，直接设置加载好的皮肤）
+ * @Author: gxm
+ * @Date: 2020-04-14 17:17:15
+ * @Last Modified by: gxm
+ * @Last Modified time: 2020-04-14 18:37:10
+ */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
 import { ISetInteractive } from "../interface/baseUI/ISetInteractive";
 import { Tool } from "../tool/Tool";
 
+export interface UIFollowConfig {
+    scene: Phaser.Scene,
+    followX: number,
+    followY: number,
+    baseX: number,
+    baseY: number
+}
+
 export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetInteractive {
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
     protected mContainer: Phaser.GameObjects.Container;
-    protected mInterActive: boolean = false;
+    protected mEnabled: boolean = false;
     protected mScene: Phaser.Scene;
-    private mMute: boolean = false;
+    protected mFollow: any;
+    protected posFunc: Function;
+    protected mMute: boolean = false;
     constructor(scene: Phaser.Scene) {
         super();
         this.mScene = scene;
@@ -16,8 +33,14 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.disInteractive();
     }
 
+    public setFollow(gameObject: any, posFunc?: Function) {
+        this.mFollow = gameObject;
+        if (posFunc) this.posFunc = posFunc;
+        this.mFollow.on("posChange", this.posChange, this);
+    }
+
     public setInteractive() {
-        this.mInterActive = true;
+        this.mEnabled = true;
         if (this.mContainer) {
             this.mContainer.setInteractive();
             this.mScene.input.off("pointerup", this.sceneClick, this);
@@ -26,10 +49,18 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public disInteractive() {
-        this.mInterActive = false;
+        this.mEnabled = false;
         if (this.mContainer) {
             this.mContainer.disableInteractive();
             this.mScene.input.on("pointerup", this.sceneClick, this);
+            this.mContainer.off("pointerup", this.uiClick, this);
+        }
+    }
+
+    public removeListen() {
+        this.mEnabled = false;
+        if (this.mContainer) {
+            this.mScene.input.off("pointerup", this.sceneClick, this);
             this.mContainer.off("pointerup", this.uiClick, this);
         }
     }
@@ -93,11 +124,20 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
             if (sound.isPlaying) sound.stop();
         });
         this.mMute = false;
-        this.mInterActive = false;
-        this.mContainer.disableInteractive();
-        this.mScene.input.off("pointerup", this.sceneClick, this);
-        this.mContainer.off("pointerup", this.uiClick, this);
+        this.removeListen();
         super.destroy();
+    }
+
+    protected posChange(sce: Phaser.Scene) {
+        if (this.posFunc) {
+            const config: UIFollowConfig = {
+                scene: sce,
+                followX: this.mFollow.x,
+                followY: this.mFollow.y,
+                baseX: this.mContainer.x,
+                baseY: this.mContainer.y
+            }
+        }
     }
 
     private sceneClick(pointer: Phaser.Input.Pointer) {

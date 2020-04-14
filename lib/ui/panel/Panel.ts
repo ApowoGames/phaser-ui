@@ -2,6 +2,7 @@ import { ISoundConfig } from "../interface/sound/ISoundConfig";
 import { IAbstractPanel } from "../interface/panel/IAbstractPanel";
 import { ISound } from "../interface/baseUI/ISound";
 import { Tool } from "../tool/Tool";
+import { UIFollowConfig } from "../baseUI/BaseUI";
 
 export class Panel extends Phaser.GameObjects.Container implements IAbstractPanel, ISound {
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
@@ -22,6 +23,8 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     protected mTweenBoo: boolean = true;
     protected mMute: boolean = false;
     protected mEnabled: boolean = true;
+    protected mFollow: any;
+    protected posFunc: Function;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
         super(scene);
         this.soundMap = new Map();
@@ -33,6 +36,12 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
             this.dpr = Math.round(world.uiRatio || 1);
             this.scale = this.mWorld.uiScaleNew;
         }
+    }
+
+    public setFollow(gameObject: any, posFunc?: Function) {
+        this.mFollow = gameObject;
+        if (posFunc) this.posFunc = posFunc;
+        this.mFollow.on("posChange", this.posChange, this);
     }
 
     isShow(): boolean {
@@ -174,6 +183,7 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
     }
 
     public removeListen() {
+        this.mEnabled = false;
         this.mScene.input.off("pointerup", this.sceneClick, this);
         this.off("pointerup", this.uiClick, this);
     }
@@ -190,6 +200,18 @@ export class Panel extends Phaser.GameObjects.Container implements IAbstractPane
             this.disableInteractive();
             this.mScene.input.on("pointerup", this.sceneClick, this);
             this.off("pointerup", this.uiClick, this);
+        }
+    }
+
+    protected posChange(sce: Phaser.Scene) {
+        if (this.posFunc) {
+            const config: UIFollowConfig = {
+                scene: sce,
+                followX: this.mFollow.x,
+                followY: this.mFollow.y,
+                baseX: this.x,
+                baseY: this.y
+            }
         }
     }
 

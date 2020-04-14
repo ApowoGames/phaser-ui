@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-10 14:57:40
+ * @Last Modified time: 2020-04-14 18:54:29
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -15,6 +15,7 @@ import { AbstractInteractiveObject } from "../interface/baseUI/AbstructInteracti
 import { ResourceData } from "../interface/baseUI/ResourceData";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
 import { ISound } from "../interface/baseUI/ISound";
+import { BaseUI } from "../baseUI/BaseUI";
 
 export enum ButtonState {
     Normal = "normal",
@@ -34,11 +35,7 @@ export interface ButtonConfig {
     music?: ISoundConfig[];
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class Button extends Phaser.Events.EventEmitter implements AbstractInteractiveObject, ISound {
-    public soundMap: Map<string, Phaser.Sound.BaseSound>;
-    protected mSelected: boolean;
-    protected mEnabled: boolean;
-    protected mContainer: Phaser.GameObjects.Container;
+export class Button extends BaseUI {
     protected mBgFramesSkin: FramesSkin;
     protected mIconFramesSkin: FramesSkin;
     protected mText: Phaser.GameObjects.Text;
@@ -47,10 +44,11 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     protected mPressDelay: any;
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
-    protected mScene;
-    private mMute: boolean = false;
+    protected mSelected: boolean = false;
+    private baseWidth: number = 0;
+    private baseHeight: number = 0;
     public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig) {
-        super();
+        super(scene);
         this.soundMap = new Map();
         this.mConfig = btnConfig;
         this.mScene = scene;
@@ -58,13 +56,12 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         const pos: any = Tool.getPos(transform);
         const posX = pos.x;
         const posY = pos.y;
-        const baseWidth = !transform && !transform.width ? 0 : transform.width;
-        const baseHeight = !transform && !transform.height ? 0 : transform.height;
+        this.baseWidth = !transform && !transform.width ? 0 : transform.width;
+        this.baseHeight = !transform && !transform.height ? 0 : transform.height;
         const bgFrames: ResourceData = !btnConfig ? undefined : btnConfig.bgFrames;
         const iconFrames: ResourceData = !btnConfig ? undefined : btnConfig.iconFrames;
         // 按钮容器
-        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
+        this.mContainer = scene.make.container({ x: posX, y: posY, width: this.baseWidth, height: this.baseHeight }, false);
         // 按钮背景
         this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
         const bgTransform: Transform = bgFrames.transForm;
@@ -82,69 +79,16 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
         this.mText = scene.make.text({
             style: Object.assign(textconfig, btnConfig.textconfig)
         }, false);
-        this.addListen();
-    }
-
-    public playSound(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        const urls = config.urls;
-        if (this.mScene.cache.audio.exists(key)) {
-            this.startPlay(config);
-        } else {
-            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
-                this.startPlay(config);
-            }, this);
-            this.mScene.load.audio(key, urls);
-            this.mScene.load.start();
-        }
-    }
-
-    public startPlay(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
-        if (!sound) {
-            sound = this.mScene.sound.add(key, config.soundConfig);
-            this.soundMap.set(key, sound);
-        }
-        if (sound.isPlaying) {
-            return;
-        }
-        sound.play();
-    }
-
-    public stopSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPlaying) sound.stop();
-        });
-    }
-
-    public pauseSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (!sound.isPaused) sound.pause();
-        });
-    }
-
-    public resumeSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPaused) sound.resume();
-        });
     }
 
     public set selected(value: boolean) {
         this.mSelected = value;
-        // const buttonState = value ? ButtonState.Select : ButtonState.Normal;
-        // this.buttonStateChange(buttonState);
     }
     public get selected(): boolean {
         return this.mSelected;
     }
 
-    public set enabled(value: boolean) {
+    public setEnabled(value: boolean) {
         this.mEnabled = value;
         const buttonState = value ? ButtonState.Normal : ButtonState.Disable;
         this.buttonStateChange(buttonState);
@@ -152,6 +96,16 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
 
     public get enabled(): boolean {
         return this.mEnabled;
+    }
+
+    public setInteractive() {
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.baseWidth, this.baseHeight), Phaser.Geom.Rectangle.Contains);
+        this.addListen();
+    }
+
+    public disInteractive() {
+        this.mContainer.disableInteractive();
+        this.removeListen();
     }
 
     public setSize(width: number, height: number) {
@@ -200,6 +154,7 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
     }
 
     public destroy() {
+        this.removeListen();
         this.removeAllListeners();
         if (this.mBgFramesSkin) {
             this.mBgFramesSkin.destroy();
@@ -272,6 +227,5 @@ export class Button extends Phaser.Events.EventEmitter implements AbstractIntera
                 this.mIconFramesSkin.changeFrame(frameName);
             }
         }
-
     }
 }
