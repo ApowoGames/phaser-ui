@@ -10,8 +10,8 @@ export class Tool {
         const bottom = gameObject.height / 2;
         if (pointer) {
             const worldMatrix: Phaser.GameObjects.Components.TransformMatrix = gameObject.getWorldTransformMatrix();
-            const x: number = pointer.x - worldMatrix.tx - gameObject.x;
-            const y: number = pointer.y - worldMatrix.ty - gameObject.y;
+            const x: number = pointer.x - worldMatrix.tx;
+            const y: number = pointer.y - worldMatrix.ty;
             if (left <= x && right >= x && top <= y && bottom >= y) {
                 return true;
             }
