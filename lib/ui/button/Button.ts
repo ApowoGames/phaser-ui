@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-14 18:54:29
+ * @Last Modified time: 2020-04-16 22:25:20
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -11,10 +11,8 @@ import { Tool } from "../tool/Tool";
 import { Event } from "../interface/event/MouseEvent";
 import { TextConfig } from "../interface/text/TextConfig";
 import { Transform } from "../interface/pos/Transform";
-import { AbstractInteractiveObject } from "../interface/baseUI/AbstructInteractiveObject";
 import { ResourceData } from "../interface/baseUI/ResourceData";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
-import { ISound } from "../interface/baseUI/ISound";
 import { BaseUI } from "../baseUI/BaseUI";
 
 export enum ButtonState {
@@ -45,23 +43,21 @@ export class Button extends BaseUI {
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
     protected mSelected: boolean = false;
-    private baseWidth: number = 0;
-    private baseHeight: number = 0;
     public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig) {
         super(scene);
         this.soundMap = new Map();
         this.mConfig = btnConfig;
-        this.mScene = scene;
         const transform: Transform = !btnConfig ? undefined : btnConfig.transform;
         const pos: any = Tool.getPos(transform);
         const posX = pos.x;
         const posY = pos.y;
-        this.baseWidth = !transform && !transform.width ? 0 : transform.width;
-        this.baseHeight = !transform && !transform.height ? 0 : transform.height;
+        this.width = !transform && !transform.width ? 0 : transform.width;
+        this.height = !transform && !transform.height ? 0 : transform.height;
         const bgFrames: ResourceData = !btnConfig ? undefined : btnConfig.bgFrames;
         const iconFrames: ResourceData = !btnConfig ? undefined : btnConfig.iconFrames;
         // 按钮容器
-        this.mContainer = scene.make.container({ x: posX, y: posY, width: this.baseWidth, height: this.baseHeight }, false);
+        this.mContainer.setPosition(posX, posY);
+        this.mContainer.setSize(this.width, this.height);
         // 按钮背景
         this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
         const bgTransform: Transform = bgFrames.transForm;
@@ -88,24 +84,20 @@ export class Button extends BaseUI {
         return this.mSelected;
     }
 
-    public setEnabled(value: boolean) {
-        this.mEnabled = value;
-        const buttonState = value ? ButtonState.Normal : ButtonState.Disable;
-        this.buttonStateChange(buttonState);
-    }
-
-    public get enabled(): boolean {
+    public get interactive(): boolean {
         return this.mEnabled;
     }
 
     public setInteractive() {
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.baseWidth, this.baseHeight), Phaser.Geom.Rectangle.Contains);
-        this.addListen();
+        super.setInteractive();
+        this.buttonStateChange(ButtonState.Normal);
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
     }
 
     public disInteractive() {
+        super.disInteractive();
+        this.buttonStateChange(ButtonState.Disable);
         this.mContainer.disableInteractive();
-        this.removeListen();
     }
 
     public setSize(width: number, height: number) {
@@ -154,8 +146,7 @@ export class Button extends BaseUI {
     }
 
     public destroy() {
-        this.removeListen();
-        this.removeAllListeners();
+
         if (this.mBgFramesSkin) {
             this.mBgFramesSkin.destroy();
             this.mBgFramesSkin = null;
@@ -169,11 +160,6 @@ export class Button extends BaseUI {
         }
         if (this.mPressDelay) {
             clearTimeout(this.mPressDelay);
-        }
-        if (this.soundMap) {
-            this.soundMap.forEach((sound) => {
-                if (sound.isPlaying) sound.stop();
-            });
         }
         this.mDownTime = 0;
         this.mMute = false;

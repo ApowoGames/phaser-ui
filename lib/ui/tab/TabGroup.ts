@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 18:10:50
+ * @Last Modified time: 2020-04-16 21:38:55
  */
 
 import { Tool } from "../tool/Tool";
@@ -11,16 +11,16 @@ import { Tool } from "../tool/Tool";
 import { Transform } from "../interface/pos/Transform";
 import { IListConfig } from "../interface/list/IListConfig";
 import { TabButton } from "./TabButton";
+import { BaseUI } from "../baseUI/BaseUI";
 
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class TabGroup {
+export class TabGroup extends BaseUI {
     private mSelectIndex: number;
     private mConfig: IListConfig;
-    private mContainer: Phaser.GameObjects.Container;
     private mList: any[];
     private mWorld;
-    private mScene: Phaser.Scene;
     constructor(scene: Phaser.Scene, config: IListConfig, world: any) {
+        super(scene);
         this.mConfig = config;
         this.mWorld = world;
         this.mScene = scene;
@@ -30,9 +30,19 @@ export class TabGroup {
         const baseWidth = !transform && !transform.width ? 0 : transform.width;
         const baseHeight = !transform && !transform.height ? 0 : transform.height;
         // tab主容器
-        this.mContainer = scene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, baseWidth, baseHeight), Phaser.Geom.Rectangle.Contains);
+        this.mContainer.setPosition(posX, posY);
+        this.mContainer.setSize(baseWidth, baseHeight);
         this.mList = [];
+    }
+
+    public setInteractive() {
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.mContainer.width, this.mContainer.height), Phaser.Geom.Rectangle.Contains);
+        super.setInteractive();
+    }
+
+    public disInteractive() {
+        this.mContainer.disableInteractive();
+        super.disInteractive();
     }
 
     public get skin(): Phaser.GameObjects.Container {
@@ -46,7 +56,9 @@ export class TabGroup {
 
     public setSize(width: number, height: number) {
         this.mContainer.setSize(width, height);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
+        if (this.mEnabled) {
+            this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
+        }
     }
 
     public set selectIndex(select: number) {
@@ -76,6 +88,7 @@ export class TabGroup {
             this.mContainer.destroy();
             this.mContainer = null;
         }
+        super.destroy();
     }
 
     private refreshList() {

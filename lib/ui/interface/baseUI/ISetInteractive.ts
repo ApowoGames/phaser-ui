@@ -1,4 +1,4 @@
-export interface ISetInteractive{
+export interface ISetInteractive {
     setInteractive();
     disInteractive();
 }

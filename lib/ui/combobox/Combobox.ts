@@ -1,7 +1,7 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
 import { AbstractItem } from "../interface/baseUI/AbstructItem";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
-import { ISound } from "../interface/baseUI/ISound";
+import { BaseUI } from "../baseUI/BaseUI";
 
 export interface ISelectCallItemData extends AbstractItem {
     text: string;
@@ -10,19 +10,17 @@ export interface ISelectCallItemData extends AbstractItem {
 export interface ISelectCallUI {
     selectCall(data: ISelectCallItemData);
 }
-export class SelectCallItem extends Phaser.GameObjects.Container {
+export class SelectCallItem extends BaseUI {
     protected configList: ISoundConfig[];
     protected mText: Phaser.GameObjects.Text;
     protected mSelectBG: Phaser.GameObjects.Graphics;
-    protected mData: ISelectCallItemData;
     protected mSelectCallUI: ISelectCallUI;
     private mSelect: boolean = false;
-    private mEnable: boolean = true;
     constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number, music?: ISoundConfig[]) {
         super(scene);
         this.mSelectCallUI = selectCallUI;
         this.configList = music;
-        this.mText = this.scene.make.text({
+        this.mText = this.mScene.make.text({
             x: -wid >> 1, y: -hei >> 1,
             style: { fill: "#F7EDED", fontSize: 18 }
         }, false);
@@ -31,25 +29,35 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
         this.mSelectBG.fillStyle(COLOR, .8);
         this.mSelectBG.fillRect(-wid >> 1, -hei >> 1, wid, hei);
         this.mSelectBG.visible = false;
-        this.add([this.mSelectBG, this.mText]);
-
-        this.setSize(wid, hei);
+        this.mContainer.add([this.mSelectBG, this.mText]);
+        this.width = wid;
+        this.height = hei;
+        this.mContainer.setSize(wid, hei);
 
         this.setInteractive();
-        this.addListen();
-
     }
 
+    public setInteractive() {
+        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+        super.setInteractive();
+    }
+
+    public disInteractive() {
+        this.mContainer.disableInteractive();
+        super.setInteractive();
+    }
+
+
     public addListen() {
-        this.on("pointerover", this.overHandler, this);
-        this.on("pointerout", this.outHandler, this);
-        this.on("pointerdown", this.selectHandler, this);
+        this.mContainer.on("pointerover", this.overHandler, this);
+        this.mContainer.on("pointerout", this.outHandler, this);
+        this.mContainer.on("pointerdown", this.selectHandler, this);
     }
 
     public removeListen() {
-        this.off("pointerover", this.overHandler, this);
-        this.off("pointerout", this.outHandler, this);
-        this.off("pointerdown", this.selectHandler, this);
+        this.mContainer.off("pointerover", this.overHandler, this);
+        this.mContainer.off("pointerout", this.outHandler, this);
+        this.mContainer.off("pointerdown", this.selectHandler, this);
     }
 
     public set itemData(val: ISelectCallItemData) {
@@ -64,14 +72,13 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
     }
 
     public destroy() {
-        this.removeAllListeners();
         this.mText.destroy(true);
         this.mSelectBG.destroy(true);
         this.mData = null;
         this.mText = null;
         this.mSelectBG = null;
         this.mSelectCallUI = null;
-        super.destroy(true);
+        super.destroy();
     }
 
     public set selected(val: boolean) {
@@ -81,20 +88,18 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
     public get selected(): boolean {
         return this.mSelect;
     }
-    public set enabled(val: boolean) {
-        this.mEnable = val;
-    }
-    public get enabled(): boolean {
-        return this.mEnable;
+
+    public get interactive(): boolean {
+        return this.mEnabled;
     }
 
     protected overHandler() {
-        if (!this.mEnable) return;
+        if (!this.mEnabled) return;
         this.mSelectBG.visible = true;
     }
 
     protected selectHandler() {
-        if (!this.mEnable) {
+        if (!this.mEnabled) {
             if (this.configList && this.configList[1]) (this.mSelectCallUI as ComboBox).playSound(this.configList[1]);
             return;
         }
@@ -103,14 +108,12 @@ export class SelectCallItem extends Phaser.GameObjects.Container {
         this.mSelectCallUI.selectCall(this.itemData);
     }
     protected outHandler() {
-        if (!this.mEnable) return;
+        if (!this.mEnabled) return;
         this.mSelectBG.visible = false;
     }
 }
-export class ComboBox extends Phaser.GameObjects.Container implements ISelectCallUI, ISound {
-    public soundMap: Map<string, Phaser.Sound.BaseSound>;
+export class ComboBox extends BaseUI implements ISelectCallUI {
     protected itemList: SelectCallItem[];
-    private mScene: Phaser.Scene;
     private mConfig: IComboboxConfig;
     private mBg: Phaser.GameObjects.Image;
     private mIsopen: boolean = false;
@@ -118,14 +121,9 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     private mtxt: Phaser.GameObjects.Text;
     private mArrow: Phaser.GameObjects.Image;
     private mInitialize: boolean = false;
-    private mData: any;
-    private mEnable: boolean = true;
-    private mMute: boolean = false;
     constructor(scene: Phaser.Scene, config: IComboboxConfig) {
         super(scene);
-        this.mScene = scene;
         this.mConfig = config;
-        this.soundMap = new Map();
         this.init();
     }
 
@@ -139,8 +137,14 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         }
     }
 
-    public set enable(value: boolean) {
-        this.mEnable = value;
+    public addListen() {
+        super.addListen();
+        this.on("uiClick", this.openHandler, this);
+    }
+
+    public removeListen() {
+        super.removeListen();
+        this.off("uiClick", this.openHandler, this);
     }
 
     public set text(value: string[]) {
@@ -169,10 +173,6 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
                 data: {},
                 selected: false,
                 enabled: true,
-                addListen: () => {
-                },
-                removeListen: () => {
-                }
             };
             this.itemList.push(item);
         }
@@ -180,62 +180,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         this.selectCall(this.itemList[0].itemData);
     }
 
-    public mute(boo: boolean) {
-        this.mMute = boo;
-    }
-
-    public playSound(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        const urls = config.urls;
-        if (this.mScene.cache.audio.exists(key)) {
-            this.startPlay(config);
-        } else {
-            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
-                this.startPlay(config);
-            }, this);
-            this.mScene.load.audio(key, urls);
-            this.mScene.load.start();
-        }
-    }
-
-    public startPlay(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
-        if (!sound) {
-            sound = this.mScene.sound.add(key, config.soundConfig);
-            this.soundMap.set(key, sound);
-        }
-        if (sound.isPlaying) {
-            return;
-        }
-        sound.play();
-    }
-
-    public stopSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPlaying) sound.stop();
-        });
-    }
-
-    public pauseSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (!sound.isPaused) sound.pause();
-        });
-    }
-
-    public resumeSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPaused) sound.resume();
-        });
-    }
-
     public destroy() {
-        this.removeAllListeners();
         if (this.itemList) {
             const len: number = this.itemList.length;
             for (let i: number = 0; i < len; i++) {
@@ -246,13 +191,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
             this.itemList.length = 0;
             this.itemList = null;
         }
-        if (this.soundMap) {
-            this.soundMap.forEach((sound) => {
-                if (sound.isPlaying) sound.stop();
-            });
-        }
-        this.mMute = false;
-        super.destroy(true);
+        super.destroy();
     }
 
     private init() {
@@ -281,15 +220,12 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
         this.mArrow.scaleY = this.mConfig.up ? -1 : 1;
         this.mArrow.x = this.mConfig.wid - this.mArrow.width;
         this.mArrow.y = (this.mConfig.hei - this.mArrow.height >> 1) + 4;
-
         this.mtxt = this.mScene.make.text({
             x: 0, y: 0,
             style: { fill: "#F7EDED", fontSize: 18 }
         }, false);
 
-        this.add([this.mBg, this.mArrow, this.mtxt]);
-        this.mBg.setInteractive();
-        this.mBg.on("pointerdown", this.openHandler, this);
+        this.mContainer.add([this.mBg, this.mArrow, this.mtxt]);
         this.mInitialize = true;
         if (this.mData) {
             this.selectCall(this.mData);
@@ -297,7 +233,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     }
 
     private openHandler() {
-        if (!this.mEnable) {
+        if (!this.mEnabled) {
             if (this.mConfig.boxMusic && this.mConfig.boxMusic[1]) this.playSound(this.mConfig.boxMusic[1]);
             return;
         }
@@ -308,7 +244,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
     private showTween(open: boolean) {
         if (open) {
             this.mItemBG = this.createTexture();
-            this.addAt(this.mItemBG, 0);
+            this.mContainer.addAt(this.mItemBG, 0);
         } else {
             if (this.mItemBG) {
                 if (this.mItemBG.parentContainer) {
@@ -328,8 +264,8 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
             if (!item) {
                 continue;
             }
-            item.x = this.mConfig.wid >> 1;
-            this.add(item);
+            item.view.x = this.mConfig.wid >> 1;
+            this.mContainer.add(item.view);
             this.mScene.tweens.add({
                 targets: item,
                 duration: 50 * i,
@@ -339,7 +275,7 @@ export class ComboBox extends Phaser.GameObjects.Container implements ISelectCal
                 },
                 onComplete: (tween, targets, element) => {
                     if (!open) {
-                        this.remove(item);
+                        this.mContainer.remove(item.view);
                     }
                 },
                 onCompleteParams: [this],

@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-10 14:58:11
+ * @Last Modified time: 2020-04-16 22:23:24
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { Transform } from "../interface/pos/Transform";
@@ -33,9 +33,10 @@ export class ProgressBar extends BaseUI {
         const pos: any = Tool.getPos(transform);
         const posX = pos.x;
         const posY = pos.y;
-        const baseWidth = !transform && !transform.width ? 0 : transform.width;
-        const baseHeight = !transform && !transform.height ? 0 : transform.height;
-        this.mContainer = this.mScene.make.container({ x: posX, y: posY, width: baseWidth, height: baseHeight }, false);
+        this.width = !transform && !transform.width ? 0 : transform.width;
+        this.height = !transform && !transform.height ? 0 : transform.height;
+        this.mContainer.setPosition(posX, posY);
+        this.mContainer.setSize(this.width, this.height);
         const bgSkinData: INinePatchSkinData = !skinData ? undefined : skinData.background;
         const barSkinData: INinePatchSkinData = !skinData ? undefined : skinData.bar;
         this.mBgSkin = new NinePatchSkin(scene, bgSkinData);
@@ -52,6 +53,7 @@ export class ProgressBar extends BaseUI {
         this.mBarMaskGraphics.fillRect(0, 0, 0, hei);
         this.mContainer.setMask(this.mBarMaskGraphics.createGeometryMask());
         this.mContainer.add([this.mBgSkin.skin, this.mBarSkin, this.mText]);
+        this.disInteractive();
     }
 
     public setProgress(curVal: number, maxVal: number) {
@@ -88,7 +90,6 @@ export class ProgressBar extends BaseUI {
     }
 
     public destory() {
-        super.destroy();
         if (this.mTween) {
             this.mTween.stop();
             this.mTween.remove();
@@ -96,8 +97,9 @@ export class ProgressBar extends BaseUI {
         }
         if (this.mContainer) {
             this.mContainer.destroy();
+            this.mContainer = null;
         }
-        this.mContainer = null;
+        super.destroy();
     }
 
     public get skin(): Phaser.GameObjects.Container {

@@ -2,6 +2,7 @@ import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { BaseUI } from "../baseUI/BaseUI";
 
 export enum ScrollerEvent {
     downinBound = "downinBound",
@@ -10,10 +11,8 @@ export enum ScrollerEvent {
     upoutBound = "upoutBound"
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
-    public soundMap: Map<string, Phaser.Sound.BaseSound>;
+export class GameScroller extends BaseUI implements ISound {
     protected configList: ISoundConfig[];
-    private mScene: Phaser.Scene;
     private mConfig: ScrollerConfig;
     private mDisDelection: number;
     private mCellDownHandler: Function;
@@ -31,9 +30,8 @@ export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
     private mGameObject: any;
     private mRectangle: Phaser.Geom.Rectangle;
     private mInteractiveList: any[];
-    private mMute: boolean = false;
     constructor(scene: Phaser.Scene, gameObject: any, config: ScrollerConfig) {
-        super();
+        super(scene);
         this.soundMap = new Map();
         this.mConfig = config;
         this.configList = config.music;
@@ -47,11 +45,10 @@ export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
         this.mGameObject = gameObject;
         this.mScroller = new Scroller(container, config);
         this.clickContainer = container;
-        this.mScene = scene;
         this.mDisDelection = GetValue(config, "interactivedisDetection", 10);
         this.mCellDownHandler = GetValue(config, "celldownCallBack", undefined);
         this.mCellUpHandler = GetValue(config, "cellupCallBack", undefined);
-        this.addListen();
+        this.setInteractive();
     }
 
     public get width(): number {
@@ -65,62 +62,7 @@ export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
         return this.mConfig.bounds;
     }
 
-    public playSound(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        const urls = config.urls;
-        if (this.mScene.cache.audio.exists(key)) {
-            this.startPlay(config);
-        } else {
-            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
-                this.startPlay(config);
-            }, this);
-            this.mScene.load.audio(key, urls);
-            this.mScene.load.start();
-        }
-    }
-
-    public startPlay(config: ISoundConfig) {
-        if (this.mMute) return;
-        const key = config.key;
-        let sound: Phaser.Sound.BaseSound = this.soundMap.get(key);
-        if (!sound) {
-            sound = this.mScene.sound.add(key, config.soundConfig);
-            this.soundMap.set(key, sound);
-        }
-        if (sound.isPlaying) {
-            return;
-        }
-        sound.play();
-    }
-
-    public stopSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPlaying) sound.stop();
-        });
-    }
-
-    public pauseSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (!sound.isPaused) sound.pause();
-        });
-    }
-
-    public resumeSound() {
-        if (this.mMute) return;
-        this.soundMap.forEach((sound) => {
-            if (sound.isPaused) sound.resume();
-        });
-    }
-
-    public mute(boo: boolean) {
-        this.mMute = boo;
-    }
-
     public setSize(width: number, height: number, value0: number, value1: number) {
-        // this.mGameObject.setSize(width, height);
         this.mScroller.setBounds(value0, value1);
     }
 
@@ -158,14 +100,10 @@ export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
 
     public destroy() {
         this.mMoveing = false;
-        this.removeListen();
-        this.soundMap.forEach((sound) => {
-            if (sound.isPlaying) sound.stop();
-        });
-        this.mMute = false;
         if (this.mGameObject) this.mGameObject.clearMask(true);
         if (this.mScroller) this.mScroller.destroy();
         if (this.clickContainer) this.clickContainer.destroy();
+        super.destroy();
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
@@ -210,11 +148,6 @@ export class GameScroller extends Phaser.Events.EventEmitter implements ISound {
             const eventName: string = inBound ? ScrollerEvent.upinBound : ScrollerEvent.upoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
-    }
-
-    private checkPointerDelection(pointer: Phaser.Input.Pointer) {
-        return Math.abs(pointer.downX - pointer.upX) < this.mDisDelection &&
-            Math.abs(pointer.downY - pointer.upY) < this.mDisDelection;
     }
 
     private checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: Boolean = false): boolean {

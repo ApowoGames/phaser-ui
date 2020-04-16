@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-14 18:37:10
+ * @Last Modified time: 2020-04-16 22:20:03
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -19,48 +19,131 @@ export interface UIFollowConfig {
 }
 
 export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetInteractive {
+    /**
+     * 声音map
+     */
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
+    /**
+     * ui显示对象
+     */
     protected mContainer: Phaser.GameObjects.Container;
+    /**
+     * 是否能交互
+     */
     protected mEnabled: boolean = false;
+    /**
+     * ui-scene
+     */
     protected mScene: Phaser.Scene;
-    protected mFollow: any;
-    protected posFunc: Function;
+    /**
+     * 是否静音
+     */
     protected mMute: boolean = false;
-    constructor(scene: Phaser.Scene) {
+    /**
+     * 移动端像素密度
+     */
+    protected dpr: number = 1;
+    /**
+     * ui缩放参数（外部world传入）
+     */
+    protected scale: number = 1;
+    /**
+     * 宽高
+     */
+    protected width: number = 0;
+    protected height: number = 0;
+    /**
+     * ui数据
+     */
+    protected mData: any;
+    /**
+     * 更新ui跟随位置回调
+     */
+    protected posFunc: Function;
+    /**
+     * ui跟随对象
+     */
+    protected mFollow: any;
+    /**
+     * 跟随对象所处的scene
+     */
+    protected mFromScene: Phaser.Scene;
+    constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
         super();
         this.mScene = scene;
+        this.dpr = dpr || 1;
+        this.scale = scale || 1;
+        this.mContainer = scene.make.container(undefined, false);
         this.soundMap = new Map();
         this.disInteractive();
     }
 
-    public setFollow(gameObject: any, posFunc?: Function) {
+    public get view(): any {
+        return this.mContainer;
+    }
+
+    public setFollow(gameObject: any, fromScene: Phaser.Scene, posFunc?: Function) {
         this.mFollow = gameObject;
+        this.mFromScene = fromScene;
         if (posFunc) this.posFunc = posFunc;
-        this.mFollow.on("posChange", this.posChange, this);
+    }
+
+    public updatePos() {
+        if (this.posFunc) {
+            this.posFunc({
+                scene: this.mFromScene,
+                followX: this.mFollow.x,
+                followY: this.mFollow.y,
+                baseX: this.mContainer.x,
+                baseY: this.mContainer.y
+            })
+        } else {
+            const camera = this.mFromScene.cameras.main;
+            const px = this.mContainer.x - camera.scrollX;
+            const py = this.mContainer.y - camera.scrollY;
+            this.mContainer.x = px;
+            this.mContainer.y = py;
+        }
     }
 
     public setInteractive() {
         this.mEnabled = true;
-        if (this.mContainer) {
-            this.mContainer.setInteractive();
-            this.mScene.input.off("pointerup", this.sceneClick, this);
-            this.mContainer.on("pointerup", this.uiClick, this);
-        }
+        this.addListen();
     }
 
     public disInteractive() {
         this.mEnabled = false;
-        if (this.mContainer) {
-            this.mContainer.disableInteractive();
+        this.removeListen();
+    }
+
+    get interactive(): boolean {
+        return this.mEnabled;
+    }
+
+    public addListen() {
+        let containerBoo: boolean = true;
+        if (this.mContainer || this.mContainer.width === 0 || this.mContainer.height === 0) {
+            containerBoo = false;
+        }
+        if (this.mEnabled) {
+            if (containerBoo) {
+                this.mContainer.setInteractive();
+                this.mContainer.on("pointerup", this.uiClick, this);
+            }
+            this.mScene.input.off("pointerup", this.sceneClick, this);
+        } else {
+            if (containerBoo) {
+                this.mContainer.disableInteractive();
+                this.mContainer.off("pointerup", this.uiClick, this);
+            }
             this.mScene.input.on("pointerup", this.sceneClick, this);
-            this.mContainer.off("pointerup", this.uiClick, this);
         }
     }
 
     public removeListen() {
         this.mEnabled = false;
+        this.mScene.input.off("pointerup", this.sceneClick, this);
         if (this.mContainer) {
-            this.mScene.input.off("pointerup", this.sceneClick, this);
             this.mContainer.off("pointerup", this.uiClick, this);
         }
     }
@@ -128,31 +211,19 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         super.destroy();
     }
 
-    protected posChange(sce: Phaser.Scene) {
-        if (this.posFunc) {
-            const config: UIFollowConfig = {
-                scene: sce,
-                followX: this.mFollow.x,
-                followY: this.mFollow.y,
-                baseX: this.mContainer.x,
-                baseY: this.mContainer.y
-            }
-        }
-    }
-
-    private sceneClick(pointer: Phaser.Input.Pointer) {
+    protected sceneClick(pointer: Phaser.Input.Pointer) {
         if (Tool.checkPointerContains(this.mContainer, pointer) && this.checkPointerDelection(pointer)) {
             this.emit("uiClick");
         }
     }
 
-    private uiClick(pointer: Phaser.Input.Pointer) {
+    protected uiClick(pointer: Phaser.Input.Pointer) {
         if (this.checkPointerDelection(pointer)) {
             this.emit("uiClick");
         }
     }
 
-    private checkPointerDelection(pointer: Phaser.Input.Pointer) {
+    protected checkPointerDelection(pointer: Phaser.Input.Pointer) {
         if (!this.mScene) return true;
         return Math.abs(pointer.downX - pointer.upX) < 10 ||
             Math.abs(pointer.downY - pointer.upY) < 10;
