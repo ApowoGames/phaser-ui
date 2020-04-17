@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 11:42:55
+ * @Last Modified time: 2020-04-17 17:04:55
  */
 
 import { Tool } from "../tool/Tool";
@@ -56,7 +56,7 @@ export class TabGroup extends BaseUI {
 
     public setSize(width: number, height: number) {
         this.container.setSize(width, height);
-        if (this.enable) {
+        if (this.interactiveBoo) {
             this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
         }
     }

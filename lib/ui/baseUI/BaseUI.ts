@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 16:26:42
+ * @Last Modified time: 2020-04-17 17:03:39
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -30,7 +30,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     /**
      * 是否能交互
      */
-    protected enable: boolean = false;
+    protected interactiveBoo: boolean = false;
     /**
      * ui-scene
      */
@@ -122,6 +122,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.width = width;
         this.height = height;
         this.container.setSize(width, height);
+        if(this.interactiveBoo)this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
     }
 
     public setPosition(x: number, y: number) {
@@ -154,17 +155,17 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public setInteractive() {
-        this.enable = true;
+        this.interactiveBoo = true;
         this.addListen();
     }
 
     public disInteractive() {
-        this.enable = false;
+        this.interactiveBoo = false;
         this.removeListen();
     }
 
     get interactive(): boolean {
-        return this.enable;
+        return this.interactiveBoo;
     }
 
     public addListen() {
@@ -172,9 +173,9 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         if (this.container || this.container.width === 0 || this.container.height === 0) {
             containerBoo = false;
         }
-        if (this.enable) {
+        if (this.interactiveBoo) {
             if (containerBoo) {
-                this.container.setInteractive();
+                this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
                 this.container.on("pointerup", this.uiClick, this);
             }
             this.scene.input.off("pointerup", this.sceneClick, this);
@@ -252,7 +253,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
         });
-        this.enable = false;
+        this.interactiveBoo = false;
         this.silent = false;
         this.removeListen();
         super.destroy();

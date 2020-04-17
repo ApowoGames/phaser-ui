@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 11:41:59
+ * @Last Modified time: 2020-04-17 17:03:34
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -85,7 +85,7 @@ export class Button extends BaseUI {
     }
 
     public get interactive(): boolean {
-        return this.enable;
+        return this.interactiveBoo;
     }
 
     public setInteractive() {
@@ -168,7 +168,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerUpHandler(pointer) {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.buttonStateChange(ButtonState.Normal);
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             // events.push(MouseEvent.Tap);
@@ -182,7 +182,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerDownHandler(pointer) {
-        if (!this.enable) {
+        if (!this.interactiveBoo) {
             if (this.mConfig.music && this.mConfig.music[1]) this.playSound(this.mConfig.music[1]);
             return;
         }
@@ -195,7 +195,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerMoveHandler(pointer) {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.mIsMove = true;
         this.emit(Event.Move);
     }

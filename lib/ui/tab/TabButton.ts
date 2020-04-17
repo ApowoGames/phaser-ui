@@ -14,7 +14,7 @@ export class TabButton extends Button {
     }
 
     protected onPointerDownHandler(pointer) {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.mDownTime = Date.now();
         this.mPressDelay = setTimeout(() => {
             this.emit(Event.Hold, this);
@@ -23,7 +23,7 @@ export class TabButton extends Button {
     }
 
     protected onPointerUpHandler(pointer) {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.buttonStateChange(ButtonState.Select);
         // 移动端用tap替换click
         if (!this.mWorld.game.device.os.desktop) {

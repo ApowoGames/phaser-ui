@@ -90,16 +90,16 @@ export class SelectCallItem extends BaseUI {
     }
 
     public get interactive(): boolean {
-        return this.enable;
+        return this.interactiveBoo;
     }
 
     protected overHandler() {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.mSelectBG.visible = true;
     }
 
     protected selectHandler() {
-        if (!this.enable) {
+        if (!this.interactiveBoo) {
             if (this.configList && this.configList[1]) (this.mSelectCallUI as ComboBox).playSound(this.configList[1]);
             return;
         }
@@ -108,7 +108,7 @@ export class SelectCallItem extends BaseUI {
         this.mSelectCallUI.selectCall(this.itedata);
     }
     protected outHandler() {
-        if (!this.enable) return;
+        if (!this.interactiveBoo) return;
         this.mSelectBG.visible = false;
     }
 }
@@ -233,7 +233,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
     }
 
     private openHandler() {
-        if (!this.enable) {
+        if (!this.interactiveBoo) {
             if (this.mConfig.boxMusic && this.mConfig.boxMusic[1]) this.playSound(this.mConfig.boxMusic[1]);
             return;
         }
