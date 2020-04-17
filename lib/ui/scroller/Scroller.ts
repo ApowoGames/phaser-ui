@@ -39,6 +39,8 @@ export class GameScroller extends BaseUI implements ISound {
         bg.fillStyle(0);
         bg.fillRect(0, 0, config.width, config.height);
         bg.setPosition(config.x, config.y);
+        this.width = this.mConfig.width;
+        this.height = this.mConfig.height;
         gameObject.setMask(bg.createGeometryMask());
         const container: Phaser.GameObjects.Container = scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
         container.setSize(config.width, config.height);
@@ -51,18 +53,13 @@ export class GameScroller extends BaseUI implements ISound {
         this.setInteractive();
     }
 
-    public get width(): number {
-        return this.mConfig.width;
-    }
-    public get height(): number {
-        return this.mConfig.height;
-    }
-
     public get bounds(): number[] {
         return this.mConfig.bounds;
     }
 
-    public setSize(width: number, height: number, value0: number, value1: number) {
+    public setSize(width?: number, height?: number, value0?: number, value1?: number) {
+        this.width = width;
+        this.height = height;
         this.mScroller.setBounds(value0, value1);
     }
 
