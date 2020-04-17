@@ -27,12 +27,8 @@ export class BaseMediator implements IMediator {
         this.mUIType = UIType.NoneUIType;
     }
 
-    public get UIType(): UIType {
+    public get UIType(): number {
         return this.mUIType;
-    }
-
-    public set UIType(type: UIType) {
-        this.mUIType = type;
     }
 
     follow() {
