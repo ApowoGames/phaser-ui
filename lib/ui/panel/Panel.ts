@@ -83,6 +83,10 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.container.setSize(wid, hei);
     }
 
+    set scale(scale: number) {
+        this.container.setScale(scale);
+    }
+
     show(param?: any) {
         this.data = param;
         if (!this.mInitialized) {
@@ -109,19 +113,14 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.mTweenBoo = boo;
     }
 
-    // set enabled(boo: boolean) {
-    //     if (!this.mInitialized) return;
-    //     super.enabled = boo;
-    // }
     get interactive(): boolean {
         return this.mEnabled;
     }
 
     protected showTween(show: boolean) {
         this.mTweening = true;
-        this.container.scaleX = show ? 0 : this.mWorld.uiScale;
-        this.container.scaleY = show ? 0 : this.mWorld.uiScale;
         const scale: number = show ? this.mWorld.uiScale : 0;
+        this.container.scale = scale;
         if (this.mPanelTween) {
             this.mPanelTween.stop();
         }
