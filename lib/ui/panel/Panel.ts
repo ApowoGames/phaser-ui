@@ -83,7 +83,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.container.setSize(wid, hei);
     }
 
-    set scale(scale: number) {
+    setScale(scale: number) {
         this.container.setScale(scale);
     }
 
