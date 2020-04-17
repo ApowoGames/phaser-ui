@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 17:03:39
+ * @Last Modified time: 2020-04-17 17:33:13
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -118,11 +118,24 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.container.addAt(gameObject, index);
     }
 
+    /**
+     * 调整ui尺寸
+     * @param width
+     * @param height 
+     */
     public setSize(width?: number, height?: number) {
         this.width = width;
         this.height = height;
         this.container.setSize(width, height);
-        if(this.interactiveBoo)this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+        if (this.interactiveBoo) this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+    }
+
+    /**
+     * 调整ui布局
+     * @param width
+     * @param height
+     */
+    public resize(width?: number, height?: number) {
     }
 
     public setPosition(x: number, y: number) {
