@@ -3,6 +3,7 @@ import { Panel } from "../panel/panel";
 import { UIType } from "../interface/baseUI/UiType";
 
 export interface IMediator {
+    UIType: UIType;
     isShow(): boolean;
     tweenExpand(show: boolean);
     resize(wid, hei);
@@ -13,7 +14,6 @@ export interface IMediator {
     destroy();
     isSceneUI(): boolean;
     getView(): IAbstractPanel;
-    getUIType(): UIType;
     setParam(param): void;
     getParam(): any;
 }
@@ -27,6 +27,14 @@ export class BaseMediator implements IMediator {
         this.mUIType = UIType.NoneUIType;
     }
 
+    public get UIType(): UIType {
+        return this.mUIType;
+    }
+
+    public set UIType(type: UIType) {
+        this.mUIType = type;
+    }
+
     follow() {
         if (!this.mView) return;
         this.mView.updatePos();
@@ -38,10 +46,6 @@ export class BaseMediator implements IMediator {
 
     getView(): IAbstractPanel {
         return this.mView;
-    }
-
-    getUIType(): number {
-        return this.mUIType;
     }
 
     hide(): void {
