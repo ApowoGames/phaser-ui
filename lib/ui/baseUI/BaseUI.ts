@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-16 22:20:03
+ * @Last Modified time: 2020-04-17 09:41:26
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -46,7 +46,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     /**
      * ui缩放参数（外部world传入）
      */
-    protected scale: number = 1;
+    protected uiScale: number = 1;
     /**
      * 宽高
      */
@@ -72,7 +72,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         super();
         this.mScene = scene;
         this.dpr = dpr || 1;
-        this.scale = scale || 1;
+        this.uiScale = scale || 1;
         this.mContainer = scene.make.container(undefined, false);
         this.soundMap = new Map();
         this.disInteractive();
@@ -80,6 +80,30 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
 
     public get view(): any {
         return this.mContainer;
+    }
+
+    public get x(): number {
+        return this.mContainer.x;
+    }
+
+    public set x(value: number) {
+        this.mContainer.x = value;
+    }
+
+    public get y(): number {
+        return this.mContainer.y;
+    }
+
+    public set y(value: number) {
+        this.mContainer.y = value;
+    }
+
+    public get scale(): number {
+        return this.mContainer.scale;
+    }
+
+    public set scale(value: number) {
+        this.mContainer.scale = value;
     }
 
     public setFollow(gameObject: any, fromScene: Phaser.Scene, posFunc?: Function) {
