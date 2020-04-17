@@ -3,7 +3,7 @@ import { Panel } from "../panel/panel";
 import { UIType } from "../interface/baseUI/UiType";
 
 export interface IMediator {
-    UIType: UIType;
+    UIType: number;
     isShow(): boolean;
     tweenExpand(show: boolean);
     resize(wid, hei);
@@ -22,7 +22,7 @@ export class BaseMediator implements IMediator {
     protected mView: Panel;
     protected mShow: boolean = false;
     protected mParam: any;
-    protected mUIType: UIType;
+    protected mUIType: number;
     constructor() {
         this.mUIType = UIType.NoneUIType;
     }
