@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 09:41:26
+ * @Last Modified time: 2020-04-17 09:48:51
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -104,6 +104,14 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
 
     public set scale(value: number) {
         this.mContainer.scale = value;
+    }
+
+    public add(gameObject: any) {
+        this.mContainer.add(gameObject);
+    }
+
+    public addAt(gameObject: any, index: number) {
+        this.mContainer.addAt(gameObject, index);
     }
 
     public setFollow(gameObject: any, fromScene: Phaser.Scene, posFunc?: Function) {
