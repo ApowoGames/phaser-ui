@@ -7,5 +7,5 @@ export interface ISound {
     stopSound();
     pauseSound();
     resumeSound();
-    mute(boo);
+    setSilent(boo);
 }

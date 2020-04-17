@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 11:40:01
+ * @Last Modified time: 2020-04-17 16:24:44
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -188,7 +188,6 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public removeListen() {
-        this.enable = false;
         this.scene.input.off("pointerup", this.sceneClick, this);
         if (this.container) {
             this.container.off("pointerup", this.uiClick, this);
@@ -196,7 +195,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public playSound(config: ISoundConfig) {
-        if (this.mute) return;
+        if (this.silent) return;
         const key = config.key;
         const urls = config.urls;
         if (this.scene.cache.audio.exists(key)) {
@@ -211,7 +210,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public startPlay(config: ISoundConfig) {
-        if (this.mute) return;
+        if (this.silent) return;
         const key = config.key;
         let sound = this.soundMap.get(key);
         if (!sound) {
@@ -245,7 +244,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         });
     }
 
-    public mute(boo: boolean) {
+    public setSilent(boo: boolean) {
         this.silent = boo;
     }
 
@@ -253,6 +252,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
         });
+        this.enable = false;
         this.silent = false;
         this.removeListen();
         super.destroy();
