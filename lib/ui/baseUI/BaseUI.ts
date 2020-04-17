@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 11:11:45
+ * @Last Modified time: 2020-04-17 11:40:01
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -26,19 +26,19 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     /**
      * ui显示对象
      */
-    protected mContainer: Phaser.GameObjects.Container;
+    protected container: Phaser.GameObjects.Container;
     /**
      * 是否能交互
      */
-    protected mEnabled: boolean = false;
+    protected enable: boolean = false;
     /**
      * ui-scene
      */
-    protected mScene: Phaser.Scene;
+    protected scene: Phaser.Scene;
     /**
      * 是否静音
      */
-    protected mMute: boolean = false;
+    protected silent: boolean = false;
     /**
      * 移动端像素密度
      */
@@ -55,7 +55,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     /**
      * ui数据
      */
-    protected mData: any;
+    protected data: any;
     /**
      * 更新ui跟随位置回调
      */
@@ -67,131 +67,131 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     /**
      * 跟随对象所处的scene
      */
-    protected mFromScene: Phaser.Scene;
+    protected mFroscene: Phaser.Scene;
     constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
         super();
-        this.mScene = scene;
+        this.scene = scene;
         this.dpr = dpr || 1;
         this.uiScale = scale || 1;
-        this.mContainer = scene.make.container(undefined, false);
+        this.container = scene.make.container(undefined, false);
         this.soundMap = new Map();
         this.disInteractive();
     }
 
     public get view(): any {
-        return this.mContainer;
+        return this.container;
     }
 
     public get x(): number {
-        return this.mContainer.x;
+        return this.container.x;
     }
 
     public set x(value: number) {
-        this.mContainer.x = value;
+        this.container.x = value;
     }
 
     public get y(): number {
-        return this.mContainer.y;
+        return this.container.y;
     }
 
     public set y(value: number) {
-        this.mContainer.y = value;
+        this.container.y = value;
     }
 
     public get scale(): number {
-        return this.mContainer.scale;
+        return this.container.scale;
     }
 
     public set scale(value: number) {
-        this.mContainer.scale = value;
+        this.container.scale = value;
     }
 
     public get list(): Phaser.GameObjects.GameObject[] {
-        return this.mContainer.list;
+        return this.container.list;
     }
 
     public add(gameObject: any) {
-        this.mContainer.add(gameObject);
+        this.container.add(gameObject);
     }
 
     public addAt(gameObject: any, index: number) {
-        this.mContainer.addAt(gameObject, index);
+        this.container.addAt(gameObject, index);
     }
 
     public setSize(width?: number, height?: number) {
         this.width = width;
         this.height = height;
-        this.mContainer.setSize(width, height);
+        this.container.setSize(width, height);
     }
 
     public setPosition(x: number, y: number) {
-        this.mContainer.x = x;
-        this.mContainer.y = y;
+        this.container.x = x;
+        this.container.y = y;
     }
 
-    public setFollow(gameObject: any, fromScene: Phaser.Scene, posFunc?: Function) {
+    public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
         this.mFollow = gameObject;
-        this.mFromScene = fromScene;
+        this.mFroscene = froscene;
         if (posFunc) this.posFunc = posFunc;
     }
 
     public updatePos() {
         if (this.posFunc) {
             this.posFunc({
-                scene: this.mFromScene,
+                scene: this.mFroscene,
                 followX: this.mFollow.x,
                 followY: this.mFollow.y,
-                baseX: this.mContainer.x,
-                baseY: this.mContainer.y
+                baseX: this.container.x,
+                baseY: this.container.y
             })
         } else {
-            const camera = this.mFromScene.cameras.main;
-            const px = this.mContainer.x - camera.scrollX;
-            const py = this.mContainer.y - camera.scrollY;
-            this.mContainer.x = px;
-            this.mContainer.y = py;
+            const camera = this.mFroscene.cameras.main;
+            const px = this.container.x - camera.scrollX;
+            const py = this.container.y - camera.scrollY;
+            this.container.x = px;
+            this.container.y = py;
         }
     }
 
     public setInteractive() {
-        this.mEnabled = true;
+        this.enable = true;
         this.addListen();
     }
 
     public disInteractive() {
-        this.mEnabled = false;
+        this.enable = false;
         this.removeListen();
     }
 
     get interactive(): boolean {
-        return this.mEnabled;
+        return this.enable;
     }
 
     public addListen() {
         let containerBoo: boolean = true;
-        if (this.mContainer || this.mContainer.width === 0 || this.mContainer.height === 0) {
+        if (this.container || this.container.width === 0 || this.container.height === 0) {
             containerBoo = false;
         }
-        if (this.mEnabled) {
+        if (this.enable) {
             if (containerBoo) {
-                this.mContainer.setInteractive();
-                this.mContainer.on("pointerup", this.uiClick, this);
+                this.container.setInteractive();
+                this.container.on("pointerup", this.uiClick, this);
             }
-            this.mScene.input.off("pointerup", this.sceneClick, this);
+            this.scene.input.off("pointerup", this.sceneClick, this);
         } else {
             if (containerBoo) {
-                this.mContainer.disableInteractive();
-                this.mContainer.off("pointerup", this.uiClick, this);
+                this.container.disableInteractive();
+                this.container.off("pointerup", this.uiClick, this);
             }
-            this.mScene.input.on("pointerup", this.sceneClick, this);
+            this.scene.input.on("pointerup", this.sceneClick, this);
         }
     }
 
     public removeListen() {
-        this.mEnabled = false;
-        this.mScene.input.off("pointerup", this.sceneClick, this);
-        if (this.mContainer) {
-            this.mContainer.off("pointerup", this.uiClick, this);
+        this.enable = false;
+        this.scene.input.off("pointerup", this.sceneClick, this);
+        if (this.container) {
+            this.container.off("pointerup", this.uiClick, this);
         }
     }
 
@@ -199,14 +199,14 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         if (this.mute) return;
         const key = config.key;
         const urls = config.urls;
-        if (this.mScene.cache.audio.exists(key)) {
+        if (this.scene.cache.audio.exists(key)) {
             this.startPlay(config);
         } else {
-            this.mScene.load.once(`filecomplete-audio-${key}`, () => {
+            this.scene.load.once(`filecomplete-audio-${key}`, () => {
                 this.startPlay(config);
             }, this);
-            this.mScene.load.audio(key, urls);
-            this.mScene.load.start();
+            this.scene.load.audio(key, urls);
+            this.scene.load.start();
         }
     }
 
@@ -215,7 +215,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         const key = config.key;
         let sound = this.soundMap.get(key);
         if (!sound) {
-            sound = this.mScene.sound.add(key, config.soundConfig);
+            sound = this.scene.sound.add(key, config.soundConfig);
             this.soundMap.set(key, sound);
         }
         if (sound.isPlaying) {
@@ -225,41 +225,41 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public stopSound() {
-        if (this.mMute) return;
+        if (this.silent) return;
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
         });
     }
 
     public pauseSound() {
-        if (this.mMute) return;
+        if (this.silent) return;
         this.soundMap.forEach((sound) => {
             if (!sound.isPaused) sound.pause();
         });
     }
 
     public resumeSound() {
-        if (this.mMute) return;
+        if (this.silent) return;
         this.soundMap.forEach((sound) => {
             if (sound.isPaused) sound.resume();
         });
     }
 
     public mute(boo: boolean) {
-        this.mMute = boo;
+        this.silent = boo;
     }
 
     public destroy() {
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
         });
-        this.mMute = false;
+        this.silent = false;
         this.removeListen();
         super.destroy();
     }
 
     protected sceneClick(pointer: Phaser.Input.Pointer) {
-        if (Tool.checkPointerContains(this.mContainer, pointer) && this.checkPointerDelection(pointer)) {
+        if (Tool.checkPointerContains(this.container, pointer) && this.checkPointerDelection(pointer)) {
             this.emit("uiClick");
         }
     }
@@ -271,7 +271,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     protected checkPointerDelection(pointer: Phaser.Input.Pointer) {
-        if (!this.mScene) return true;
+        if (!this.scene) return true;
         return Math.abs(pointer.downX - pointer.upX) < 10 ||
             Math.abs(pointer.downY - pointer.upY) < 10;
     }

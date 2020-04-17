@@ -24,7 +24,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
         super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();
-        this.mScene = scene;
+        this.scene = scene;
         this.mWorld = world;
         this.configList = music;
         this.mInitialized = false;
@@ -41,9 +41,9 @@ export class Panel extends BaseUI implements IAbstractPanel {
         super.removeListen();
     }
 
-    public setFollow(gameObject: any, fromScene: Phaser.Scene, posFunc?: Function) {
+    public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
         this.mFollow = gameObject;
-        this.mFromScene = fromScene;
+        this.mFroscene = froscene;
         if (posFunc) this.posFunc = posFunc;
     }
 
@@ -59,8 +59,8 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     destroy() {
-        if (this.mContainer && this.mContainer.parentContainer) {
-            this.mContainer.parentContainer.remove(this.mContainer, true);
+        if (this.container && this.container.parentContainer) {
+            this.container.parentContainer.remove(this.container, true);
         }
         if (this.mPanelTween) {
             this.mPanelTween.stop();
@@ -80,11 +80,11 @@ export class Panel extends BaseUI implements IAbstractPanel {
     resize(wid: number, hei: number) {
         this.width = wid;
         this.height = hei;
-        this.mContainer.setSize(wid, hei);
+        this.container.setSize(wid, hei);
     }
 
     show(param?: any) {
-        this.mData = param;
+        this.data = param;
         if (!this.mInitialized) {
             this.preload();
             return;
@@ -119,13 +119,13 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     protected showTween(show: boolean) {
         this.mTweening = true;
-        this.mContainer.scaleX = show ? 0 : this.mWorld.uiScale;
-        this.mContainer.scaleY = show ? 0 : this.mWorld.uiScale;
+        this.container.scaleX = show ? 0 : this.mWorld.uiScale;
+        this.container.scaleY = show ? 0 : this.mWorld.uiScale;
         const scale: number = show ? this.mWorld.uiScale : 0;
         if (this.mPanelTween) {
             this.mPanelTween.stop();
         }
-        this.mPanelTween = this.mScene.tweens.add({
+        this.mPanelTween = this.scene.tweens.add({
             targets: this,
             duration: 200,
             ease: "Linear",
@@ -155,7 +155,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
             this.mResources.clear();
             this.mResources = null;
         }
-        this.show(this.mData);
+        this.show(this.data);
     }
 
     protected addAtlas(key: string, texture: string, data: string) {
@@ -171,7 +171,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected preload() {
-        if (!this.mScene) {
+        if (!this.scene) {
             return;
         }
         if (this.mResources) {
@@ -220,7 +220,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     protected addResources(key: string, resource: any) {
         // TODO Add IResource interface
-        if (!this.mScene) {
+        if (!this.scene) {
             return;
         }
         // TODO add load type
@@ -241,26 +241,26 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected startLoad() {
-        if (!this.mScene) {
+        if (!this.scene) {
             return;
         }
-        this.mScene.load.on(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
-        this.mScene.load.once(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
-        this.mScene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
-        this.mScene.load.start();
+        this.scene.load.on(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.once(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
+        this.scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
+        this.scene.load.start();
     }
 
     protected offLoad() {
-        if (!this.mScene) {
+        if (!this.scene) {
             return;
         }
-        this.mScene.load.off(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
-        this.mScene.load.off(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
-        this.mScene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
+        this.scene.load.off(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.off(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
+        this.scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
     }
 
     protected sceneClick(pointer: Phaser.Input.Pointer) {
-        if (Tool.checkPointerContains(this.mContainer, pointer) && this.checkPointerDelection(pointer)) {
+        if (Tool.checkPointerContains(this.container, pointer) && this.checkPointerDelection(pointer)) {
             this.emit("panelClick", pointer);
         }
     }

@@ -14,7 +14,7 @@ export class TabButton extends Button {
     }
 
     protected onPointerDownHandler(pointer) {
-        if (!this.mEnabled) return;
+        if (!this.enable) return;
         this.mDownTime = Date.now();
         this.mPressDelay = setTimeout(() => {
             this.emit(Event.Hold, this);
@@ -23,14 +23,14 @@ export class TabButton extends Button {
     }
 
     protected onPointerUpHandler(pointer) {
-        if (!this.mEnabled) return;
+        if (!this.enable) return;
         this.buttonStateChange(ButtonState.Select);
         // 移动端用tap替换click
         if (!this.mWorld.game.device.os.desktop) {
             // 在没有发生移动或点击时间超过200毫秒发送tap事件
             if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
                 // events.push(MouseEvent.Tap);
-                this.emit(Event.Tap, pointer, this.mContainer);
+                this.emit(Event.Tap, pointer, this.container);
             }
         } else {
             this.emit(Event.Click, pointer, this);

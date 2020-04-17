@@ -82,17 +82,17 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     public addListen() {
-        this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
-        this.mScene.input.on("pointerdown", this.pointerDownHandler, this);
-        this.mScene.input.on("pointerup", this.pointerUpHandler, this);
+        this.scene.input.on("pointermove", this.pointerMoveHandler, this);
+        this.scene.input.on("pointerdown", this.pointerDownHandler, this);
+        this.scene.input.on("pointerup", this.pointerUpHandler, this);
 
     }
 
     public removeListen() {
         this.mMoveing = false;
-        this.mScene.input.off("pointerdown", this.pointerDownHandler, this);
-        this.mScene.input.off("pointerup", this.pointerUpHandler, this);
-        this.mScene.input.off("pointermove", this.pointerMoveHandler, this);
+        this.scene.input.off("pointerdown", this.pointerDownHandler, this);
+        this.scene.input.off("pointerup", this.pointerUpHandler, this);
+        this.scene.input.off("pointermove", this.pointerMoveHandler, this);
     }
 
     public destroy() {
@@ -109,7 +109,7 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {
-        // this.mScene.input.off("pointermove", this.pointerMoveHandler, this);
+        // this.scene.input.off("pointermove", this.pointerMoveHandler, this);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellDownHandler && !this.mMoveing) {
@@ -127,7 +127,7 @@ export class GameScroller extends BaseUI implements ISound {
         }
     }
     private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
-        // this.mScene.input.on("pointermove", this.pointerMoveHandler, this);
+        // this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         this.mMoveing = false;
         if (this.configList && this.configList[0]) this.playSound(this.configList[0]);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);

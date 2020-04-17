@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-16 22:25:20
+ * @Last Modified time: 2020-04-17 11:41:59
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -56,20 +56,20 @@ export class Button extends BaseUI {
         const bgFrames: ResourceData = !btnConfig ? undefined : btnConfig.bgFrames;
         const iconFrames: ResourceData = !btnConfig ? undefined : btnConfig.iconFrames;
         // 按钮容器
-        this.mContainer.setPosition(posX, posY);
-        this.mContainer.setSize(this.width, this.height);
+        this.container.setPosition(posX, posY);
+        this.container.setSize(this.width, this.height);
         // 按钮背景
         this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
         const bgTransform: Transform = bgFrames.transForm;
         this.mBgFramesSkin.x = Tool.getPos(bgTransform).x;
         this.mBgFramesSkin.y = Tool.getPos(bgTransform).y;
-        if (this.mBgFramesSkin.skin) this.mContainer.add(this.mBgFramesSkin.skin);
+        if (this.mBgFramesSkin.skin) this.container.add(this.mBgFramesSkin.skin);
         // 按钮icon
         this.mIconFramesSkin = new FramesSkin(scene, iconFrames);
         const iconTransform: Transform = iconFrames.transForm;
         this.mIconFramesSkin.x = Tool.getPos(iconTransform).x;
         this.mIconFramesSkin.y = Tool.getPos(iconTransform).y;
-        if (this.mIconFramesSkin.skin) this.mContainer.add(this.mIconFramesSkin.skin);
+        if (this.mIconFramesSkin.skin) this.container.add(this.mIconFramesSkin.skin);
         // 按钮文本
         const textconfig = {};
         this.mText = scene.make.text({
@@ -85,64 +85,64 @@ export class Button extends BaseUI {
     }
 
     public get interactive(): boolean {
-        return this.mEnabled;
+        return this.enable;
     }
 
     public setInteractive() {
         super.setInteractive();
         this.buttonStateChange(ButtonState.Normal);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
     }
 
     public disInteractive() {
         super.disInteractive();
         this.buttonStateChange(ButtonState.Disable);
-        this.mContainer.disableInteractive();
+        this.container.disableInteractive();
     }
 
     public setSize(width: number, height: number) {
-        this.mContainer.setSize(width, height);
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
+        this.container.setSize(width, height);
+        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
     }
 
     public setBgTexture(resData: ResourceData) {
         this.mBgFramesSkin.setSkinData(resData);
-        if (!this.mBgFramesSkin.skin.parentContainer) this.mContainer.add(this.mBgFramesSkin.skin);
+        if (!this.mBgFramesSkin.skin.parentContainer) this.container.add(this.mBgFramesSkin.skin);
     }
 
     public setIconTexture(resData: ResourceData) {
         this.mIconFramesSkin.setSkinData(resData);
-        if (!this.mIconFramesSkin.skin.parentContainer) this.mContainer.add(this.mIconFramesSkin.skin);
+        if (!this.mIconFramesSkin.skin.parentContainer) this.container.add(this.mIconFramesSkin.skin);
     }
 
     public setText(val: string) {
         if (this.mText) {
             this.mText.text = val;
-            if (!this.mText.parentContainer) this.mContainer.add(this.mText);
+            if (!this.mText.parentContainer) this.container.add(this.mText);
         }
     }
 
     public get skin(): Phaser.GameObjects.Container {
-        return this.mContainer;
+        return this.container;
     }
 
     public addListen() {
-        this.mContainer.on("pointerDown", this.onPointerDownHandler, this);
-        this.mContainer.on("pointerUp", this.onPointerUpHandler, this);
-        this.mContainer.on("pointerMove", this.onPointerMoveHandler, this);
+        this.container.on("pointerDown", this.onPointerDownHandler, this);
+        this.container.on("pointerUp", this.onPointerUpHandler, this);
+        this.container.on("pointerMove", this.onPointerMoveHandler, this);
     }
 
     public removeListen() {
-        this.mContainer.off("pointerDown", this.onPointerDownHandler, this);
-        this.mContainer.off("pointerUp", this.onPointerUpHandler, this);
-        this.mContainer.off("pointerMove", this.onPointerMoveHandler, this);
+        this.container.off("pointerDown", this.onPointerDownHandler, this);
+        this.container.off("pointerUp", this.onPointerUpHandler, this);
+        this.container.off("pointerMove", this.onPointerMoveHandler, this);
     }
     /**
      * 是否静音
      * @param boo 
      */
     public mute(boo: boolean) {
-        this.mMute = boo;
+        this.silent = boo;
     }
 
     public destroy() {
@@ -155,20 +155,20 @@ export class Button extends BaseUI {
             this.mIconFramesSkin.destroy();
             this.mIconFramesSkin = null;
         }
-        if (this.mContainer) {
-            this.mContainer.destroy();
+        if (this.container) {
+            this.container.destroy();
         }
         if (this.mPressDelay) {
             clearTimeout(this.mPressDelay);
         }
         this.mDownTime = 0;
-        this.mMute = false;
+        this.silent = false;
         this.mIsMove = false;
         super.destroy();
     }
 
     protected onPointerUpHandler(pointer) {
-        if (!this.mEnabled) return;
+        if (!this.enable) return;
         this.buttonStateChange(ButtonState.Normal);
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             // events.push(MouseEvent.Tap);
@@ -182,7 +182,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerDownHandler(pointer) {
-        if (!this.mEnabled) {
+        if (!this.enable) {
             if (this.mConfig.music && this.mConfig.music[1]) this.playSound(this.mConfig.music[1]);
             return;
         }
@@ -195,7 +195,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerMoveHandler(pointer) {
-        if (!this.mEnabled) return;
+        if (!this.enable) return;
         this.mIsMove = true;
         this.emit(Event.Move);
     }

@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-16 21:38:55
+ * @Last Modified time: 2020-04-17 11:42:55
  */
 
 import { Tool } from "../tool/Tool";
@@ -23,41 +23,41 @@ export class TabGroup extends BaseUI {
         super(scene);
         this.mConfig = config;
         this.mWorld = world;
-        this.mScene = scene;
+        this.scene = scene;
         const transform: Transform = !config ? undefined : config.transform;
         const posX = Tool.getPos(transform).x;
         const posY = Tool.getPos(transform).y;
         const baseWidth = !transform && !transform.width ? 0 : transform.width;
         const baseHeight = !transform && !transform.height ? 0 : transform.height;
         // tab主容器
-        this.mContainer.setPosition(posX, posY);
-        this.mContainer.setSize(baseWidth, baseHeight);
+        this.container.setPosition(posX, posY);
+        this.container.setSize(baseWidth, baseHeight);
         this.mList = [];
     }
 
     public setInteractive() {
-        this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.mContainer.width, this.mContainer.height), Phaser.Geom.Rectangle.Contains);
+        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.container.width, this.container.height), Phaser.Geom.Rectangle.Contains);
         super.setInteractive();
     }
 
     public disInteractive() {
-        this.mContainer.disableInteractive();
+        this.container.disableInteractive();
         super.disInteractive();
     }
 
     public get skin(): Phaser.GameObjects.Container {
-        return this.mContainer;
+        return this.container;
     }
 
     public setPos(pos: any) {
-        this.mContainer.x = pos.x;
-        this.mContainer.y = pos.y;
+        this.container.x = pos.x;
+        this.container.y = pos.y;
     }
 
     public setSize(width: number, height: number) {
-        this.mContainer.setSize(width, height);
-        if (this.mEnabled) {
-            this.mContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
+        this.container.setSize(width, height);
+        if (this.enable) {
+            this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
         }
     }
 
@@ -82,20 +82,20 @@ export class TabGroup extends BaseUI {
             this.mList.length = 0;
             this.mList = null;
         }
-        if (this.mContainer) {
-            if (this.mContainer.parentContainer)
-                this.mContainer.parentContainer.remove(this.mContainer);
-            this.mContainer.destroy();
-            this.mContainer = null;
+        if (this.container) {
+            if (this.container.parentContainer)
+                this.container.parentContainer.remove(this.container);
+            this.container.destroy();
+            this.container = null;
         }
         super.destroy();
     }
 
     private refreshList() {
-        this.mContainer.removeAll();
+        this.container.removeAll();
         for (let i: number = 0, len = this.mList.length; i < len; i++) {
-            const tab: TabButton = new TabButton(this.mScene, this.mList[i], this.mWorld);
-            this.mContainer.add(tab.skin);
+            const tab: TabButton = new TabButton(this.scene, this.mList[i], this.mWorld);
+            this.container.add(tab.skin);
         }
     }
 }

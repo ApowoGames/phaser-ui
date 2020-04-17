@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-16 22:23:24
+ * @Last Modified time: 2020-04-17 11:40:34
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { Transform } from "../interface/pos/Transform";
@@ -35,8 +35,8 @@ export class ProgressBar extends BaseUI {
         const posY = pos.y;
         this.width = !transform && !transform.width ? 0 : transform.width;
         this.height = !transform && !transform.height ? 0 : transform.height;
-        this.mContainer.setPosition(posX, posY);
-        this.mContainer.setSize(this.width, this.height);
+        this.container.setPosition(posX, posY);
+        this.container.setSize(this.width, this.height);
         const bgSkinData: INinePatchSkinData = !skinData ? undefined : skinData.background;
         const barSkinData: INinePatchSkinData = !skinData ? undefined : skinData.bar;
         this.mBgSkin = new NinePatchSkin(scene, bgSkinData);
@@ -48,11 +48,11 @@ export class ProgressBar extends BaseUI {
         }, false);
         this.barWid = this.mConfig.skinsData.bar.transform.width;
         const hei: number = this.mConfig.skinsData.bar.transform.height;
-        this.mBarMaskGraphics = this.mScene.make.graphics(undefined, false);
+        this.mBarMaskGraphics = this.scene.make.graphics(undefined, false);
         this.mBarMaskGraphics.fillStyle(0, 0);
         this.mBarMaskGraphics.fillRect(0, 0, 0, hei);
-        this.mContainer.setMask(this.mBarMaskGraphics.createGeometryMask());
-        this.mContainer.add([this.mBgSkin.skin, this.mBarSkin, this.mText]);
+        this.container.setMask(this.mBarMaskGraphics.createGeometryMask());
+        this.container.add([this.mBgSkin.skin, this.mBarSkin, this.mText]);
         this.disInteractive();
     }
 
@@ -62,7 +62,7 @@ export class ProgressBar extends BaseUI {
             this.mTween.stop();
             this.mTween.remove();
         }
-        this.mTween = this.mScene.tweens.add({
+        this.mTween = this.scene.tweens.add({
             targets: this.mBarMaskGraphics,
             duration: 100,
             ease: "Linear",
@@ -85,7 +85,7 @@ export class ProgressBar extends BaseUI {
     public setText(val: string) {
         if (this.mText) {
             this.mText.text = val;
-            if (!this.mText.parentContainer) this.mContainer.add(this.mText);
+            if (!this.mText.parentContainer) this.container.add(this.mText);
         }
     }
 
@@ -95,15 +95,15 @@ export class ProgressBar extends BaseUI {
             this.mTween.remove();
             this.mTween = null;
         }
-        if (this.mContainer) {
-            this.mContainer.destroy();
-            this.mContainer = null;
+        if (this.container) {
+            this.container.destroy();
+            this.container = null;
         }
         super.destroy();
     }
 
     public get skin(): Phaser.GameObjects.Container {
-        return this.mContainer;
+        return this.container;
     }
 
     private onTweenStart() {
