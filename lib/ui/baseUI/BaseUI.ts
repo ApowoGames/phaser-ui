@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 16:24:44
+ * @Last Modified time: 2020-04-17 16:26:42
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -11,11 +11,11 @@ import { ISetInteractive } from "../interface/baseUI/ISetInteractive";
 import { Tool } from "../tool/Tool";
 
 export interface UIFollowConfig {
-    scene: Phaser.Scene,
-    followX: number,
-    followY: number,
-    baseX: number,
-    baseY: number
+    scene: Phaser.Scene;
+    followX: number;
+    followY: number;
+    baseX: number;
+    baseY: number;
 }
 
 export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetInteractive {
@@ -143,7 +143,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
                 followY: this.mFollow.y,
                 baseX: this.container.x,
                 baseY: this.container.y
-            })
+            });
         } else {
             const camera = this.mFroscene.cameras.main;
             const px = this.container.x - camera.scrollX;
