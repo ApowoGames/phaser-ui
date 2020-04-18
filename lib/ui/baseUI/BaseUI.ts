@@ -98,6 +98,18 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.container.y = value;
     }
 
+    public get z(): number {
+        return this.container.z;
+    }
+
+    public set z(value: number) {
+        this.container.z = value;
+    }
+
+    public get parentContainer(): Phaser.GameObjects.GameObject {
+        return this.container.parentContainer;
+    }
+
     public get scale(): number {
         return this.container.scale;
     }
