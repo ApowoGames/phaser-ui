@@ -58,7 +58,7 @@ export class BaseMediator implements IMediator {
         return this.mShow;
     }
 
-    resize(width: number, height: number) {
+    resize(width?: number, height?: number) {
         const view = this.getView();
         if (view && view.isShow()) view.resize(width, height);
     }
