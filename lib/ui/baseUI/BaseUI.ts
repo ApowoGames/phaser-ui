@@ -210,6 +210,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public addListen() {
+        if (!this.mInitialized) return;
         let containerBoo: boolean = true;
         if (this.container || this.container.width === 0 || this.container.height === 0) {
             containerBoo = false;
@@ -230,6 +231,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public removeListen() {
+        if (!this.mInitialized) return;
         this.scene.input.off("pointerup", this.sceneClick, this);
         if (this.container) {
             this.container.off("pointerup", this.uiClick, this);
@@ -294,6 +296,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         this.soundMap.forEach((sound) => {
             if (sound.isPlaying) sound.stop();
         });
+        this.mInitialized = false;
         this.interactiveBoo = false;
         this.silent = false;
         this.removeListen();
