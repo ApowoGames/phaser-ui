@@ -32,10 +32,12 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     public addListen() {
         if (!this.mInitialized) return;
+        super.addListen();
     }
 
     public removeListen() {
         if (!this.mInitialized) return;
+        super.removeListen();
     }
 
     public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
