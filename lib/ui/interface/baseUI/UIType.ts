@@ -13,4 +13,3 @@ export enum UIType {
     Monopoly, // 独占型ui
     Activity, // 热发布活动类型ui，便于单独刷新活动ui
 }
-
