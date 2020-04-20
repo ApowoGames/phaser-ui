@@ -9,7 +9,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     public UIType: UIType;
     protected configList: ISoundConfig[];
     protected mShow: boolean = false;
-    protected mInitialized: boolean;
     protected mTweening: boolean = false;
     protected mWorld: any;
     protected mPanelTween: Phaser.Tweens.Tween;

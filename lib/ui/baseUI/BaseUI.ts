@@ -68,6 +68,10 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
      * 跟随对象所处的scene
      */
     protected mFroscene: Phaser.Scene;
+    /**
+     * 是否初始化
+     */
+    protected mInitialized: boolean = false;
     constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
         super();
         this.scene = scene;
