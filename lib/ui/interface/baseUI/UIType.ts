@@ -11,6 +11,6 @@ export enum UIType {
     Pop, // 弹出型ui
     Tips, // tips型ui
     Monopoly, // 独占型ui
-    activity, // 热发布活动类型ui，便于单独刷新活动ui
+    Activity, // 热发布活动类型ui，便于单独刷新活动ui
 }
 
