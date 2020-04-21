@@ -1,4 +1,4 @@
-import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
+import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { IAbstractPanel } from "../interface/panel/IAbstractPanel";
 import { Tool } from "../tool/Tool";
 import { BaseUI } from "../baseUI/BaseUI";
