@@ -1,6 +1,6 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
 import { AbstractItem } from "../interface/baseUI/AbstructItem";
-import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
 export interface ISelectCallItedata extends AbstractItem {
@@ -11,15 +11,15 @@ export interface ISelectCallUI {
     selectCall(data: ISelectCallItedata);
 }
 export class SelectCallItem extends BaseUI {
-    protected configList: ISoundConfig[];
+    protected soundGroup: ISoundGroup;
     protected mText: Phaser.GameObjects.Text;
     protected mSelectBG: Phaser.GameObjects.Graphics;
     protected mSelectCallUI: ISelectCallUI;
     private mSelect: boolean = false;
-    constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number, music?: ISoundConfig[]) {
+    constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number, music?: ISoundGroup) {
         super(scene);
         this.mSelectCallUI = selectCallUI;
-        this.configList = music;
+        this.soundGroup = music;
         this.mText = this.scene.make.text({
             x: -wid >> 1, y: -hei >> 1,
             style: { fill: "#F7EDED", fontSize: 18 }
@@ -100,10 +100,10 @@ export class SelectCallItem extends BaseUI {
 
     protected selectHandler() {
         if (!this.interactiveBoo) {
-            if (this.configList && this.configList[1]) (this.mSelectCallUI as ComboBox).playSound(this.configList[1]);
+            if (this.soundGroup && this.soundGroup.disabled) (this.mSelectCallUI as ComboBox).playSound(this.soundGroup.disabled);
             return;
         }
-        if (this.configList && this.configList[0]) (this.mSelectCallUI as ComboBox).playSound(this.configList[0]);
+        if (this.soundGroup && this.soundGroup.down) (this.mSelectCallUI as ComboBox).playSound(this.soundGroup.down);
         this.overHandler();
         this.mSelectCallUI.selectCall(this.itedata);
     }
@@ -114,6 +114,7 @@ export class SelectCallItem extends BaseUI {
 }
 export class ComboBox extends BaseUI implements ISelectCallUI {
     protected itemList: SelectCallItem[];
+    private soundGroup: ISoundGroup;
     private mConfig: IComboboxConfig;
     private mBg: Phaser.GameObjects.Image;
     private mIsopen: boolean = false;
@@ -124,6 +125,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
     constructor(scene: Phaser.Scene, config: IComboboxConfig) {
         super(scene);
         this.mConfig = config;
+        this.soundGroup = config.boxMusic;
         this.init();
     }
 
@@ -234,10 +236,10 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
 
     private openHandler() {
         if (!this.interactiveBoo) {
-            if (this.mConfig.boxMusic && this.mConfig.boxMusic[1]) this.playSound(this.mConfig.boxMusic[1]);
+            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
             return;
         }
-        if (this.mConfig.boxMusic && this.mConfig.boxMusic[0]) this.playSound(this.mConfig.boxMusic[0]);
+        if (this.soundGroup && this.soundGroup.expand) this.playSound(this.soundGroup.expand);
         if (!this.itemList || this.itemList.length < 1) return;
         this.showTween(this.mIsopen);
     }

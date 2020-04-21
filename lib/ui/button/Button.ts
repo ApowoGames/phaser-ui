@@ -12,7 +12,7 @@ import { Event } from "../interface/event/MouseEvent";
 import { TextConfig } from "../interface/text/TextConfig";
 import { Transform } from "../interface/pos/Transform";
 import { ResourceData } from "../interface/baseUI/ResourceData";
-import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
 export enum ButtonState {
@@ -30,10 +30,11 @@ export interface ButtonConfig {
     /**
      * 默认 0位是点击音效，1位是不可点击音效，2，3根据具体ui实现
      */
-    music?: ISoundConfig[];
+    music?: ISoundGroup;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class Button extends BaseUI {
+    protected soundGroup: ISoundGroup;
     protected mBgFramesSkin: FramesSkin;
     protected mIconFramesSkin: FramesSkin;
     protected mText: Phaser.GameObjects.Text;
@@ -47,6 +48,7 @@ export class Button extends BaseUI {
         super(scene);
         this.soundMap = new Map();
         this.mConfig = btnConfig;
+        this.soundGroup = btnConfig.music;
         const transform: Transform = !btnConfig ? undefined : btnConfig.transform;
         const pos: any = Tool.getPos(transform);
         const posX = pos.x;
@@ -168,11 +170,15 @@ export class Button extends BaseUI {
     }
 
     protected onPointerUpHandler(pointer) {
-        if (!this.interactiveBoo) return;
+
+        if (!this.interactiveBoo) {
+            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
+            return;
+        }
         this.buttonStateChange(ButtonState.Normal);
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             // events.push(MouseEvent.Tap);
-            if (this.mConfig.music && this.mConfig.music[0]) this.playSound(this.mConfig.music[0]);
+            if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
             this.emit(Event.Tap, pointer, this);
         }
 
@@ -182,6 +188,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerDownHandler(pointer) {
+        if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
         if (!this.interactiveBoo) {
             if (this.mConfig.music && this.mConfig.music[1]) this.playSound(this.mConfig.music[1]);
             return;
@@ -195,6 +202,7 @@ export class Button extends BaseUI {
     }
 
     protected onPointerMoveHandler(pointer) {
+        if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
         if (!this.interactiveBoo) return;
         this.mIsMove = true;
         this.emit(Event.Move);

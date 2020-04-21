@@ -1,4 +1,4 @@
-import { ISoundConfig } from "../sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../sound/ISoundConfig";
 
 export interface ScrollerConfig {
     x: number;
@@ -25,7 +25,7 @@ export interface ScrollerConfig {
     /**
      * 0 点击音效  1滚动音效
      */
-    music?: ISoundConfig[];
+    music?: ISoundGroup;
     valuechangeCallback?: Function; // 滚动条位置发生变化返回事件
     valuechangeCallbackScope?: Function; //
     overminCallback?: Function; // 超出视口最小范围返回事件

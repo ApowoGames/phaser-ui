@@ -1,4 +1,4 @@
-import { ISoundConfig } from "../sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../sound/ISoundConfig";
 
 export interface IComboboxConfig {
     wid: number;
@@ -11,6 +11,6 @@ export interface IComboboxConfig {
     fontStyle: { size: number, color: string, bold: boolean };
     up: boolean;
     clickCallBack: Function;
-    boxMusic?: ISoundConfig[];
-    itemMusic?: ISoundConfig[];
+    boxMusic?: ISoundGroup;
+    itemMusic?: ISoundGroup;
 }

@@ -115,10 +115,11 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public get scale(): number {
-        return this.container.scale;
+        return this.uiScale;
     }
 
     public set scale(value: number) {
+        this.uiScale = value;
         this.container.scale = value;
     }
 

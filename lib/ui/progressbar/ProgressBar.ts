@@ -107,7 +107,7 @@ export class ProgressBar extends BaseUI {
     }
 
     private onTweenStart() {
-        if (this.mConfig.music && this.mConfig.music[0]) this.playSound(this.mConfig.music[0]);
+        if (this.mConfig.music && this.mConfig.music.progress) this.playSound(this.mConfig.music.progress);
         this.emit(ProgressBarEvent.tweenStart);
     }
 

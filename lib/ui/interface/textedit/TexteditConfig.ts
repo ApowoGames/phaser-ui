@@ -1,6 +1,6 @@
 import { TextConfig } from "../text/TextConfig";
 import { TextType } from "../text/TextType";
-import { ISoundConfig } from "../sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../sound/ISoundConfig";
 
 export interface TextEditConfig {
     textConfig: TextConfig;
@@ -8,5 +8,5 @@ export interface TextEditConfig {
     text?: string;
     onTextChanged?: Function;
     onClose?: Function;
-    music?: ISoundConfig[];
+    music?: ISoundGroup;
 }

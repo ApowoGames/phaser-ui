@@ -1,7 +1,7 @@
 import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
 import Scroller from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
-import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
 export enum ScrollerEvent {
@@ -12,7 +12,7 @@ export enum ScrollerEvent {
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class GameScroller extends BaseUI implements ISound {
-    protected configList: ISoundConfig[];
+    protected soundGroup: ISoundGroup;
     private mConfig: ScrollerConfig;
     private mDisDelection: number;
     private mCellDownHandler: Function;
@@ -34,7 +34,7 @@ export class GameScroller extends BaseUI implements ISound {
         super(scene);
         this.soundMap = new Map();
         this.mConfig = config;
-        this.configList = config.music;
+        this.soundGroup = config.music;
         const bg = scene.make.graphics(undefined, false);
         bg.fillStyle(0);
         bg.fillRect(0, 0, config.width, config.height);
@@ -104,12 +104,13 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
-        if (this.configList && this.configList[1]) this.playSound(this.configList[1]);
+        if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
         this.mMoveing = true;
     }
 
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {
         // this.scene.input.off("pointermove", this.pointerMoveHandler, this);
+        if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellDownHandler && !this.mMoveing) {
@@ -129,7 +130,7 @@ export class GameScroller extends BaseUI implements ISound {
     private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
         // this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         this.mMoveing = false;
-        if (this.configList && this.configList[0]) this.playSound(this.configList[0]);
+        if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellUpHandler && !this.mMoveing) {

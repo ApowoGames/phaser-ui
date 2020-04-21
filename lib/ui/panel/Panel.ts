@@ -1,4 +1,4 @@
-import { ISoundConfig } from "../interface/sound/ISoundConfig";
+import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
 import { IAbstractPanel } from "../interface/panel/IAbstractPanel";
 import { Tool } from "../tool/Tool";
 import { BaseUI } from "../baseUI/BaseUI";
@@ -7,7 +7,7 @@ import { UIType } from "../interface/baseUI/UIType";
 export class Panel extends BaseUI implements IAbstractPanel {
     public id: number;
     public UIType: UIType;
-    protected configList: ISoundConfig[];
+    protected soundGroup: ISoundGroup;
     protected mShow: boolean = false;
     protected mTweening: boolean = false;
     protected mWorld: any;
@@ -20,12 +20,12 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mEnabled: boolean = true;
     protected mFollow: any;
     protected posFunc: Function;
-    constructor(scene: Phaser.Scene, world: any, music?: ISoundConfig[]) {
+    constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
         super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();
         this.scene = scene;
         this.mWorld = world;
-        this.configList = music;
+        this.soundGroup = music;
         this.mInitialized = false;
         this.setTween(false);
     }
@@ -50,6 +50,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         return this.mShow;
     }
     hide() {
+        if (this.soundGroup && this.soundGroup.close) this.playSound(this.soundGroup.close);
         if (!this.mTweening && this.mTweenBoo) {
             this.showTween(false);
         } else {
@@ -79,10 +80,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     resize(wid?: number, hei?: number) {
     }
 
-    setScale(scale: number) {
-        this.container.setScale(scale);
-    }
-
     show(param?: any) {
         this.data = param;
         if (!this.mInitialized) {
@@ -90,7 +87,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
             return;
         }
         if (this.mShow) return;
-        if (this.configList && this.configList[0]) this.playSound(this.configList[0]);
+        if (this.soundGroup && this.soundGroup.open) this.playSound(this.soundGroup.open);
         if (!this.mTweening && this.mTweenBoo) {
             this.showTween(true);
         } else {
@@ -115,7 +112,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     protected showTween(show: boolean) {
         this.mTweening = true;
-        const scale: number = show ? this.mWorld.uiScale : 0;
+        const scale: number = show ? this.scale : 0;
         this.container.scale = scale;
         if (this.mPanelTween) {
             this.mPanelTween.stop();
