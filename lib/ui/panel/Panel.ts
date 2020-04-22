@@ -9,6 +9,10 @@ export class Panel extends BaseUI implements IAbstractPanel {
     public UIType: UIType;
     protected soundGroup: ISoundGroup;
     protected mShow: boolean = false;
+    /**
+     * 是否正在加载中，加载中的ui不走show流程
+     */
+    protected mPreLoad: boolean = false;
     protected mTweening: boolean = false;
     protected mWorld: any;
     protected mPanelTween: Phaser.Tweens.Tween;
@@ -82,6 +86,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     show(param?: any) {
         this.data = param;
+        if (this.mPreLoad) return;
         if (!this.mInitialized) {
             this.preload();
             return;
@@ -164,6 +169,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected preload() {
+        this.mPreLoad = true;
         if (!this.scene) {
             return;
         }
@@ -176,6 +182,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected loadComplete(loader: Phaser.Loader.LoaderPlugin, totalComplete: integer, totalFailed: integer) {
+        this.mPreLoad = false;
         if (this.mInitialized) {
             return;
         }

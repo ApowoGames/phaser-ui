@@ -20,6 +20,9 @@ export interface IMediator {
 
 export class BaseMediator implements IMediator {
     protected mView: Panel;
+    /**
+     * 面板处于打开状态
+     */
     protected mShow: boolean = false;
     protected mParam: any;
     protected mUIType: number;
