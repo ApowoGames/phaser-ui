@@ -97,6 +97,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     update(param?: any) {
+        this.data = param;
     }
 
     tweenExpand(tweenBoo: boolean) {
