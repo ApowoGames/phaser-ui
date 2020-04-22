@@ -1,5 +1,5 @@
 import { IAbstractPanel } from "../interface/panel/IAbstractPanel";
-import { Panel } from "../panel/panel";
+import { Panel } from "../panel/Panel";
 import { UIType } from "../interface/baseUI/UIType";
 
 export interface IMediator {
