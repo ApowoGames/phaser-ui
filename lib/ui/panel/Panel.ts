@@ -8,7 +8,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     public id: number;
     public UIType: UIType;
     protected soundGroup: ISoundGroup;
-    protected mShow: boolean = false;
     /**
      * 是否正在加载中，加载中的ui不走show流程
      */
@@ -23,7 +22,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mMute: boolean = false;
     protected mEnabled: boolean = true;
     protected mFollow: any;
-    protected posFunc: Function;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
         super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();

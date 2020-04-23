@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 19:30:56
+ * @Last Modified time: 2020-04-23 18:13:03
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -72,6 +72,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
      * 是否初始化
      */
     protected mInitialized: boolean = false;
+    protected mShow: boolean = false;
     constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
         super();
         this.scene = scene;
@@ -179,6 +180,7 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
     }
 
     public updatePos() {
+        if (!this.mShow) return;
         if (this.posFunc) {
             this.posFunc({
                 scene: this.mFroscene,
