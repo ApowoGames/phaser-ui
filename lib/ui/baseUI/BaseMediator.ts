@@ -10,7 +10,7 @@ export interface IMediator {
     show(param?: any): void;
     update(param?: any): void;
     hide(): void;
-    follow();
+    updateViewPos();
     destroy();
     isSceneUI(): boolean;
     getView(): IAbstractPanel;
@@ -34,7 +34,7 @@ export class BaseMediator implements IMediator {
         return this.mUIType;
     }
 
-    follow() {
+    updateViewPos() {
         if (!this.mView) return;
         this.mView.updatePos();
     }

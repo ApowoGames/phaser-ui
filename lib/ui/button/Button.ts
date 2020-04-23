@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-17 17:03:34
+ * @Last Modified time: 2020-04-23 15:07:11
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -44,8 +44,8 @@ export class Button extends BaseUI {
     protected mDownTime: number = 0;
     protected mIsMove: boolean = false;
     protected mSelected: boolean = false;
-    public constructor(scene: Phaser.Scene, btnConfig: ButtonConfig) {
-        super(scene);
+    public constructor(scene: Phaser.Scene, world: any, btnConfig: ButtonConfig) {
+        super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();
         this.mConfig = btnConfig;
         this.soundGroup = btnConfig.music;
