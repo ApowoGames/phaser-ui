@@ -4,7 +4,7 @@ import { Event } from "../interface/event/MouseEvent";
 export class TabButton extends Button {
     private mWorld;
     constructor(scene: Phaser.Scene, config: ButtonConfig, world: any) {
-        super(scene, config);
+        super(scene, world, config);
         this.mWorld = world;
     }
     public set selected(value: boolean) {
