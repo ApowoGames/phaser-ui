@@ -47,7 +47,6 @@ export class Button extends BaseUI implements IButtonState {
     }
 
     public addListen() {
-        if (!this.mInitialized) return;
         if (this.interactiveBoo) {
             this.container.setInteractive();
         } else {
