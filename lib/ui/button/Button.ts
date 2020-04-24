@@ -26,7 +26,6 @@ export class Button extends BaseUI implements IButtonState {
     protected mIsMove: boolean = false;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
         super(scene);
-        this.setInteractive();
         this.soundGroup = music;
         this.mKey = key;
         this.mFrame = frame;
@@ -44,24 +43,27 @@ export class Button extends BaseUI implements IButtonState {
                 .setSize(this.mBackground.width, this.mBackground.height);
             this.add(this.mText);
         }
-
+        this.setInteractive();
     }
 
     public addListen() {
-        this.container.on("pointerDown", this.onPointerDownHandler, this);
-        this.container.on("pointerUp", this.onPointerUpHandler, this);
-        this.container.on("pointerMove", this.onPointerMoveHandler, this);
+        if (!this.mInitialized) return;
+        if (this.interactiveBoo) {
+            this.container.setInteractive();
+        } else {
+            this.container.disableInteractive();
+        }
+        this.container.on("pointerdown", this.onPointerDownHandler, this);
+        this.container.on("pointerup", this.onPointerUpHandler, this);
+        this.container.on("pointermove", this.onPointerMoveHandler, this);
     }
 
     public removeListen() {
-        this.container.off("pointerDown", this.onPointerDownHandler, this);
-        this.container.off("pointerUp", this.onPointerUpHandler, this);
-        this.container.off("pointerMove", this.onPointerMoveHandler, this);
+        this.container.off("pointerdown", this.onPointerDownHandler, this);
+        this.container.off("pointerup", this.onPointerUpHandler, this);
+        this.container.off("pointermove", this.onPointerMoveHandler, this);
     }
-    /**
-    * 是否静音
-    * @param boo 
-    */
+
     public mute(boo: boolean) {
         this.silent = boo;
     }

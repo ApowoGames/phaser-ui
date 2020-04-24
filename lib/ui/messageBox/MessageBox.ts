@@ -3,11 +3,11 @@ import BBCodeText from "../../plugins/gameobjects/text/bbocdetext/BBCodeText.js"
 import { Button } from "../button/Button";
 import { MouseEvent } from "../interface/event/MouseEvent";
 export interface MessageBoxConfig {
-    key: string;
-    png: string;
-    json: string;
-    bgFrame: string;
-    titleFrame: string;
+    key?: string;
+    png?: string;
+    json?: string;
+    bgFrame?: string;
+    titleFrame?: string;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class MessageBox extends Panel {
@@ -23,6 +23,7 @@ export class MessageBox extends Panel {
     private mContent: BBCodeText;
     private mTitleLabel: Phaser.GameObjects.Text;
     private btnNum: number = 2;
+    private btnList: Button[];
     constructor(scene: Phaser.Scene, world: any, config?: MessageBoxConfig) {
         super(scene, world);
         this.key = config !== undefined ? GetValue(config, "key", "pica_alert") : "pica_alert";
@@ -45,6 +46,7 @@ export class MessageBox extends Panel {
             if (config.title) {
                 this.mTitleLabel.setText(config.title);
             }
+            if (this.btnNum > 0 && (!this.btnList || this.btnList.length < 1)) this.setbtnNum(this.btnNum);
         }
     }
 
@@ -64,30 +66,36 @@ export class MessageBox extends Panel {
         } else {
             this.btnNum = MessageBox.OK;
         }
-
-        const btns = [];
-        if ((this.btnNum & MessageBox.OK) === MessageBox.OK) {
-            this.add(this.mOkBtn);
-            btns.push(this.mOkBtn);
+        if (!this.mInitialized) return;
+        this.btnList = [];
+        if (this.btnNum >= MessageBox.OK) {
+            this.add(this.mOkBtn.view);
+            this.mOkBtn.view.visible = true;
+            this.btnList.push(this.mOkBtn);
         }
-        if ((this.btnNum & MessageBox.CANCEL) === MessageBox.CANCEL) {
-            this.add(this.mCancelBtn);
-            btns.push(this.mCancelBtn);
+        if (this.btnNum >= MessageBox.CANCEL) {
+            this.add(this.mCancelBtn.view);
+            this.mCancelBtn.view.visible = true;
+            this.btnList.push(this.mCancelBtn);
         }
 
-        const w = (this.width) / (btns.length + 1);
-        for (let i = 0; i < btns.length; i++) {
-            btns[i].x = (i + 1) * w - (btns[i].width >> 1);
+        const w = (this.width) / (this.btnList.length + 1);
+        for (let i = 0; i < this.btnList.length; i++) {
+            this.btnList[i].x = i * w - (this.btnList[i].view.width >> 1);
         }
     }
 
+    protected addResources(key: string, resource: any) {
+        super.addResources(key, resource);
+        if (resource.data) this.scene.load.atlas(key, this.png, this.json);
+    }
 
     protected init() {
         const bg = this.scene.make.image({
             key: this.key,
             frame: this.bgFrame
         }, false);
-
+        this.setSize(bg.width, bg.height);
         const title = this.scene.make.image({
             key: this.key,
             frame: this.titleFrame
@@ -113,7 +121,7 @@ export class MessageBox extends Panel {
                 width: 145 * this.dpr
             }
         });
-        this.mContent.setOrigin(0.5, 0.5);
+        (<any>this.mContent).setOrigin(0.5, 0.5);
         this.mContent.setText("[color=#FF0000]content[/color]");
 
         this.mOkBtn = new Button(this.scene, this.key, "yellow_btn.png", undefined, "确定");
@@ -126,7 +134,9 @@ export class MessageBox extends Panel {
         this.mCancelBtn.x = -(bg.width - this.mCancelBtn.view.width) / 2 + 20 * this.dpr;
         this.mCancelBtn.y = this.mOkBtn.y;
         this.mCancelBtn.on(MouseEvent.Tap, this.onCancelHandler, this);
-        this.add([bg, title, this.mTitleLabel, this.mTitleLabel, this.mContent]);
+        this.add([bg, title, this.mTitleLabel, this.mTitleLabel, this.mContent, this.mOkBtn.view, this.mCancelBtn.view]);
+        this.mCancelBtn.view.visible = false;
+        this.mOkBtn.view.visible = false;
         super.init();
     }
 
