@@ -1,5 +1,5 @@
 import { Panel } from "../panel/Panel";
-import BBCodeText from "../../plugins/bbcodetext.js";
+import BBCodeText from "../../plugins/gameobjects/text/bbocdetext/BBCodeText.js";
 import { Button } from "../button/Button";
 import { MouseEvent } from "../interface/event/MouseEvent";
 export interface MessageBoxConfig {
