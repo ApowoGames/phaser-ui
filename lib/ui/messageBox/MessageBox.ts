@@ -1,13 +1,13 @@
 import { Panel } from "../panel/Panel";
-import BBCodeText from "../../plugins/bbcodetext";
+import BBCodeText from "../../plugins/bbcodetext.js";
 import { Button } from "../button/Button";
 import { MouseEvent } from "../interface/event/MouseEvent";
 export interface MessageBoxConfig {
-    key: string,
-    png: string,
-    json: string,
-    bgFrame: string,
-    titleFrame: string
+    key: string;
+    png: string;
+    json: string;
+    bgFrame: string;
+    titleFrame: string;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
 export class MessageBox extends Panel {
@@ -149,7 +149,6 @@ export class MessageBox extends Panel {
         }
     }
 }
-
 export interface IAlertConfig {
     text: string;
     title?: string;
