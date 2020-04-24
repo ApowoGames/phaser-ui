@@ -1,132 +1,58 @@
-/*
- * 按钮组件
- * @Author: gxm
- * @Date: 2020-03-10 10:51:48
- * @Last Modified by: gxm
- * @Last Modified time: 2020-04-23 15:07:11
- */
-
-import { FramesSkin } from "../interface/button/FrameSkin";
-import { Tool } from "../tool/Tool";
-import { Event } from "../interface/event/MouseEvent";
-import { TextConfig } from "../interface/text/TextConfig";
-import { Transform } from "../interface/pos/Transform";
-import { ResourceData } from "../interface/baseUI/ResourceData";
-import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
+import { ISoundGroup } from "../interface/sound/ISoundConfig";
+import { MouseEvent } from "../interface/event/MouseEvent";
+export interface IButtonState {
+    changeNormal();
+    changeDown();
+}
 
-export enum ButtonState {
-    Normal = "normal",
-    Over = "over",
-    Select = "select",
-    Disable = "disable",
-}
-export interface ButtonConfig {
-    bgFrames?: ResourceData;
-    iconFrames?: ResourceData;
-    transform?: Transform;
-    textconfig?: TextConfig;
-    text?: string;
-    /**
-     * 默认 0位是点击音效，1位是不可点击音效，2，3根据具体ui实现
-     */
-    music?: ISoundGroup;
-}
-const GetValue = Phaser.Utils.Objects.GetValue;
-export class Button extends BaseUI {
+export class Button extends BaseUI implements IButtonState {
     protected soundGroup: ISoundGroup;
-    protected mBgFramesSkin: FramesSkin;
-    protected mIconFramesSkin: FramesSkin;
-    protected mText: Phaser.GameObjects.Text;
-    protected mConfig: ButtonConfig;
-    protected mPressTime: number = 2000;
-    protected mPressDelay: any;
     protected mDownTime: number = 0;
+    private mBackground: Phaser.GameObjects.Image;
+    private mPressDelay = 1000;
+    private mPressTime: any;
+    private mKey: string;
+    private mFrame: string;
+    private mDownFrame: string;
+    private mText: Phaser.GameObjects.Text;
     protected mIsMove: boolean = false;
     protected mSelected: boolean = false;
-    public constructor(scene: Phaser.Scene, world: any, btnConfig: ButtonConfig) {
-        super(scene, world.dpr, world.uiScaleNew);
-        this.soundMap = new Map();
-        this.mConfig = btnConfig;
-        this.soundGroup = btnConfig.music;
-        const transform: Transform = !btnConfig ? undefined : btnConfig.transform;
-        const pos: any = Tool.getPos(transform);
-        const posX = pos.x;
-        const posY = pos.y;
-        this.width = !transform && !transform.width ? 0 : transform.width;
-        this.height = !transform && !transform.height ? 0 : transform.height;
-        const bgFrames: ResourceData = !btnConfig ? undefined : btnConfig.bgFrames;
-        const iconFrames: ResourceData = !btnConfig ? undefined : btnConfig.iconFrames;
-        // 按钮容器
-        this.container.setPosition(posX, posY);
-        this.container.setSize(this.width, this.height);
-        // 按钮背景
-        this.mBgFramesSkin = new FramesSkin(scene, bgFrames);
-        const bgTransform: Transform = bgFrames.transForm;
-        this.mBgFramesSkin.x = Tool.getPos(bgTransform).x;
-        this.mBgFramesSkin.y = Tool.getPos(bgTransform).y;
-        if (this.mBgFramesSkin.skin) this.container.add(this.mBgFramesSkin.skin);
-        // 按钮icon
-        this.mIconFramesSkin = new FramesSkin(scene, iconFrames);
-        const iconTransform: Transform = iconFrames.transForm;
-        this.mIconFramesSkin.x = Tool.getPos(iconTransform).x;
-        this.mIconFramesSkin.y = Tool.getPos(iconTransform).y;
-        if (this.mIconFramesSkin.skin) this.container.add(this.mIconFramesSkin.skin);
-        // 按钮文本
-        const textconfig = {};
-        this.mText = scene.make.text({
-            style: Object.assign(textconfig, btnConfig.textconfig)
+
+    constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
+        super(scene);
+        this.setInteractive();
+        this.soundGroup = music;
+        this.mKey = key;
+        this.mFrame = frame;
+        this.mDownFrame = downFrame;
+        this.mBackground = scene.make.image({
+            key,
+            frame
         }, false);
-    }
-
-    public set selected(value: boolean) {
-        this.mSelected = value;
-    }
-    public get selected(): boolean {
-        return this.mSelected;
-    }
-
-    public get interactive(): boolean {
-        return this.interactiveBoo;
-    }
-
-    public setInteractive() {
-        super.setInteractive();
-        this.buttonStateChange(ButtonState.Normal);
-        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
-    }
-
-    public disInteractive() {
-        super.disInteractive();
-        this.buttonStateChange(ButtonState.Disable);
-        this.container.disableInteractive();
-    }
-
-    public setSize(width: number, height: number) {
-        this.container.setSize(width, height);
-        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
-    }
-
-    public setBgTexture(resData: ResourceData) {
-        this.mBgFramesSkin.setSkinData(resData);
-        if (!this.mBgFramesSkin.skin.parentContainer) this.container.add(this.mBgFramesSkin.skin);
-    }
-
-    public setIconTexture(resData: ResourceData) {
-        this.mIconFramesSkin.setSkinData(resData);
-        if (!this.mIconFramesSkin.skin.parentContainer) this.container.add(this.mIconFramesSkin.skin);
-    }
-
-    public setText(val: string) {
-        if (this.mText) {
-            this.mText.text = val;
-            if (!this.mText.parentContainer) this.container.add(this.mText);
+        this.setSize(this.mBackground.width, this.mBackground.height);
+        this.add(this.mBackground);
+        if (text) {
+            this.mText = this.scene.make.text(undefined, false)
+                .setOrigin(0.5, 0.5)
+                .setText(text)
+                .setSize(this.mBackground.width, this.mBackground.height);
+            this.add(this.mText);
         }
+
     }
 
-    public get skin(): Phaser.GameObjects.Container {
-        return this.container;
-    }
+    // public addListen() {
+    //     if (!this.mInitialized) return;
+    //     this.on("pointerup", this.onPointerUpHandler, this);
+    //     this.on("pointerdown", this.onPointerDownHandler, this);
+    // }
+
+    // public removeListen() {
+    //     if (!this.mInitialized) return;
+    //     this.off("pointerup", this.onPointerUpHandler, this);
+    //     this.off("pointerdown", this.onPointerDownHandler, this);
+    // }
 
     public addListen() {
         this.container.on("pointerDown", this.onPointerDownHandler, this);
@@ -139,87 +65,107 @@ export class Button extends BaseUI {
         this.container.off("pointerUp", this.onPointerUpHandler, this);
         this.container.off("pointerMove", this.onPointerMoveHandler, this);
     }
+
     /**
-     * 是否静音
-     * @param boo 
-     */
+    * 是否静音
+    * @param boo 
+    */
     public mute(boo: boolean) {
         this.silent = boo;
     }
 
-    public destroy() {
-
-        if (this.mBgFramesSkin) {
-            this.mBgFramesSkin.destroy();
-            this.mBgFramesSkin = null;
-        }
-        if (this.mIconFramesSkin) {
-            this.mIconFramesSkin.destroy();
-            this.mIconFramesSkin = null;
-        }
-        if (this.container) {
-            this.container.destroy();
-        }
-        if (this.mPressDelay) {
-            clearTimeout(this.mPressDelay);
-        }
-        this.mDownTime = 0;
-        this.silent = false;
-        this.mIsMove = false;
-        super.destroy();
+    changeNormal() {
+        this.mBackground.setFrame(this.mFrame);
     }
 
-    protected onPointerUpHandler(pointer) {
+    changeDown() {
+        if (this.mDownFrame) {
+            this.mBackground.setFrame(this.mDownFrame);
+        }
+    }
 
+    setFrame(frame: string) {
+        if (this.mBackground) {
+            this.mBackground.setFrame(frame);
+        }
+    }
+
+    setText(val: string) {
+        if (this.mText) {
+            this.mText.setText(val);
+        }
+    }
+
+    setTextStyle(style: object) {
+        if (this.mText) {
+            this.mText.setStyle(style);
+        }
+    }
+
+    setFontStyle(val: string) {
+        if (this.mText) {
+            this.mText.setFontStyle(val);
+        }
+    }
+
+    setTextOffset(x: number, y: number) {
+        if (this.mText) {
+            this.mText.setPosition(x, y);
+        }
+    }
+
+    setTextColor(color: string) {
+        if (this.mText) {
+            this.mText.setColor(color);
+        }
+    }
+
+    private onPointerMoveHandler(pointer: Phaser.Input.Pointer) {
+        if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
+        if (!this.interactiveBoo) return;
+        this.mIsMove = true;
+        this.emit(MouseEvent.Move);
+    }
+
+    private onPointerUpHandler(pointer: Phaser.Input.Pointer) {
         if (!this.interactiveBoo) {
             if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
             return;
         }
-        this.buttonStateChange(ButtonState.Normal);
+        this.changeNormal();
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-            // events.push(MouseEvent.Tap);
-            if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-            this.emit(Event.Tap, pointer, this);
+            if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
+                if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
+                this.emit(MouseEvent.Tap, pointer, this);
+            }
         }
 
         clearTimeout(this.mPressDelay);
         this.mIsMove = false;
         this.mDownTime = 0;
+
+
+        // if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
+        //     this.emit("click", pointer, this);
+        // }
+        // clearTimeout(this.mPressTime);
     }
 
-    protected onPointerDownHandler(pointer) {
-        if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
+    private onPointerDownHandler() {
         if (!this.interactiveBoo) {
-            if (this.mConfig.music && this.mConfig.music[1]) this.playSound(this.mConfig.music[1]);
+            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
             return;
         }
-        this.buttonStateChange(ButtonState.Select);
+        if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
+        this.changeDown();
         this.mDownTime = Date.now();
-        this.mPressDelay = setTimeout(() => {
-            this.emit(Event.Hold, this);
+        this.mPressTime = setTimeout(() => {
+            this.emit(MouseEvent.Hold, this);
         }, this.mPressTime);
-        this.emit(Event.Down, this);
-    }
+        this.emit(MouseEvent.Down, this);
 
-    protected onPointerMoveHandler(pointer) {
-        if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
-        if (!this.interactiveBoo) return;
-        this.mIsMove = true;
-        this.emit(Event.Move);
-    }
-
-    protected buttonStateChange(state: ButtonState) {
-        if (this.mConfig.bgFrames) {
-            const frameName: string = this.mConfig.bgFrames.frameObj[state];
-            if (this.mBgFramesSkin) {
-                this.mBgFramesSkin.changeFrame(frameName);
-            }
-        }
-        if (this.mConfig.iconFrames) {
-            const frameName: string = this.mConfig.iconFrames.frameObj[state];
-            if (this.mIconFramesSkin) {
-                this.mIconFramesSkin.changeFrame(frameName);
-            }
-        }
+        // this.mPressTime = setTimeout(() => {
+        //     this.emit("hold", this);
+        // }, this.mPressDelay);
     }
 }

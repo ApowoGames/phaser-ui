@@ -1,4 +1,4 @@
-export enum Event {
+export enum MouseEvent {
     Click = "click",
     Up = "Up",
     Down = "Down",
