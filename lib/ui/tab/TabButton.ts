@@ -1,42 +1,58 @@
-import { Button, ButtonConfig, ButtonState } from "../button/Button";
-import { Event } from "../interface/event/MouseEvent";
+import { Button, ButtonState } from "../button/Button";
+import { ISoundGroup } from "../interface/sound/ISoundConfig";
+import { MouseEvent } from "../interface/event/MouseEvent";
 
 export class TabButton extends Button {
-    private mWorld;
-    constructor(scene: Phaser.Scene, config: ButtonConfig, world: any) {
-        super(scene, world, config);
-        this.mWorld = world;
+    protected mSelected: boolean = false;
+    constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
+        super(scene, key, frame, downFrame, text, music);
     }
+
     public set selected(value: boolean) {
         this.mSelected = value;
         const buttonState = value ? ButtonState.Select : ButtonState.Normal;
         this.buttonStateChange(buttonState);
+        this.emit("selectChange", value);
     }
 
-    protected onPointerDownHandler(pointer) {
-        if (!this.interactiveBoo) return;
-        this.mDownTime = Date.now();
-        this.mPressDelay = setTimeout(() => {
-            this.emit(Event.Hold, this);
-        }, this.mPressTime);
-        this.emit(Event.Down);
+    public get selected(): boolean {
+        return this.mSelected;
     }
 
-    protected onPointerUpHandler(pointer) {
-        if (!this.interactiveBoo) return;
-        this.buttonStateChange(ButtonState.Select);
-        // 移动端用tap替换click
-        if (!this.mWorld.game.device.os.desktop) {
-            // 在没有发生移动或点击时间超过200毫秒发送tap事件
-            if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-                // events.push(MouseEvent.Tap);
-                this.emit(Event.Tap, pointer, this.container);
-            }
-        } else {
-            this.emit(Event.Click, pointer, this);
+    public destroy() {
+        this.selected = false;
+        super.destroy();
+    }
+
+    protected onPointerUpHandler(pointer: Phaser.Input.Pointer) {
+        if (!this.interactiveBoo) {
+            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
+            return;
         }
+        if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
+            if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
+                if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
+                this.emit(MouseEvent.Tap, pointer, this);
+            }
+        }
+
         clearTimeout(this.mPressDelay);
         this.mIsMove = false;
         this.mDownTime = 0;
+    }
+
+
+    protected onPointerDownHandler(pointer: Phaser.Input.Pointer) {
+        if (!this.interactiveBoo) {
+            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
+            return;
+        }
+        if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
+        this.selected = true;
+        this.mDownTime = Date.now();
+        this.mPressTime = setTimeout(() => {
+            this.emit(MouseEvent.Hold, this);
+        }, this.mPressTime);
+        this.emit(MouseEvent.Down, this);
     }
 }
