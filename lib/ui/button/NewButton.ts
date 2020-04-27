@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:48
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-24 11:19:51
+ * @Last Modified time: 2020-04-27 16:09:49
  */
 
 import { FramesSkin } from "../interface/button/FrameSkin";
@@ -33,7 +33,7 @@ export interface ButtonConfig {
     music?: ISoundGroup;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class New_Button extends BaseUI {
+export class NewButton extends BaseUI {
     protected soundGroup: ISoundGroup;
     protected mBgFramesSkin: FramesSkin;
     protected mIconFramesSkin: FramesSkin;
@@ -141,7 +141,7 @@ export class New_Button extends BaseUI {
     }
     /**
      * 是否静音
-     * @param boo 
+     * @param boo
      */
     public mute(boo: boolean) {
         this.silent = boo;
