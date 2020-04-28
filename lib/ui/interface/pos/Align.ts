@@ -8,3 +8,8 @@ export interface Align {
     centerX: number;
     centerY: number;
 }
+export enum AlignType {
+    center = "center",
+    left = "left",
+    right = "right"
+}
