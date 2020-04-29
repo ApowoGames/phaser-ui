@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-24 11:43:50
+ * @Last Modified time: 2020-04-28 21:19:37
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -85,6 +85,16 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
 
     public get view(): any {
         return this.container;
+    }
+
+    public get displayWidth(): number {
+        if (this.view) return this.width;
+        return 0;
+    }
+
+    public get displayHeight(): number {
+        if (this.view) return this.height;
+        return 0;
     }
 
     public get x(): number {

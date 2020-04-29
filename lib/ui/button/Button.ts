@@ -1,10 +1,7 @@
 import { BaseUI } from "../baseUI/BaseUI";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { MouseEvent } from "../interface/event/MouseEvent";
-export interface IButtonState {
-    changeNormal();
-    changeDown();
-}
+import { IButtonState } from "../interface/button/IButtonState";
 
 export enum ButtonState {
     Normal = "normal",
