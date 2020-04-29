@@ -3,6 +3,8 @@
 ## Links
 
 - [Phaser3](https://github.com/photonstorm/phaser)
+    - [Discord channel](https://discord.gg/phaser)
+    - [Forum](https://phaser.discourse.group/)
 - [API](https://photonstorm.github.io/phaser3-docs/index.html)
 - [Notes](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html)
     - [rexUI](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/ui-overview/)
@@ -12,7 +14,7 @@
 
 ### Prepare
 
-1. Install [node.js](https://nodejs.org/en/)
+1. Install [node.js](https://nodejs.org/en/) (ver 10+, for rollup)
 2. Click `install.bat`
     - `npm install`
 
@@ -20,8 +22,14 @@
 
 1. Click `*.bat` in folder `examples`, it will open application on browser
 
+### Export minify file of plugins
+
+1. Click `export-plugins.bat`
+    - `npm run build`
+
 ## File structure
 
+- Folder `dist` : Plugin minify files
 - Folder `plugins`, `templates` : Source code of plugins and templates
 - Folder `examples` : Test code of plugins
 - Folder `docs` : Some notes of phaser3, and my plugins.

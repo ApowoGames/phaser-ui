@@ -5,7 +5,7 @@ import { Transform } from "../interface/pos/Transform";
 import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
 import { Align } from "../interface/pos/Align";
 import { BaseUI } from "../baseUI/BaseUI";
-export class NinePatch extends BaseUI {
+export class NineSlicePatch extends BaseUI {
     private static readonly __BASE: string = "__BASE";
     private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];
 
@@ -28,7 +28,7 @@ export class NinePatch extends BaseUI {
         const baseWidth: number = transform.width;
         const baseHeight: number = transform.height;
         const skinData: INinePatchSkinData = config.skinData;
-        const frame = skinData.frame ? skinData.frame : NinePatch.__BASE;
+        const frame = skinData.frame ? skinData.frame : NineSlicePatch.__BASE;
         const key = skinData.key;
         const aligin: Align = transform.align;
         this.patchesConfig = this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
@@ -68,7 +68,7 @@ export class NinePatch extends BaseUI {
     }
 
     public setFrame(frame: string | integer): this {
-        this.originFrame = (this.originTexture.frames as any)[frame] || (this.originTexture.frames as any)[NinePatch.__BASE];
+        this.originFrame = (this.originTexture.frames as any)[frame] || (this.originTexture.frames as any)[NineSlicePatch.__BASE];
         this.createPatches();
         this.drawPatches();
         return this;
@@ -160,6 +160,6 @@ export class NinePatch extends BaseUI {
     }
 
     protected getPatchNameByIndex(index: number): string {
-        return `${this.originFrame.name}|${NinePatch.patches[index]}`;
+        return `${this.originFrame.name}|${NineSlicePatch.patches[index]}`;
     }
 }

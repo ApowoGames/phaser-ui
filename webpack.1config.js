@@ -20,8 +20,7 @@ switch (testMode) {
         phaser = path.join(phaserModule, 'src/phaser.js');
         break;
     default:
-        var phaserModule = path.join(__dirname, testMode); // Other phaser path
-        phaser = path.join(phaserModule, 'src/phaser.js');
+        phaser = path.join(__dirname, testMode); // Other phaser path
         break;
 }
 
@@ -35,18 +34,53 @@ module.exports = {
     mode: 'development',
     entry: {
         app: [
-            './plugins/index.js'
-        ]
+            '@babel/polyfill',
+            projectMain
+        ],
+        vendor: ['phaser']
     },
+    devtool: 'cheap-source-map',
     output: {
         pathinfo: true,
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: './dist/',
+        path: path.resolve(__dirname, 'watch-dist'),
+        publicPath: './watch-dist/',
         library: '[name]',
-        libraryTarget: 'commonjs',
+        libraryTarget: 'umd',
         filename: '[name].js'
     },
     watch: true,
+    plugins: [
+        new webpack.DefinePlugin({
+            __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
+        }),
+        new HtmlWebpackPlugin({
+            filename: '../index.html',
+            template: htmlTemplate,
+            chunks: ['vendor', 'app'],
+            chunksSortMode: 'manual',
+            minify: {
+                removeAttributeQuotes: false,
+                collapseWhitespace: false,
+                html5: false,
+                minifyCSS: false,
+                minifyJS: false,
+                minifyURLs: false,
+                removeComments: false,
+                removeEmptyAttributes: false
+            },
+            hash: false
+        }),
+        new BrowserSyncPlugin({
+            host: process.env.IP || 'localhost',
+            port: process.env.PORT || 3000,
+            server: {
+                baseDir: './',
+                routes: {
+                    '/assets': assetsFolder,
+                }
+            },
+        })
+    ],
     module: {
         rules: [
             {
@@ -64,4 +98,14 @@ module.exports = {
             }
         ]
     },
+    node: {
+        fs: 'empty'
+    },
+    resolve: {
+        alias: {
+            'phaser': phaser,
+            // 'rexPlugins': path.resolve(__dirname, 'plugins/'),
+            // 'rexTemplates': path.resolve(__dirname, 'templates/'),
+        }
+    }
 }

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es5",
+    "lib": [
+      "es2015",
+      "webworker",
+      "dom"
+    ],
+    "declaration": false,
+    "sourceMap": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "exclude": ["node_modules"]
+}

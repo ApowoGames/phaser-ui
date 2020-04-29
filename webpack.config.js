@@ -32,58 +32,17 @@ const assetsFolder = process.env.assets || './assets';
 const htmlTemplate = process.env.htmltemplate || './examples/index.tmpl';
 
 module.exports = {
-    mode: 'development',
-    entry: {
-        app: [
-            '@babel/polyfill',
-            projectMain
-        ],
-        vendor: ['phaser']
-    },
-    devtool: 'cheap-source-map',
+    mode: 'none',
+    entry: './lib/ui/ui-components.js',
     output: {
         pathinfo: true,
         path: path.resolve(__dirname, 'dist'),
         publicPath: './dist/',
         library: '[name]',
-        libraryTarget: 'umd',
-        filename: '[name].js'
+        libraryTarget: 'commonjs',
+        filename: 'index.js'
     },
     watch: true,
-    plugins: [
-        new webpack.DefinePlugin({
-            __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
-            WEBGL_RENDERER: true, // I did this to make webpack work, but I'm not really sure it should always be true
-            CANVAS_RENDERER: true // I did this to make webpack work, but I'm not really sure it should always be true
-        }),
-        new HtmlWebpackPlugin({
-            filename: '../index.html',
-            template: htmlTemplate,
-            chunks: ['vendor', 'app'],
-            chunksSortMode: 'manual',
-            minify: {
-                removeAttributeQuotes: false,
-                collapseWhitespace: false,
-                html5: false,
-                minifyCSS: false,
-                minifyJS: false,
-                minifyURLs: false,
-                removeComments: false,
-                removeEmptyAttributes: false
-            },
-            hash: false
-        }),
-        new BrowserSyncPlugin({
-            host: process.env.IP || 'localhost',
-            port: process.env.PORT || 3000,
-            server: {
-                baseDir: './',
-                routes: {
-                    '/assets': assetsFolder,
-                }
-            },
-        })
-    ],
     module: {
         rules: [
             {
@@ -98,17 +57,11 @@ module.exports = {
             {
                 test: [/\.vert$/, /\.frag$/],
                 use: 'raw-loader'
-            }
+            },
+            { test: /\.ts$/, loader: "ts-loader", exclude: "/node_modules/" },
         ]
     },
-    node: {
-        fs: 'empty'
-    },
     resolve: {
-        alias: {
-            'phaser': phaser,
-            // 'rexPlugins': path.resolve(__dirname, 'plugins/'),
-            // 'rexTemplates': path.resolve(__dirname, 'templates/'),
-        }
-    }
+        extensions: ['.tsx', '.ts', '.js'],
+    },
 }
