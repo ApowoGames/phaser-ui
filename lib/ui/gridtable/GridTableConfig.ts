@@ -1,4 +1,5 @@
 import { AlignType } from "../interface/pos/Align";
+import { IPatchesConfig } from "../interface/baseUI/Patches.config";
 
 export interface GridTableConfig {
   x?: number;
@@ -24,7 +25,7 @@ export interface GridTableConfig {
     bottom?: number;
     header?: number;
     footer?: number;
-    table?: number; // number Space between table object and slider object；
+    table?: number | IPatchesConfig; // number Space between table object and slider object；
   };
   // Expand width or height of elemen
   expand?: {
