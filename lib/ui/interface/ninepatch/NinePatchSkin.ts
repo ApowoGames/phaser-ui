@@ -46,39 +46,39 @@ export class NinePatchSkin extends Phaser.Events.EventEmitter {
     }
 
     private setNinePatchRes(nineSkinData: INinePatchSkinData, skin: any) {
-        if (!nineSkinData) return;
-        const skinTransform: Transform = Tool.getTransfrom(nineSkinData);
-        const config: INinePatchConfig = {
-            transform: nineSkinData.transform,
-            skinData: nineSkinData
-        };
-        if (skinTransform) {
-            if (Tool.checkNinePatch(skinTransform.align)) {
-                if (!skin) {
-                    skin = new NinePatch(this.mScene, config);
-                } else {
-                    skin.refreshNinePath(config);
-                }
-            } else {
-                const texture_Key: string = this.mSkinData.key;
-                const texture: Phaser.Textures.Texture = this.mScene.textures.get(texture_Key);
-                const framesObj: {} = texture.frames;
-                const frameName = nineSkinData.frame;
-                const textureFrame = framesObj ? framesObj[frameName] : null;
-                if (!skin) {
-                    if (texture.frameTotal > 1) {
-                        skin = this.mScene.make.sprite({ key: undefined }, false);
-                    } else {
-                        skin = this.mScene.make.image({ key: undefined }, false);
-                    }
-                }
-                if (textureFrame) {
-                    skin.setTexture(texture_Key, frameName);
-                } else {
-                    // 如果没有写入frame，默认显示"__BASE"第一帧
-                    skin.setTexture(texture_Key);
-                }
-            }
-        }
+        // if (!nineSkinData) return;
+        // const skinTransform: Transform = Tool.getTransfrom(nineSkinData);
+        // const config: INinePatchConfig = {
+        //     // transform: nineSkinData.transform,
+        //     skinData: nineSkinData
+        // };
+        // if (skinTransform) {
+        //     if (Tool.checkNinePatch(skinTransform.align)) {
+        //         if (!skin) {
+        //             skin = new NinePatch(this.mScene, config);
+        //         } else {
+        //             skin.refreshNinePath(config);
+        //         }
+        //     } else {
+        //         const texture_Key: string = this.mSkinData.key;
+        //         const texture: Phaser.Textures.Texture = this.mScene.textures.get(texture_Key);
+        //         const framesObj: {} = texture.frames;
+        //         const frameName = nineSkinData.frame;
+        //         const textureFrame = framesObj ? framesObj[frameName] : null;
+        //         if (!skin) {
+        //             if (texture.frameTotal > 1) {
+        //                 skin = this.mScene.make.sprite({ key: undefined }, false);
+        //             } else {
+        //                 skin = this.mScene.make.image({ key: undefined }, false);
+        //             }
+        //         }
+        //         if (textureFrame) {
+        //             skin.setTexture(texture_Key, frameName);
+        //         } else {
+        //             // 如果没有写入frame，默认显示"__BASE"第一帧
+        //             skin.setTexture(texture_Key);
+        //         }
+        //     }
+        // }
     }
 }
