@@ -1,18 +1,11 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "commonjs",
     "target": "es5",
-    "lib": [
-      "es2015",
-      "webworker",
-      "dom"
-    ],
+    "lib": ["es2015", "webworker", "dom"],
     "declaration": false,
     "sourceMap": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types", "node_modules/phaser/types"]
   },
   "exclude": ["node_modules"]
 }
