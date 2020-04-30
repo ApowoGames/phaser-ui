@@ -5,40 +5,30 @@ import { Transform } from "../interface/pos/Transform";
 import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
 import { Align } from "../interface/pos/Align";
 import { BaseUI } from "../baseUI/BaseUI";
+
+const GetValue = Phaser.Utils.Objects.GetValue;
 export class NineSlicePatch extends BaseUI {
     private static readonly __BASE: string = "__BASE";
     private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];
-
     protected originTexture: Phaser.Textures.Texture;
     protected originFrame: Phaser.Textures.Frame;
     protected patchesConfig: IPatchesConfig;
     protected finalXs: number[];
     protected finalYs: number[];
     protected internalTint: number;
-
     constructor(scene: Phaser.Scene, config: INinePatchConfig) {
         super(scene);
         this.refreshNinePath(config);
     }
 
     public refreshNinePath(config: INinePatchConfig) {
-        const transform: Transform = Tool.getTransfrom(config.transform);
-        this.container.x = Tool.getPos(transform).x;
-        this.container.y = Tool.getPos(transform).y;
-        const baseWidth: number = transform.width;
-        const baseHeight: number = transform.height;
-        const skinData: INinePatchSkinData = config.skinData;
-        const frame = skinData.frame ? skinData.frame : NineSlicePatch.__BASE;
-        const key = skinData.key;
-        const aligin: Align = transform.align;
-        this.patchesConfig = this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
-            ? this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
-            : {
-                top: aligin.top || 0,
-                left: aligin.left || 0,
-                right: aligin.right || 0,
-                bottom: aligin.bottom || 0,
-            };
+        this.container.x = GetValue(config, "x", 0);
+        this.container.y = GetValue(config, "y", 0);
+        const baseWidth: number = GetValue(config, "width", 0);
+        const baseHeight: number = GetValue(config, "height", 0);
+        const key: string = GetValue(config, "key", "");
+        const frame = GetValue(config, "frame", NineSlicePatch.__BASE);
+        this.patchesConfig =GetValue(config, "config", {});
         normalizePatchesConfig(this.patchesConfig);
         this.setSize(baseWidth, baseHeight);
         this.setTexture(key, frame);

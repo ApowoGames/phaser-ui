@@ -1,7 +1,13 @@
 import { INinePatchSkinData } from "./INinePatchSkinData";
 import { Transform } from "../pos/Transform";
+import { IPatchesConfig } from "../baseUI/Patches.config";
 
 export interface INinePatchConfig {
-    transform: Transform;
-    skinData: INinePatchSkinData;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    key: string;
+    frame?: string;
+    config?: IPatchesConfig;
 }

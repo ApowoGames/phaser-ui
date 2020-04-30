@@ -73,18 +73,18 @@ export class Button extends BaseUI implements IButtonState {
     }
 
     changeNormal() {
-        this.mBackground.setFrame(this.mFrame);
+        this.setBgFrame(this.mFrame);
     }
 
     changeDown() {
         if (this.mDownFrame) {
-            this.mBackground.setFrame(this.mDownFrame);
+            this.setBgFrame(this.mDownFrame);
         }
     }
 
     setFrame(frame: string) {
         if (this.mBackground) {
-            this.mBackground.setFrame(frame);
+            this.setBgFrame(frame);
         }
     }
 
@@ -116,6 +116,11 @@ export class Button extends BaseUI implements IButtonState {
         if (this.mText) {
             this.mText.setColor(color);
         }
+    }
+
+    protected setBgFrame(frame: string) {
+        this.mBackground.setFrame(frame);
+        this.setSize(this.mBackground.width, this.mBackground.height);
     }
 
     protected buttonStateChange(state: ButtonState) {
