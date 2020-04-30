@@ -1,0 +1,165 @@
+import { IPatchesConfig, normalizePatchesConfig } from "../interface/baseUI/Patches.config";
+import { INinePatchConfig } from "../interface/ninepatch/INinePatchConfig";
+import { Tool } from "../tool/Tool";
+import { Transform } from "../interface/pos/Transform";
+import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
+import { Align } from "../interface/pos/Align";
+import { BaseUI } from "../baseUI/BaseUI";
+export class NineSlicePatch extends BaseUI {
+    private static readonly __BASE: string = "__BASE";
+    private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];
+
+    protected originTexture: Phaser.Textures.Texture;
+    protected originFrame: Phaser.Textures.Frame;
+    protected patchesConfig: IPatchesConfig;
+    protected finalXs: number[];
+    protected finalYs: number[];
+    protected internalTint: number;
+
+    constructor(scene: Phaser.Scene, config: INinePatchConfig) {
+        super(scene);
+        this.refreshNinePath(config);
+    }
+
+    public refreshNinePath(config: INinePatchConfig) {
+        const transform: Transform = Tool.getTransfrom(config.transform);
+        this.container.x = Tool.getPos(transform).x;
+        this.container.y = Tool.getPos(transform).y;
+        const baseWidth: number = transform.width;
+        const baseHeight: number = transform.height;
+        const skinData: INinePatchSkinData = config.skinData;
+        const frame = skinData.frame ? skinData.frame : NineSlicePatch.__BASE;
+        const key = skinData.key;
+        const aligin: Align = transform.align;
+        this.patchesConfig = this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
+            ? this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
+            : {
+                top: aligin.top || 0,
+                left: aligin.left || 0,
+                right: aligin.right || 0,
+                bottom: aligin.bottom || 0,
+            };
+        normalizePatchesConfig(this.patchesConfig);
+        this.setSize(baseWidth, baseHeight);
+        this.setTexture(key, frame);
+        this.disInteractive();
+    }
+
+    public resize(width: number, height: number) {
+        width = Math.round(width);
+        height = Math.round(height);
+        if (!this.patchesConfig) {
+            return this;
+        }
+        if (this.width === width && this.height === height) {
+            return this;
+        }
+        width = Math.max(width, this.patchesConfig.left + this.patchesConfig.right);
+        height = Math.max(height, this.patchesConfig.top + this.patchesConfig.bottom);
+        this.setSize(width, height);
+        this.drawPatches();
+        return;
+    }
+
+    public setTexture(key: string, frame?: string | integer): this {
+        this.originTexture = this.scene.textures.get(key);
+        this.setFrame(frame);
+        return this;
+    }
+
+    public setFrame(frame: string | integer): this {
+        this.originFrame = (this.originTexture.frames as any)[frame] || (this.originTexture.frames as any)[NineSlicePatch.__BASE];
+        this.createPatches();
+        this.drawPatches();
+        return this;
+    }
+
+    public setSize(width: number, height: number): this {
+        this.width = width;
+        this.height = height;
+        this.container.setSize(width, height);
+        this.finalXs = [0, this.patchesConfig.left, this.width - this.patchesConfig.right, this.width];
+        this.finalYs = [0, this.patchesConfig.top, this.height - this.patchesConfig.bottom, this.height];
+        return this;
+    }
+
+    public setTint(tint: number): this {
+        this.tint = tint;
+        return this;
+    }
+
+    public setTintFill(tint: number): this {
+        this.tint = tint;
+        this.tintFill = true;
+        return this;
+    }
+
+    public get tintFill(): boolean {
+        return this.container.first && (this.container.first as Phaser.GameObjects.Image).tintFill;
+    }
+
+    public set tintFill(value: boolean) {
+        this.container.each((patch: Phaser.GameObjects.Image) => patch.tintFill = value);
+    }
+
+    public set tint(value: number) {
+        this.container.each((patch: Phaser.GameObjects.Image) => patch.setTint(value));
+        this.internalTint = value;
+    }
+
+    public get isTinted(): boolean {
+        return this.container.first && (this.container.first as Phaser.GameObjects.Image).isTinted;
+    }
+
+    protected createPatches(): void {
+        // The positions we want from the base texture
+        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
+        const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
+        let patchIndex: number = 0;
+        for (let yi: number = 0; yi < 3; yi++) {
+            for (let xi: number = 0; xi < 3; xi++) {
+                this.createPatchFrame(
+                    this.getPatchNameByIndex(patchIndex),
+                    textureXs[xi], // x
+                    textureYs[yi], // y
+                    textureXs[xi + 1] - textureXs[xi], // width
+                    textureYs[yi + 1] - textureYs[yi] // height
+                );
+                ++patchIndex;
+            }
+        }
+    }
+
+    protected drawPatches(): void {
+        const tintFill = this.tintFill;
+        this.container.removeAll(true);
+        let patchIndex = 0;
+        for (let yi = 0; yi < 3; yi++) {
+            for (let xi = 0; xi < 3; xi++) {
+                const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
+                const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
+                patchImg.setOrigin(0);
+                patchImg.setPosition(this.finalXs[xi] - this.width * this.container.originX, this.finalYs[yi] - this.height * this.container.originY);
+                patchImg.setScale(
+                    (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width,
+                    (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height
+                );
+                this.container.add(patchImg);
+                patchImg.setTint(this.internalTint);
+                patchImg.tintFill = tintFill;
+                ++patchIndex;
+            }
+        }
+    }
+
+    protected createPatchFrame(patch: string, x: number, y: number, width: number, height: number) {
+        if (this.originTexture.frames.hasOwnProperty(patch)) {
+            return;
+        }
+        this.originTexture.add(patch, this.originFrame.sourceIndex, this.originFrame.cutX + x, this.originFrame.cutY + y, width, height);
+    }
+
+    protected getPatchNameByIndex(index: number): string {
+        return `${this.originFrame.name}|${NineSlicePatch.patches[index]}`;
+    }
+}
