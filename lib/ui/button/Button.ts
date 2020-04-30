@@ -43,6 +43,14 @@ export class Button extends BaseUI implements IButtonState {
         this.setInteractive();
     }
 
+    get backGround(): Phaser.GameObjects.Image {
+        return this.mBackground;
+    }
+
+    get text(): Phaser.GameObjects.Text {
+        return this.mText;
+    }
+
     public addListen() {
         if (this.interactiveBoo) {
             this.container.setInteractive();
