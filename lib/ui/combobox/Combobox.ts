@@ -1,14 +1,14 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
-import { AbstractItem } from "../interface/baseUI/AbstructItem";
-import { ISoundConfig, ISoundGroup } from "../interface/sound/ISoundConfig";
+import { IAbstructItem } from "../interface/baseUI/IAbstructItem";
+import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
-export interface ISelectCallItedata extends AbstractItem {
+export interface ISelectCallItemdata extends IAbstructItem {
     text: string;
     data: any;
 }
 export interface ISelectCallUI {
-    selectCall(data: ISelectCallItedata);
+    selectCall(data: ISelectCallItemdata);
 }
 export class SelectCallItem extends BaseUI {
     protected soundGroup: ISoundGroup;
@@ -16,6 +16,7 @@ export class SelectCallItem extends BaseUI {
     protected mSelectBG: Phaser.GameObjects.Graphics;
     protected mSelectCallUI: ISelectCallUI;
     private mSelect: boolean = false;
+    private mItemData: ISelectCallItemdata;
     constructor(scene: Phaser.Scene, selectCallUI: ISelectCallUI, wid: number, hei: number, music?: ISoundGroup) {
         super(scene);
         this.mSelectCallUI = selectCallUI;
@@ -29,52 +30,47 @@ export class SelectCallItem extends BaseUI {
         this.mSelectBG.fillStyle(COLOR, .8);
         this.mSelectBG.fillRect(-wid >> 1, -hei >> 1, wid, hei);
         this.mSelectBG.visible = false;
-        this.container.add([this.mSelectBG, this.mText]);
+        this.add([this.mSelectBG, this.mText]);
         this.width = wid;
         this.height = hei;
-        this.container.setSize(wid, hei);
+        this.setSize(wid, hei);
 
         this.setInteractive();
     }
 
-    public setInteractive() {
-        this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
-        super.setInteractive();
+    public setInteractive(): this {
+        super.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+        return this;
     }
-
-    public disInteractive() {
-        this.container.disableInteractive();
-        super.setInteractive();
-    }
-
 
     public addListen() {
-        this.container.on("pointerover", this.overHandler, this);
-        this.container.on("pointerout", this.outHandler, this);
-        this.container.on("pointerdown", this.selectHandler, this);
+        this.on("pointerover", this.overHandler, this);
+        this.on("pointerout", this.outHandler, this);
+        this.on("pointerdown", this.selectHandler, this);
     }
 
     public removeListen() {
-        this.container.off("pointerover", this.overHandler, this);
-        this.container.off("pointerout", this.outHandler, this);
-        this.container.off("pointerdown", this.selectHandler, this);
+        this.off("pointerover", this.overHandler, this);
+        this.off("pointerout", this.outHandler, this);
+        this.off("pointerdown", this.selectHandler, this);
     }
 
-    public set itedata(val: ISelectCallItedata) {
-        this.data = val;
-        this.mText.text = this.data.text;
+    public set itemData(val: ISelectCallItemdata) {
+        this.mItemData = val;
+        this.mText.text = this.mItemData.text;
         this.mText.x = -this.width / 2 + (this.width - this.mText.width >> 1);
         this.mText.y = -this.height / 2 + (this.height - this.mText.height >> 1);
     }
 
-    public get itedata(): ISelectCallItedata {
-        return this.data;
+    public get itemData(): ISelectCallItemdata {
+        return this.mItemData;
     }
 
     public destroy() {
+        if (!this.mInitialized) return;
         this.mText.destroy(true);
         this.mSelectBG.destroy(true);
-        this.data = null;
+        this.mItemData = null;
         this.mText = null;
         this.mSelectBG = null;
         this.mSelectCallUI = null;
@@ -105,7 +101,7 @@ export class SelectCallItem extends BaseUI {
         }
         if (this.soundGroup && this.soundGroup.down) (this.mSelectCallUI as ComboBox).playSound(this.soundGroup.down);
         this.overHandler();
-        this.mSelectCallUI.selectCall(this.itedata);
+        this.mSelectCallUI.selectCall(this.mItemData);
     }
     protected outHandler() {
         if (!this.interactiveBoo) return;
@@ -122,6 +118,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
     private mtxt: Phaser.GameObjects.Text;
     private mArrow: Phaser.GameObjects.Image;
     private mInitialize: boolean = false;
+    private mSelectData: ISelectCallItemdata;
     constructor(scene: Phaser.Scene, config: IComboboxConfig) {
         super(scene);
         this.mConfig = config;
@@ -129,13 +126,13 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
         this.init();
     }
 
-    public selectCall(itedata: ISelectCallItedata) {
-        this.mtxt.text = itedata.text;
+    public selectCall(itemData: ISelectCallItemdata) {
+        this.mtxt.text = itemData.text;
         this.mtxt.x = this.mConfig.wid - this.mtxt.width >> 1;
         this.mtxt.y = this.mConfig.hei - this.mtxt.height >> 1;
         this.showTween(false);
         if (this.mConfig.clickCallBack) {
-            this.mConfig.clickCallBack.call(this, itedata);
+            this.mConfig.clickCallBack.call(this, itemData);
         }
     }
 
@@ -151,7 +148,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
 
     public set text(value: string[]) {
         if (!this.mInitialize) {
-            this.data = this.itemList[0].itedata;
+            this.mSelectData = this.itemList[0].itemData;
             return;
         }
         if (this.itemList) {
@@ -169,7 +166,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
         for (let i: number = 0; i < len; i++) {
             const item: SelectCallItem = new SelectCallItem(this.scene, this, this.mConfig.wid, this.mConfig.hei, this.mConfig.itemMusic);
             const str: string = value[i];
-            item.itedata = {
+            item.itemData = {
                 index: i,
                 text: str,
                 data: {},
@@ -179,7 +176,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
             this.itemList.push(item);
         }
         // 默認顯示第0個
-        this.selectCall(this.itemList[0].itedata);
+        this.selectCall(this.itemList[0].itemData);
     }
 
     public destroy() {
@@ -227,10 +224,10 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
             style: { fill: "#F7EDED", fontSize: 18 }
         }, false);
 
-        this.container.add([this.mBg, this.mArrow, this.mtxt]);
+        this.add([this.mBg, this.mArrow, this.mtxt]);
         this.mInitialize = true;
-        if (this.data) {
-            this.selectCall(this.data);
+        if (this.mSelectData) {
+            this.selectCall(this.mSelectData);
         }
     }
 
@@ -246,7 +243,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
     private showTween(open: boolean) {
         if (open) {
             this.mItemBG = this.createTexture();
-            this.container.addAt(this.mItemBG, 0);
+            this.addAt(this.mItemBG, 0);
         } else {
             if (this.mItemBG) {
                 if (this.mItemBG.parentContainer) {
@@ -266,8 +263,8 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
             if (!item) {
                 continue;
             }
-            item.view.x = this.mConfig.wid >> 1;
-            this.container.add(item.view);
+            item.x = this.mConfig.wid >> 1;
+            this.add(item);
             this.scene.tweens.add({
                 targets: item,
                 duration: 50 * i,
@@ -277,7 +274,7 @@ export class ComboBox extends BaseUI implements ISelectCallUI {
                 },
                 onComplete: (tween, targets, element) => {
                     if (!open) {
-                        this.container.remove(item.view);
+                        this.remove(item);
                     }
                 },
                 onCompleteParams: [this],

@@ -57,7 +57,7 @@ export class GameScroller extends BaseUI implements ISound {
         return this.mConfig.bounds;
     }
 
-    public setSize(width?: number, height?: number, value0?: number, value1?: number) {
+    public resize(width?: number, height?: number, value0?: number, value1?: number) {
         this.width = width;
         this.height = height;
         this.mScroller.setBounds(value0, value1);

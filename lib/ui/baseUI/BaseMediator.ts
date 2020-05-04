@@ -43,7 +43,7 @@ export class BaseMediator implements IMediator {
         if (this.mView) this.mView.tweenExpand(show);
     }
 
-    getView(): IAbstractPanel {
+    getView(): Panel {
         return this.mView;
     }
 

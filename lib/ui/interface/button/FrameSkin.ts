@@ -3,11 +3,11 @@
  * @Author: gxm
  * @Date: 2020-03-10 10:51:27
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-27 16:11:29
+ * @Last Modified time: 2020-05-04 23:26:01
  */
 
 import { ResourceData } from "../baseUI/ResourceData";
-import { ButtonState } from "../../button/NewButton";
+import { ButtonState } from "../../button/Button";
 export enum SkinEvent {
     LoadComplete = "LOAD_COMPLETE",
     LoadError = "LOAD_ERROR",

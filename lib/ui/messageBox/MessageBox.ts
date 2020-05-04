@@ -24,6 +24,7 @@ export class MessageBox extends Panel {
   private mTitleLabel: Phaser.GameObjects.Text;
   private btnNum: number = 2;
   private btnList: Button[];
+  private mCurData: IAlertConfig;
   constructor(scene: Phaser.Scene, world: any, config?: MessageBoxConfig) {
     super(scene, world);
     this.key = config !== undefined ? GetValue(config, "key", "pica_alert") : "pica_alert";
@@ -37,10 +38,10 @@ export class MessageBox extends Panel {
   }
 
   show(config: IAlertConfig) {
-    this.data = config;
+    this.mCurData = config;
     super.show(config);
     if (this.mInitialized) {
-      this.mWorld.uiManager.getUILayerManager().addToDialogLayer(this.container);
+      this.mWorld.uiManager.getUILayerManager().addToDialogLayer(this);
       this.x = this.scene.cameras.main.width / 2;
       this.y = this.scene.cameras.main.height / 2;
 
@@ -71,19 +72,19 @@ export class MessageBox extends Panel {
     if (!this.mInitialized) return;
     this.btnList = [];
     if (this.btnNum >= MessageBox.OK) {
-      this.add(this.mOkBtn.view);
-      this.mOkBtn.view.visible = true;
+      this.add(this.mOkBtn);
+      this.mOkBtn.visible = true;
       this.btnList.push(this.mOkBtn);
     }
     if (this.btnNum >= MessageBox.CANCEL) {
-      this.add(this.mCancelBtn.view);
-      this.mCancelBtn.view.visible = true;
+      this.add(this.mCancelBtn);
+      this.mCancelBtn.visible = true;
       this.btnList.push(this.mCancelBtn);
     }
 
     const w = this.width / (this.btnList.length + 1);
     for (let i = 0; i < this.btnList.length; i++) {
-      this.btnList[i].x = i * w - (this.btnList[i].view.width >> 1);
+      this.btnList[i].x = i * w - (this.btnList[i].width >> 1);
     }
   }
 
@@ -139,36 +140,36 @@ export class MessageBox extends Panel {
 
     this.mOkBtn = new Button(this.scene, this.key, "yellow_btn.png", undefined, "确定");
     this.mOkBtn.setTextColor("#905B06");
-    this.mOkBtn.x = (bg.width - this.mOkBtn.view.width) / 2 - 20 * this.dpr;
-    this.mOkBtn.y = (bg.height - this.mOkBtn.view.height) / 2 - 11 * this.dpr;
+    this.mOkBtn.x = (bg.width - this.mOkBtn.width) / 2 - 20 * this.dpr;
+    this.mOkBtn.y = (bg.height - this.mOkBtn.height) / 2 - 11 * this.dpr;
     this.mOkBtn.on(MouseEvent.Tap, this.onOkHandler, this);
 
     this.mCancelBtn = new Button(this.scene, this.key, "red_btn.png", undefined, "取消");
-    this.mCancelBtn.x = -(bg.width - this.mCancelBtn.view.width) / 2 + 20 * this.dpr;
+    this.mCancelBtn.x = -(bg.width - this.mCancelBtn.width) / 2 + 20 * this.dpr;
     this.mCancelBtn.y = this.mOkBtn.y;
     this.mCancelBtn.on(MouseEvent.Tap, this.onCancelHandler, this);
-    this.add([bg, title, this.mTitleLabel, this.mTitleLabel, this.mContent, this.mOkBtn.view, this.mCancelBtn.view]);
-    this.mCancelBtn.view.visible = false;
-    this.mOkBtn.view.visible = false;
+    this.add([bg, title, this.mTitleLabel, this.mTitleLabel, this.mContent, this.mOkBtn, this.mCancelBtn]);
+    this.mCancelBtn.visible = false;
+    this.mOkBtn.visible = false;
     super.init();
   }
 
   private onOkHandler() {
-    if (!this.data) {
+    if (!this.mCurData) {
       return;
     }
-    const callback = this.data.callback;
+    const callback = this.mCurData.callback;
     if (callback) {
-      callback.call(this.data.content);
+      callback.call(this.mCurData.content);
     }
   }
 
   private onCancelHandler() {
-    if (!this.container) {
+    if (!this) {
       return;
     }
-    if (this.container.parentContainer) {
-      this.container.parentContainer.remove(this.container);
+    if (this.parentContainer) {
+      this.parentContainer.remove(this);
     }
   }
 }

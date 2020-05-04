@@ -41,7 +41,6 @@ export class TabButton extends Button {
         this.mDownTime = 0;
     }
 
-
     protected onPointerDownHandler(pointer: Phaser.Input.Pointer) {
         if (!this.interactiveBoo) {
             if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);

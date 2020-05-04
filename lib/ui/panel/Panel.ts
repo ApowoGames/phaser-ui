@@ -61,9 +61,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     destroy() {
-        if (this.container && this.container.parentContainer) {
-            this.container.parentContainer.remove(this.container, true);
-        }
         if (this.mPanelTween) {
             this.mPanelTween.stop();
             this.mPanelTween.remove();
@@ -117,7 +114,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected showTween(show: boolean) {
         this.mTweening = true;
         const scale: number = show ? this.scale : 0;
-        this.container.scale = scale;
+        this.scale = scale;
         if (this.mPanelTween) {
             this.mPanelTween.stop();
         }
@@ -258,7 +255,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected sceneClick(pointer: Phaser.Input.Pointer) {
-        if (Tool.checkPointerContains(this.container, pointer) && this.checkPointerDelection(pointer)) {
+        if (Tool.checkPointerContains(this, pointer) && this.checkPointerDelection(pointer)) {
             this.emit("panelClick", pointer);
         }
     }

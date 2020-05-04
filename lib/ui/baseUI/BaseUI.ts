@@ -3,12 +3,10 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-28 21:19:37
+ * @Last Modified time: 2020-05-03 02:25:56
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
-import { ISetInteractive } from "../interface/baseUI/ISetInteractive";
-import { Tool } from "../tool/Tool";
 
 export interface UIFollowConfig {
     scene: Phaser.Scene;
@@ -18,19 +16,11 @@ export interface UIFollowConfig {
     baseY: number;
 }
 
-export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetInteractive {
+export class BaseUI extends Phaser.GameObjects.Container implements ISound {
     /**
      * 声音map
      */
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
-    /**
-     * ui显示对象
-     */
-    protected container: Phaser.GameObjects.Container;
-    /**
-     * 是否能交互
-     */
-    protected interactiveBoo: boolean = false;
     /**
      * ui-scene
      */
@@ -48,15 +38,6 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
      */
     protected uiScale: number = 1;
     /**
-     * 宽高
-     */
-    protected width: number = 0;
-    protected height: number = 0;
-    /**
-     * ui数据
-     */
-    protected data: any;
-    /**
      * 更新ui跟随位置回调
      */
     protected posFunc: Function;
@@ -72,57 +53,15 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
      * 是否初始化
      */
     protected mInitialized: boolean = false;
+    protected interactiveBoo: boolean = false;
     protected mShow: boolean = false;
     constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
-        super();
+        super(scene);
         this.scene = scene;
         this.dpr = dpr || 1;
         this.uiScale = scale || 1;
-        this.container = scene.make.container(undefined, false);
         this.soundMap = new Map();
         this.disInteractive();
-    }
-
-    public get view(): any {
-        return this.container;
-    }
-
-    public get displayWidth(): number {
-        if (this.view) return this.width;
-        return 0;
-    }
-
-    public get displayHeight(): number {
-        if (this.view) return this.height;
-        return 0;
-    }
-
-    public get x(): number {
-        return this.container.x;
-    }
-
-    public set x(value: number) {
-        this.container.x = value;
-    }
-
-    public get y(): number {
-        return this.container.y;
-    }
-
-    public set y(value: number) {
-        this.container.y = value;
-    }
-
-    public get z(): number {
-        return this.container.z;
-    }
-
-    public set z(value: number) {
-        this.container.z = value;
-    }
-
-    public get parentContainer(): Phaser.GameObjects.GameObject {
-        return this.container.parentContainer;
     }
 
     public get scale(): number {
@@ -131,56 +70,6 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
 
     public set scale(value: number) {
         this.uiScale = value;
-        this.container.scale = value;
-    }
-
-    public get list(): Phaser.GameObjects.GameObject[] {
-        return this.container.list;
-    }
-
-    public add(gameObject: any) {
-        this.container.add(gameObject);
-    }
-
-    public addAt(gameObject: any, index: number) {
-        this.container.addAt(gameObject, index);
-    }
-
-    public remove(gameObject: any) {
-        this.container.remove(gameObject);
-    }
-
-    public setData(key, data) {
-        this.container.setData(key, data);
-    }
-
-    public getData(key): any {
-        return this.container.getData(key);
-    }
-
-    /**
-     * 调整ui尺寸
-     * @param width
-     * @param height
-     */
-    public setSize(width?: number, height?: number) {
-        this.width = width;
-        this.height = height;
-        this.container.setSize(width, height);
-        if (this.interactiveBoo) this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
-    }
-
-    /**
-     * 调整ui布局
-     * @param width
-     * @param height
-     */
-    public resize(width?: number, height?: number) {
-    }
-
-    public setPosition(x: number, y: number) {
-        this.container.x = x;
-        this.container.y = y;
     }
 
     public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
@@ -196,59 +85,56 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
                 scene: this.mFroscene,
                 followX: this.mFollow.x,
                 followY: this.mFollow.y,
-                baseX: this.container.x,
-                baseY: this.container.y
+                baseX: this.x,
+                baseY: this.y
             });
         } else {
             const camera = this.mFroscene.cameras.main;
-            const px = this.container.x - camera.scrollX;
-            const py = this.container.y - camera.scrollY;
-            this.container.x = px;
-            this.container.y = py;
+            const px = this.x - camera.scrollX;
+            const py = this.y - camera.scrollY;
+            this.x = px;
+            this.y = py;
         }
     }
 
-    public setInteractive() {
+    public setInteractive(shape?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
         this.interactiveBoo = true;
+        super.setInteractive(shape, callback, dropZone);
         this.addListen();
+        return this;
     }
 
     public disInteractive() {
         this.interactiveBoo = false;
+        super.disableInteractive();
         this.removeListen();
     }
 
-    get interactive(): boolean {
-        return this.interactiveBoo;
-    }
-
     public addListen() {
-        if (!this.mInitialized) return;
-        let containerBoo: boolean = true;
-        if (this.container || this.container.width === 0 || this.container.height === 0) {
-            containerBoo = false;
-        }
-        if (this.interactiveBoo) {
-            if (containerBoo) {
-                this.container.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
-                this.container.on("pointerup", this.uiClick, this);
-            }
-            this.scene.input.off("pointerup", this.sceneClick, this);
-        } else {
-            if (containerBoo) {
-                this.container.disableInteractive();
-                this.container.off("pointerup", this.uiClick, this);
-            }
-            this.scene.input.on("pointerup", this.sceneClick, this);
-        }
+        // if (!this.mInitialized) return;
+        // let sizeBoo: boolean = true;
+        // if (this.width === 0 || this.height === 0) {
+        //     sizeBoo = false;
+        // }
+        // if (this.interactiveBoo) {
+        //     if (sizeBoo) {
+        //         this.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.width, this.height), Phaser.Geom.Rectangle.Contains);
+        //         this.on("pointerup", this.uiClick, this);
+        //     }
+        //     this.scene.input.off("pointerup", this.sceneClick, this);
+        // } else {
+        //     if (sizeBoo) {
+        //         this.disableInteractive();
+        //         this.off("pointerup", this.uiClick, this);
+        //     }
+        //     this.scene.input.on("pointerup", this.sceneClick, this);
+        // }
     }
 
     public removeListen() {
-        if (!this.mInitialized) return;
-        this.scene.input.off("pointerup", this.sceneClick, this);
-        if (this.container) {
-            this.container.off("pointerup", this.uiClick, this);
-        }
+        // if (!this.mInitialized) return;
+        // this.scene.input.off("pointerup", this.sceneClick, this);
+        // this.off("pointerup", this.uiClick, this);
     }
 
     public playSound(config: ISoundConfig) {
@@ -316,21 +202,21 @@ export class BaseUI extends Phaser.Events.EventEmitter implements ISound, ISetIn
         super.destroy();
     }
 
-    protected sceneClick(pointer: Phaser.Input.Pointer) {
-        if (Tool.checkPointerContains(this.container, pointer) && this.checkPointerDelection(pointer)) {
-            this.emit("uiClick");
-        }
-    }
+    // protected sceneClick(pointer: Phaser.Input.Pointer) {
+    //     if (Tool.checkPointerContains(this, pointer) && this.checkPointerDelection(pointer)) {
+    //         this.emit("uiClick");
+    //     }
+    // }
 
-    protected uiClick(pointer: Phaser.Input.Pointer) {
-        if (this.checkPointerDelection(pointer)) {
-            this.emit("uiClick");
-        }
-    }
+    // protected uiClick(pointer: Phaser.Input.Pointer) {
+    //     if (this.checkPointerDelection(pointer)) {
+    //         this.emit("uiClick");
+    //     }
+    // }
 
     protected checkPointerDelection(pointer: Phaser.Input.Pointer) {
         if (!this.scene) return true;
-        return Math.abs(pointer.downX - pointer.upX) < 10 ||
-            Math.abs(pointer.downY - pointer.upY) < 10;
+        return Math.abs(pointer.downX - pointer.upX) < 10 * this.dpr * this.uiScale ||
+            Math.abs(pointer.downY - pointer.upY) < 10 * this.dpr * this.uiScale;
     }
 }
