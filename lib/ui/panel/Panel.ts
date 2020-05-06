@@ -166,6 +166,18 @@ export class Panel extends BaseUI implements IAbstractPanel {
         });
     }
 
+    protected addImage(key: string, value?: string) {
+        if (!this.mResources) {
+            this.mResources = new Map();
+        }
+        if (value === undefined) value = key;
+        this.mResources.set(key, {
+            dpr: this.dpr,
+            type: "image",
+            texture: value
+        });
+    }
+
     protected preload() {
         this.mPreLoad = true;
         if (!this.scene) {
