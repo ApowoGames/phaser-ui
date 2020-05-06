@@ -22,6 +22,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mMute: boolean = false;
     protected mEnabled: boolean = true;
     protected mFollow: any;
+    protected mShowData: any;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
         super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();
@@ -64,6 +65,11 @@ export class Panel extends BaseUI implements IAbstractPanel {
         if (this.mPanelTween) {
             this.mPanelTween.stop();
             this.mPanelTween.remove();
+            this.mPanelTween = undefined;
+        }
+        if (this.mResources) {
+            this.mResources.clear();
+            this.mResources = undefined;
         }
         this.mMute = false;
         this.mInitialized = false;
@@ -71,7 +77,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.width = 0;
         this.height = 0;
         this.mReloadTimes = 0;
-        this.mPanelTween = null;
         this.offLoad();
         super.destroy();
     }
@@ -80,7 +85,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     show(param?: any) {
-        this.data = param;
+        this.mShowData = param;
         if (this.mPreLoad) return;
         if (!this.mInitialized) {
             this.preload();
@@ -97,7 +102,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     update(param?: any) {
-        this.data = param;
+        this.mShowData = param;
     }
 
     tweenExpand(tweenBoo: boolean) {
@@ -148,7 +153,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
             this.mResources.clear();
             this.mResources = null;
         }
-        this.show(this.data);
+        if (this.mShowData) this.show(this.mShowData);
     }
 
     protected addAtlas(key: string, texture: string, data: string) {
@@ -160,6 +165,18 @@ export class Panel extends BaseUI implements IAbstractPanel {
             type: "atlas",
             texture,
             data
+        });
+    }
+
+    protected addImage(key: string, value?: string) {
+        if (!this.mResources) {
+            this.mResources = new Map();
+        }
+        if (value === undefined) value = key;
+        this.mResources.set(key, {
+            dpr: this.dpr,
+            type: "image",
+            texture: value
         });
     }
 
