@@ -112,6 +112,10 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.mTweenBoo = boo;
     }
 
+    public get showData(): any {
+        return this.mShowData;
+    }
+
     get interactive(): boolean {
         return this.mEnabled;
     }
