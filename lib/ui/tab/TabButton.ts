@@ -33,22 +33,19 @@ export class TabButton extends Button {
             if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
                 if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
                 this.emit(MouseEvent.Tap, pointer, this);
+                this.selected = true;
             }
         }
-
         clearTimeout(this.mPressDelay);
         this.mIsMove = false;
         this.mDownTime = 0;
     }
-
-
     protected onPointerDownHandler(pointer: Phaser.Input.Pointer) {
         if (!this.interactiveBoo) {
             if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
             return;
         }
         if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
-        this.selected = true;
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
             this.emit(MouseEvent.Hold, this);
