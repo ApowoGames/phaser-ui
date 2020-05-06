@@ -51,6 +51,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     isShow(): boolean {
         return this.mShow;
     }
+    
     hide() {
         if (this.soundGroup && this.soundGroup.close) this.playSound(this.soundGroup.close);
         if (!this.mTweening && this.mTweenBoo) {
@@ -61,12 +62,17 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     destroy() {
-        if (this.container && this.container.parentContainer) {
-            this.container.parentContainer.remove(this.container, true);
+        if (this.container) {
+            this.container.destroy();
         }
         if (this.mPanelTween) {
             this.mPanelTween.stop();
             this.mPanelTween.remove();
+            this.mPanelTween = undefined;
+        }
+        if (this.mResources) {
+            this.mResources.clear();
+            this.mResources = undefined;
         }
         this.mMute = false;
         this.mInitialized = false;
@@ -74,7 +80,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.width = 0;
         this.height = 0;
         this.mReloadTimes = 0;
-        this.mPanelTween = null;
         this.offLoad();
         super.destroy();
     }
