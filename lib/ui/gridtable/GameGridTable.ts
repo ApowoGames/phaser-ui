@@ -3,10 +3,10 @@ import GridTable from "./GridTable.js";
 export class GameGridTable extends Phaser.Events.EventEmitter {
     private mGridTable: GridTable;
     private mConfig: GridTableConfig;
-    private mCellParentCon: Phaser.GameObjects.Container;
+    // private mCellParentCon: Phaser.GameObjects.Container;
     constructor(scene: Phaser.Scene, config?: GridTableConfig) {
         super();
-        this.mCellParentCon = scene.make.container(undefined, false);
+        // this.mCellParentCon = scene.make.container(undefined, false);
         this.mGridTable = new GridTable(scene, config);
         this.mConfig = config;
         this.addListen();
@@ -18,9 +18,13 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         if (this.mGridTable) return this.mGridTable.childrenMap;
         return undefined;
     }
-    public get cellParentCon(): Phaser.GameObjects.Container {
-        return this.mCellParentCon;
+    public get table(): any {
+        if (this.mGridTable) return this.mGridTable.getElement("table");
+        return undefined;
     }
+    // public get cellParentCon(): Phaser.GameObjects.Container {
+    //     return this.mCellParentCon;
+    // }
     public get items(): any[] {
         if (!this.mGridTable) return null;
         return this.mGridTable.items;
@@ -76,8 +80,11 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         if (!this.mGridTable) return;
         this.mGridTable.x = x;
         this.mGridTable.y = y;
+        if (this.table && conx !== undefined && cony !== undefined) {
+            this.table.tableOX = conx;
+            this.table.tableOY = cony;
+        }
         this.mGridTable.layout();
-        if (this.cellParentCon) this.cellParentCon.setPosition(conx, cony);
     }
 
     public destroy() {
@@ -85,7 +92,6 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
             this.removeListen();
             this.mGridTable.destroy();
         }
-        if (this.cellParentCon) this.cellParentCon.destroy();
     }
     protected cellTapHandler(cell) {
         this.emit("cellTap", cell);

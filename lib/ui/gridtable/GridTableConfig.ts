@@ -59,13 +59,14 @@ export interface GridTableCoreConfig {
   // Set false when dragging by scroller
   clamplTableOY?: boolean;
   // Set false no mask
-  mask?: {
-    //  Extra left/right/top/bottom padding spacing of this rectangle mask. Default value is 0.
-    padding: number;
-    // 0, or update : Apply mask to cell container only when table.updateTable() is invoked. Default behavior.
-    // 1, or everyTick : Apply mask to cell container every tick. Use this mode if game objects of cell are moved after table.updateTable() and still been masked.
-    updateMode: number;
-  };
+  mask?: any;
+  // mask?: {
+  //   //  Extra left/right/top/bottom padding spacing of this rectangle mask. Default value is 0.
+  //   padding: number;
+  //   // 0, or update : Apply mask to cell container only when table.updateTable() is invoked. Default behavior.
+  //   // 1, or everyTick : Apply mask to cell container every tick. Use this mode if game objects of cell are moved after table.updateTable() and still been masked.
+  //   updateMode: number;
+  // };
 }
 export interface SliderConfig {
   background?: any;

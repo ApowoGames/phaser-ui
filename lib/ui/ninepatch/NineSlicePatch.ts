@@ -8,41 +8,26 @@ import { BaseUI } from "../baseUI/BaseUI";
 export class NineSlicePatch extends BaseUI {
     private static readonly __BASE: string = "__BASE";
     private static patches: string[] = ["[0][0]", "[1][0]", "[2][0]", "[0][1]", "[1][1]", "[2][1]", "[0][2]", "[1][2]", "[2][2]"];
-
     protected originTexture: Phaser.Textures.Texture;
     protected originFrame: Phaser.Textures.Frame;
     protected patchesConfig: IPatchesConfig;
     protected finalXs: number[];
     protected finalYs: number[];
     protected internalTint: number;
-
-    constructor(scene: Phaser.Scene, config: INinePatchConfig) {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        key: string, frame: string | number,
+        config?: IPatchesConfig) {
         super(scene);
-        this.refreshNinePath(config);
-    }
-
-    public refreshNinePath(config: INinePatchConfig) {
-        const transform: Transform = Tool.getTransfrom(config.transform);
-        this.x = Tool.getPos(transform).x;
-        this.y = Tool.getPos(transform).y;
-        const baseWidth: number = transform.width;
-        const baseHeight: number = transform.height;
-        const skinData: INinePatchSkinData = config.skinData;
-        const frame = skinData.frame ? skinData.frame : NineSlicePatch.__BASE;
-        const key = skinData.key;
-        const aligin: Align = transform.align;
-        this.patchesConfig = this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
-            ? this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key)
-            : {
-                top: aligin.top || 0,
-                left: aligin.left || 0,
-                right: aligin.right || 0,
-                bottom: aligin.bottom || 0,
-            };
-        normalizePatchesConfig(this.patchesConfig);
-        this.setSize(baseWidth, baseHeight);
+        this.patchesConfig = config;
+        config = config || this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key);
+        normalizePatchesConfig(config);
+        this.setSize(width, height);
         this.setTexture(key, frame);
-        this.disInteractive();
     }
 
     public resize(width: number, height: number) {
@@ -109,6 +94,10 @@ export class NineSlicePatch extends BaseUI {
 
     public get isTinted(): boolean {
         return this.first && (this.first as Phaser.GameObjects.Image).isTinted;
+    }
+
+    public clearTint() {
+        this.each((patch: Phaser.GameObjects.Image) => patch.clearTint());
     }
 
     protected createPatches(): void {

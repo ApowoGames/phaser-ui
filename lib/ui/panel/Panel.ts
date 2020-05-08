@@ -157,7 +157,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
             this.mResources.clear();
             this.mResources = null;
         }
-        if (this.mShowData) this.show(this.mShowData);
+        this.show(this.mShowData);
     }
 
     protected addAtlas(key: string, texture: string, data: string) {
