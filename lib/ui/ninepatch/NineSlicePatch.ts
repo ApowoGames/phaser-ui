@@ -16,23 +16,20 @@ export class NineSlicePatch extends BaseUI {
     protected finalXs: number[];
     protected finalYs: number[];
     protected internalTint: number;
-    constructor(scene: Phaser.Scene, config: INinePatchConfig) {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        key: string, frame: string | number,
+        config?: IPatchesConfig) {
         super(scene);
-        this.refreshNinePath(config);
-    }
-
-    public refreshNinePath(config: INinePatchConfig) {
-        this.container.x = GetValue(config, "x", 0);
-        this.container.y = GetValue(config, "y", 0);
-        const baseWidth: number = GetValue(config, "width", 0);
-        const baseHeight: number = GetValue(config, "height", 0);
-        const key: string = GetValue(config, "key", "");
-        const frame = GetValue(config, "frame", NineSlicePatch.__BASE);
-        this.patchesConfig =GetValue(config, "config", {});
-        normalizePatchesConfig(this.patchesConfig);
-        this.setSize(baseWidth, baseHeight);
+        this.patchesConfig = config;
+        config = config || this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key);
+        normalizePatchesConfig(config);
+        this.setSize(width, height);
         this.setTexture(key, frame);
-        this.disInteractive();
     }
 
     public resize(width: number, height: number) {
@@ -67,7 +64,7 @@ export class NineSlicePatch extends BaseUI {
     public setSize(width: number, height: number): this {
         this.width = width;
         this.height = height;
-        this.container.setSize(width, height);
+        this.setSize(width, height);
         this.finalXs = [0, this.patchesConfig.left, this.width - this.patchesConfig.right, this.width];
         this.finalYs = [0, this.patchesConfig.top, this.height - this.patchesConfig.bottom, this.height];
         return this;
@@ -85,20 +82,24 @@ export class NineSlicePatch extends BaseUI {
     }
 
     public get tintFill(): boolean {
-        return this.container.first && (this.container.first as Phaser.GameObjects.Image).tintFill;
+        return this.first && (this.first as Phaser.GameObjects.Image).tintFill;
     }
 
     public set tintFill(value: boolean) {
-        this.container.each((patch: Phaser.GameObjects.Image) => patch.tintFill = value);
+        this.each((patch: Phaser.GameObjects.Image) => patch.tintFill = value);
     }
 
     public set tint(value: number) {
-        this.container.each((patch: Phaser.GameObjects.Image) => patch.setTint(value));
+        this.each((patch: Phaser.GameObjects.Image) => patch.setTint(value));
         this.internalTint = value;
     }
 
     public get isTinted(): boolean {
-        return this.container.first && (this.container.first as Phaser.GameObjects.Image).isTinted;
+        return this.first && (this.first as Phaser.GameObjects.Image).isTinted;
+    }
+
+    public clearTint() {
+        this.each((patch: Phaser.GameObjects.Image) => patch.clearTint());
     }
 
     protected createPatches(): void {
@@ -122,19 +123,19 @@ export class NineSlicePatch extends BaseUI {
 
     protected drawPatches(): void {
         const tintFill = this.tintFill;
-        this.container.removeAll(true);
+        this.removeAll(true);
         let patchIndex = 0;
         for (let yi = 0; yi < 3; yi++) {
             for (let xi = 0; xi < 3; xi++) {
                 const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
                 const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
                 patchImg.setOrigin(0);
-                patchImg.setPosition(this.finalXs[xi] - this.width * this.container.originX, this.finalYs[yi] - this.height * this.container.originY);
+                patchImg.setPosition(this.finalXs[xi] - this.width * this.originX, this.finalYs[yi] - this.height * this.originY);
                 patchImg.setScale(
                     (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width,
                     (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height
                 );
-                this.container.add(patchImg);
+                this.add(patchImg);
                 patchImg.setTint(this.internalTint);
                 patchImg.tintFill = tintFill;
                 ++patchIndex;

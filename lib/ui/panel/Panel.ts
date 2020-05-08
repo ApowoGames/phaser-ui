@@ -22,6 +22,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mMute: boolean = false;
     protected mEnabled: boolean = true;
     protected mFollow: any;
+    protected mShowData: any;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
         super(scene, world.dpr, world.uiScaleNew);
         this.soundMap = new Map();
@@ -51,7 +52,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     isShow(): boolean {
         return this.mShow;
     }
-    
     hide() {
         if (this.soundGroup && this.soundGroup.close) this.playSound(this.soundGroup.close);
         if (!this.mTweening && this.mTweenBoo) {
@@ -62,9 +62,6 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     destroy() {
-        if (this.container) {
-            this.container.destroy();
-        }
         if (this.mPanelTween) {
             this.mPanelTween.stop();
             this.mPanelTween.remove();
@@ -88,7 +85,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     show(param?: any) {
-        this.data = param;
+        this.mShowData = param;
         if (this.mPreLoad) return;
         if (!this.mInitialized) {
             this.preload();
@@ -105,7 +102,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     update(param?: any) {
-        this.data = param;
+        this.mShowData = param;
     }
 
     tweenExpand(tweenBoo: boolean) {
@@ -115,6 +112,10 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.mTweenBoo = boo;
     }
 
+    public get showData(): any {
+        return this.mShowData;
+    }
+
     get interactive(): boolean {
         return this.mEnabled;
     }
@@ -122,7 +123,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected showTween(show: boolean) {
         this.mTweening = true;
         const scale: number = show ? this.scale : 0;
-        this.container.scale = scale;
+        this.scale = scale;
         if (this.mPanelTween) {
             this.mPanelTween.stop();
         }
@@ -156,7 +157,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
             this.mResources.clear();
             this.mResources = null;
         }
-        this.show(this.data);
+        this.show(this.mShowData);
     }
 
     protected addAtlas(key: string, texture: string, data: string) {
@@ -275,7 +276,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected sceneClick(pointer: Phaser.Input.Pointer) {
-        if (Tool.checkPointerContains(this.container, pointer) && this.checkPointerDelection(pointer)) {
+        if (Tool.checkPointerContains(this, pointer) && this.checkPointerDelection(pointer)) {
             this.emit("panelClick", pointer);
         }
     }

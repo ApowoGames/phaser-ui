@@ -43,29 +43,24 @@ export class Button extends BaseUI implements IButtonState {
         this.setInteractive();
     }
 
-    get backGround(): Phaser.GameObjects.Image {
+    public get background(): Phaser.GameObjects.Image {
         return this.mBackground;
     }
 
-    get text(): Phaser.GameObjects.Text {
+    public get text(): Phaser.GameObjects.Text {
         return this.mText;
     }
 
     public addListen() {
-        if (this.interactiveBoo) {
-            this.container.setInteractive();
-        } else {
-            this.container.disableInteractive();
-        }
-        this.container.on("pointerdown", this.onPointerDownHandler, this);
-        this.container.on("pointerup", this.onPointerUpHandler, this);
-        this.container.on("pointermove", this.onPointerMoveHandler, this);
+        this.on("pointerdown", this.onPointerDownHandler, this);
+        this.on("pointerup", this.onPointerUpHandler, this);
+        this.on("pointermove", this.onPointerMoveHandler, this);
     }
 
     public removeListen() {
-        this.container.off("pointerdown", this.onPointerDownHandler, this);
-        this.container.off("pointerup", this.onPointerUpHandler, this);
-        this.container.off("pointermove", this.onPointerMoveHandler, this);
+        this.off("pointerdown", this.onPointerDownHandler, this);
+        this.off("pointerup", this.onPointerUpHandler, this);
+        this.off("pointermove", this.onPointerMoveHandler, this);
     }
 
     public mute(boo: boolean) {

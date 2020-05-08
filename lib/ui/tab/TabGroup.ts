@@ -3,12 +3,8 @@
  * @Author: gxm
  * @Date: 2020-03-11 13:33:29
  * @Last Modified by: gxm
- * @Last Modified time: 2020-04-24 15:24:28
+ * @Last Modified time: 2020-05-05 00:34:23
  */
-
-import { Tool } from "../tool/Tool";
-
-import { Transform } from "../interface/pos/Transform";
 import { IListConfig } from "../interface/list/IListConfig";
 import { TabButton } from "./TabButton";
 export class TabGroup extends Phaser.Events.EventEmitter {

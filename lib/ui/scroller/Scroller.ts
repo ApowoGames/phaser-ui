@@ -42,9 +42,14 @@ export class GameScroller extends BaseUI implements ISound {
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
         gameObject.setMask(bg.createGeometryMask());
-        const container: Phaser.GameObjects.Container = scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
+        const container: Phaser.GameObjects.Container = scene.make.container(undefined, false); // scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
         container.setSize(config.width, config.height);
         this.mGameObject = gameObject;
+        if (this.mGameObject.parentContainer) {
+            container.x = this.mGameObject.x + config.width / 2;
+            container.y = this.mGameObject.y + config.height;
+            this.mGameObject.parentContainer.add(container);
+        }
         this.mScroller = new Scroller(container, config);
         this.clickContainer = container;
         this.mDisDelection = GetValue(config, "interactivedisDetection", 10);
@@ -57,10 +62,22 @@ export class GameScroller extends BaseUI implements ISound {
         return this.mConfig.bounds;
     }
 
-    public setSize(width?: number, height?: number, value0?: number, value1?: number) {
+    public resize(width?: number, height?: number, value0?: number, value1?: number) {
         this.width = width;
         this.height = height;
-        this.mScroller.setBounds(value0, value1);
+        this.mGameObject.setSize(width, height);
+        if (this.mGameObject.parentContainer) {
+            this.clickContainer.x = this.mGameObject.x;
+            this.clickContainer.y = this.mGameObject.y + this.mGameObject.height / 2;
+            this.mGameObject.parentContainer.add(this.clickContainer);
+        }
+        // const tmp0 = value0 ? value0 : this.mScroller.bounds[0];
+        // const tmp1 = value1 ? value1 : this.mScroller.bounds[1];
+        // if (value0 && value1) this.mScroller.setBounds(tmp0, tmp1);
+    }
+
+    public setBounds(value0: number, value1: number) {
+        // this.mScroller.setBounds(value0, value1);
     }
 
     public clearInteractiveObject() {
@@ -82,6 +99,7 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     public addListen() {
+        if (!this.scene) return;
         this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         this.scene.input.on("pointerdown", this.pointerDownHandler, this);
         this.scene.input.on("pointerup", this.pointerUpHandler, this);
@@ -90,6 +108,7 @@ export class GameScroller extends BaseUI implements ISound {
 
     public removeListen() {
         this.mMoveing = false;
+        if (!this.scene) return;
         this.scene.input.off("pointerdown", this.pointerDownHandler, this);
         this.scene.input.off("pointerup", this.pointerUpHandler, this);
         this.scene.input.off("pointermove", this.pointerMoveHandler, this);
