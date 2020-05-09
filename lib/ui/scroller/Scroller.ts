@@ -46,8 +46,8 @@ export class GameScroller extends BaseUI implements ISound {
         container.setSize(config.width, config.height);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
-            container.x = this.mGameObject.x + config.width / 2;
-            container.y = this.mGameObject.y + config.height;
+            container.x = this.mGameObject.x;
+            container.y = this.mGameObject.y + this.mGameObject.height / 4;
             this.mGameObject.parentContainer.add(container);
         }
         this.mScroller = new Scroller(container, config);
@@ -68,12 +68,12 @@ export class GameScroller extends BaseUI implements ISound {
         this.mGameObject.setSize(width, height);
         if (this.mGameObject.parentContainer) {
             this.clickContainer.x = this.mGameObject.x;
-            this.clickContainer.y = this.mGameObject.y + this.mGameObject.height / 2;
+            this.clickContainer.y = this.mGameObject.y + this.mGameObject.height / 4;
             this.mGameObject.parentContainer.add(this.clickContainer);
         }
         // const tmp0 = value0 ? value0 : this.mScroller.bounds[0];
         // const tmp1 = value1 ? value1 : this.mScroller.bounds[1];
-        // if (value0 && value1) this.mScroller.setBounds(tmp0, tmp1);
+        if (value0 && value1) this.mScroller.setBounds(value0, value1);
     }
 
     public setBounds(value0: number, value1: number) {
