@@ -51,8 +51,8 @@ export class GameScroller extends BaseUI implements ISound {
         // container.add(bg1);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
-            container.x = config.x;
-            container.y = config.y;
+            container.x = config.clickX;
+            container.y = config.clickY;
             this.mGameObject.parentContainer.add(container);
         }
         this.mScroller = new Scroller(container, config);
@@ -79,8 +79,8 @@ export class GameScroller extends BaseUI implements ISound {
         // this.mGameObject.setSize(width, height);
         // this.mGameObject.setMask(bg.createGeometryMask());
         if (this.mGameObject.parentContainer) {
-            this.clickContainer.x = 0;
-            this.clickContainer.y = 0;
+            this.clickContainer.x = this.mConfig.clickX;
+            this.clickContainer.y = this.mConfig.clickY;
             this.mGameObject.parentContainer.add(this.clickContainer);
         }
         // const tmp0 = value0 ? value0 : this.mScroller.bounds[0];
@@ -112,6 +112,7 @@ export class GameScroller extends BaseUI implements ISound {
 
     public addListen() {
         if (!this.scene) return;
+        this.removeListen();
         this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         this.scene.input.on("pointerdown", this.pointerDownHandler, this);
         this.scene.input.on("pointerup", this.pointerUpHandler, this);
@@ -148,6 +149,17 @@ export class GameScroller extends BaseUI implements ISound {
         if (this.mScroller) this.mScroller.destroy();
         if (this.clickContainer) this.clickContainer.destroy();
         super.destroy();
+    }
+
+    public refreshBound() {
+        if (!this.mInteractiveList) return;
+        let tmpSize: number = 0;
+        this.mInteractiveList.forEach((gameObject) => {
+            if (gameObject) {
+                tmpSize += this.mConfig.orientation ? gameObject.width : gameObject.height;
+            }
+        });
+        //  this.setBounds(-tmpSize, 0);
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {

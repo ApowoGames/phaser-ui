@@ -3,6 +3,8 @@ import { ISoundConfig, ISoundGroup } from "../sound/ISoundConfig";
 export interface ScrollerConfig {
     x: number;
     y: number;
+    clickX: number;
+    clickY: number;
     width: number;
     height: number;
     /**
