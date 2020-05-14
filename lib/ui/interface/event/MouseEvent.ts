@@ -10,6 +10,6 @@ export namespace CoreUI {
         Over = "Over",
         Out = "Out",
         DragStart = "DragStart",
-        DragStop = "DragStop",
+        DragStop = "DragStop"
     }
 }
