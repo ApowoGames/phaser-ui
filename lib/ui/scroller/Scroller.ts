@@ -145,7 +145,10 @@ export class GameScroller extends BaseUI implements ISound {
 
     public destroy() {
         this.mMoveing = false;
-        if (this.mGameObject) this.mGameObject.clearMask(true);
+        if (this.mGameObject) {
+            this.mGameObject.clearMask(true);
+            this.mGameObject.destroy();
+        }
         if (this.mScroller) this.mScroller.destroy();
         if (this.clickContainer) this.clickContainer.destroy();
         super.destroy();
