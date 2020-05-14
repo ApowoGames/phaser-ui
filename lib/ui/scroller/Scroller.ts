@@ -191,7 +191,6 @@ export class GameScroller extends BaseUI implements ISound {
     }
     private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
         // this.scene.input.on("pointermove", this.pointerMoveHandler, this);
-        this.mMoveing = false;
         if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
@@ -208,6 +207,7 @@ export class GameScroller extends BaseUI implements ISound {
             const eventName: string = inBound ? ScrollerEvent.upinBound : ScrollerEvent.upoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
+        this.mMoveing = false;
     }
 
     private checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: Boolean = false): boolean {
