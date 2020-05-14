@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-03 02:25:56
+ * @Last Modified time: 2020-05-14 15:05:42
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -100,14 +100,12 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
     public setInteractive(shape?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
         this.interactiveBoo = true;
         super.setInteractive(shape, callback, dropZone);
-        this.addListen();
         return this;
     }
 
     public disInteractive() {
         this.interactiveBoo = false;
         super.disableInteractive();
-        this.removeListen();
     }
 
     public addListen() {

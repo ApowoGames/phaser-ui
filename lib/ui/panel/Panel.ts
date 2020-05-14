@@ -35,6 +35,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
 
     public addListen() {
         if (!this.mInitialized) return;
+        this.removeListen();
         super.addListen();
     }
 

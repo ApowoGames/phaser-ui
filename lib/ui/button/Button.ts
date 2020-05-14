@@ -53,6 +53,7 @@ export class Button extends BaseUI implements IButtonState {
     }
 
     public addListen() {
+        this.removeListen();
         this.on("pointerdown", this.onPointerDownHandler, this);
         this.on("pointerup", this.onPointerUpHandler, this);
         this.on("pointermove", this.onPointerMoveHandler, this);
