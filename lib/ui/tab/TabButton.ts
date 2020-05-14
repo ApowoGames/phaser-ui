@@ -1,7 +1,6 @@
 import { Button, ButtonState } from "../button/Button";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
-import { MouseEvent } from "../interface/event/MouseEvent";
-
+import { CoreUI } from "../interface/event/MouseEvent";
 export class TabButton extends Button {
     protected mSelected: boolean = false;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
@@ -32,7 +31,7 @@ export class TabButton extends Button {
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
                 if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(MouseEvent.Tap, pointer, this);
+                this.emit(CoreUI.MouseEvent.Tap, pointer, this);
                 this.selected = true;
             }
         }
@@ -48,8 +47,8 @@ export class TabButton extends Button {
         if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
-            this.emit(MouseEvent.Hold, this);
+            this.emit(CoreUI.MouseEvent.Hold, this);
         }, this.mPressTime);
-        this.emit(MouseEvent.Down, this);
+        this.emit(CoreUI.MouseEvent.Down, this);
     }
 }

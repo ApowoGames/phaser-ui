@@ -1,7 +1,7 @@
 import { Panel } from "../panel/Panel";
 import BBCodeText from "../../plugins/gameobjects/text/bbcodetext/BBCodeText.js";
+import { CoreUI } from "../interface/event/MouseEvent";
 import { Button } from "../button/Button";
-import { MouseEvent } from "../interface/event/MouseEvent";
 export interface MessageBoxConfig {
   key?: string;
   png?: string;
@@ -142,12 +142,12 @@ export class MessageBox extends Panel {
     this.mOkBtn.setTextColor("#905B06");
     this.mOkBtn.x = (bg.width - this.mOkBtn.width) / 2 - 20 * this.dpr;
     this.mOkBtn.y = (bg.height - this.mOkBtn.height) / 2 - 11 * this.dpr;
-    this.mOkBtn.on(MouseEvent.Tap, this.onOkHandler, this);
+    this.mOkBtn.on(CoreUI.MouseEvent.Tap, this.onOkHandler, this);
 
     this.mCancelBtn = new Button(this.scene, this.key, "red_btn.png", undefined, "取消");
     this.mCancelBtn.x = -(bg.width - this.mCancelBtn.width) / 2 + 20 * this.dpr;
     this.mCancelBtn.y = this.mOkBtn.y;
-    this.mCancelBtn.on(MouseEvent.Tap, this.onCancelHandler, this);
+    this.mCancelBtn.on(CoreUI.MouseEvent.Tap, this.onCancelHandler, this);
     this.add([bg, title, this.mTitleLabel, this.mTitleLabel, this.mContent, this.mOkBtn, this.mCancelBtn]);
     this.mCancelBtn.visible = false;
     this.mOkBtn.visible = false;

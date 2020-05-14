@@ -1,7 +1,7 @@
 import { BaseUI } from "../baseUI/BaseUI";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
-import { MouseEvent } from "../interface/event/MouseEvent";
 import { IButtonState } from "../interface/button/IButtonState";
+import { CoreUI } from "../interface/event/MouseEvent";
 
 export enum ButtonState {
     Normal = "normal",
@@ -139,7 +139,7 @@ export class Button extends BaseUI implements IButtonState {
         if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
         if (!this.interactiveBoo) return;
         this.mIsMove = true;
-        this.emit(MouseEvent.Move);
+        this.emit(CoreUI.MouseEvent.Move);
     }
 
     protected onPointerUpHandler(pointer: Phaser.Input.Pointer) {
@@ -151,7 +151,7 @@ export class Button extends BaseUI implements IButtonState {
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
                 if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(MouseEvent.Tap, pointer, this);
+                this.emit(CoreUI.MouseEvent.Tap, pointer, this);
             }
         }
 
@@ -169,8 +169,8 @@ export class Button extends BaseUI implements IButtonState {
         this.buttonStateChange(ButtonState.Select);
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
-            this.emit(MouseEvent.Hold, this);
+            this.emit(CoreUI.MouseEvent.Hold, this);
         }, this.mPressTime);
-        this.emit(MouseEvent.Down, this);
+        this.emit(CoreUI.MouseEvent.Down, this);
     }
 }
