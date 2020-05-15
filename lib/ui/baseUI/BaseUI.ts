@@ -34,10 +34,6 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
      */
     protected dpr: number = 1;
     /**
-     * ui缩放参数（外部world传入）
-     */
-    protected uiScale: number = 1;
-    /**
      * 更新ui跟随位置回调
      */
     protected posFunc: Function;
@@ -59,17 +55,9 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
         super(scene);
         this.scene = scene;
         this.dpr = dpr || 1;
-        this.uiScale = scale || 1;
+        this.scale = scale || 1;
         this.soundMap = new Map();
         this.disInteractive();
-    }
-
-    public get scale(): number {
-        return this.uiScale;
-    }
-
-    public set scale(value: number) {
-        this.uiScale = value;
     }
 
     public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
@@ -214,7 +202,7 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
 
     protected checkPointerDelection(pointer: Phaser.Input.Pointer) {
         if (!this.scene) return true;
-        return Math.abs(pointer.downX - pointer.upX) < 10 * this.dpr * this.uiScale ||
-            Math.abs(pointer.downY - pointer.upY) < 10 * this.dpr * this.uiScale;
+        return Math.abs(pointer.downX - pointer.upX) < 10 * this.dpr * this.scale ||
+            Math.abs(pointer.downY - pointer.upY) < 10 * this.dpr * this.scale;
     }
 }
