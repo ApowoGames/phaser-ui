@@ -37,18 +37,18 @@ export class GameScroller extends BaseUI implements ISound {
         this.soundGroup = config.music;
         const bg = scene.make.graphics(undefined, false);
         bg.fillStyle(0);
-        bg.fillRect(0, 0, config.width, config.height);
+        bg.fillRect(config.x, config.y, config.width, config.height);
         bg.setPosition(config.x, config.y);
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
         gameObject.setMask(bg.createGeometryMask());
         const container: Phaser.GameObjects.Container = scene.make.container(undefined, false); // scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
         container.setSize(config.width, config.height);
-        // const bg1 = scene.make.graphics(undefined, false);
-        // bg1.fillStyle(0, .2);
-        // bg1.fillRect(0, 0, config.width, config.height);
-        // bg1.setPosition(0, 0);
-        // container.add(bg1);
+        const bg1 = scene.make.graphics(undefined, false);
+        bg1.fillStyle(0, .2);
+        bg1.fillRect(-config.width * 0.5, -config.height * 0.5, config.width, config.height);
+        bg1.setPosition(0, 0);
+        container.add(bg);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
             container.x = config.clickX;
@@ -90,6 +90,10 @@ export class GameScroller extends BaseUI implements ISound {
 
     public setBounds(value0: number, value1: number) {
         this.mScroller.setBounds(value0, value1);
+    }
+
+    public setValue(value) {
+        this.mScroller.setValue(value);
     }
 
     public clearInteractiveObject() {
