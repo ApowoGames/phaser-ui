@@ -89,7 +89,7 @@ export class BaseMediator implements IMediator {
         let view = this.getView();
         if (view) {
             view.destroy();
-            view = null;
+            view = undefined;
         }
     }
 }

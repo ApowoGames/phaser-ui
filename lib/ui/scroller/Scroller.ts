@@ -42,12 +42,12 @@ export class GameScroller extends BaseUI implements ISound {
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
         gameObject.setMask(bg.createGeometryMask());
-        const container: Phaser.GameObjects.Container = scene.make.container(undefined, false); // scene.add.container(config.x + config.width / 2, config.y + config.height / 2);
+        const container: Phaser.GameObjects.Container = scene.make.container(undefined, false);
         container.setSize(config.width, config.height);
         // const bg1 = scene.make.graphics(undefined, false);
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
-        // bg1.setPosition(0, 0);
+        // bg1.setPosition(-config.width / 2, -config.height / 2);
         // container.add(bg1);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
@@ -71,20 +71,11 @@ export class GameScroller extends BaseUI implements ISound {
     public resize(width?: number, height?: number, value0?: number, value1?: number) {
         this.width = width;
         this.height = height;
-        // this.mGameObject.clearMask();
-        // const bg = this.scene.make.graphics(undefined, false);
-        // bg.fillStyle(0);
-        // bg.fillRect(0, 0, width, height);
-        // bg.setPosition(this.mConfig.x - 10 * this.dpr * this.scale, this.mConfig.y);
-        // this.mGameObject.setSize(width, height);
-        // this.mGameObject.setMask(bg.createGeometryMask());
         if (this.mGameObject.parentContainer) {
             this.clickContainer.x = this.mConfig.clickX;
             this.clickContainer.y = this.mConfig.clickY;
             this.mGameObject.parentContainer.add(this.clickContainer);
         }
-        // const tmp0 = value0 ? value0 : this.mScroller.bounds[0];
-        // const tmp1 = value1 ? value1 : this.mScroller.bounds[1];
         this.mScroller.setBounds(value0, value1);
     }
 
