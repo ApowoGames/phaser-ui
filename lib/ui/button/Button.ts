@@ -42,6 +42,11 @@ export class Button extends BaseUI implements IButtonState {
         }
         this.setInteractive();
         this.addListen();
+        this.soundGroup = {
+            up: {
+                urls: "./resources/sound/click.mp3"
+            }
+        }
     }
 
     public get background(): Phaser.GameObjects.Image {

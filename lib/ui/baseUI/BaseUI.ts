@@ -125,6 +125,13 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
 
     public playSound(config: ISoundConfig) {
         if (this.silent) return;
+        if (config.key === undefined) {
+            if (typeof config.urls === "string") {
+                config.key = config.urls;
+            } else {
+                config.key = config.urls[0];
+            }
+        }
         const key = config.key;
         const urls = config.urls;
         if (this.scene.cache.audio.exists(key)) {
