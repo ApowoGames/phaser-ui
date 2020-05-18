@@ -38,7 +38,7 @@ export class GameScroller extends BaseUI implements ISound {
         this.soundGroup = config.music;
         const bg = scene.make.graphics(undefined, false);
         bg.fillStyle(0);
-        bg.fillRect(config.x, config.y, config.width, config.height);
+        bg.fillRect(0, 0, config.width, config.height);
         bg.setPosition(config.x, config.y);
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
@@ -49,7 +49,7 @@ export class GameScroller extends BaseUI implements ISound {
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
         // bg1.setPosition(-config.width / 2, -config.height / 2);
-        // container.add(bg1);
+        // container.add(bg);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
             container.x = config.clickX;
