@@ -64,7 +64,7 @@ export class NineSlicePatch extends BaseUI {
     public setSize(width: number, height: number): this {
         this.width = width;
         this.height = height;
-        this.setSize(width, height);
+        super.setSize(width, height);
         this.finalXs = [0, this.patchesConfig.left, this.width - this.patchesConfig.right, this.width];
         this.finalYs = [0, this.patchesConfig.top, this.height - this.patchesConfig.bottom, this.height];
         return this;

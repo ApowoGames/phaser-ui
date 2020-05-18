@@ -56,6 +56,10 @@ export interface GridTableCoreConfig {
   cellVisibleCallbackScope?: number[];
   cellInvisibleCallback?: Function;
   cellInvisibleCallbackScope?: number[];
+  // 子对象的originX 默认为0.5
+  cellOriginX?: number;
+  // 子对象的originY 默认为0.5
+  cellOriginY?: number;
   // Set true to clamp tableOX, tableOY when out-of-bound,
   // Set false when dragging by scroller
   clamplTableOY?: boolean;
