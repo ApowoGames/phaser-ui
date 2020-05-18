@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-03 02:25:56
+ * @Last Modified time: 2020-05-18 14:45:01
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -34,10 +34,6 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
      */
     protected dpr: number = 1;
     /**
-     * ui缩放参数（外部world传入）
-     */
-    protected uiScale: number = 1;
-    /**
      * 更新ui跟随位置回调
      */
     protected posFunc: Function;
@@ -59,17 +55,9 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
         super(scene);
         this.scene = scene;
         this.dpr = dpr || 1;
-        this.uiScale = scale || 1;
+        this.scale = scale || 1;
         this.soundMap = new Map();
         this.disInteractive();
-    }
-
-    public get scale(): number {
-        return this.uiScale;
-    }
-
-    public set scale(value: number) {
-        this.uiScale = value;
     }
 
     public setFollow(gameObject: any, froscene: Phaser.Scene, posFunc?: Function) {
@@ -100,14 +88,12 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
     public setInteractive(shape?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): this {
         this.interactiveBoo = true;
         super.setInteractive(shape, callback, dropZone);
-        this.addListen();
         return this;
     }
 
     public disInteractive() {
         this.interactiveBoo = false;
         super.disableInteractive();
-        this.removeListen();
     }
 
     public addListen() {
@@ -139,16 +125,23 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
 
     public playSound(config: ISoundConfig) {
         if (this.silent) return;
+        // if (config.key === undefined) {
+        //     if (typeof config.urls === "string") {
+        //         config.key = config.urls;
+        //     } else {
+        //         config.key = config.urls[0];
+        //     }
+        // }
         const key = config.key;
-        const urls = config.urls;
+        // const urls = config.urls;
         if (this.scene.cache.audio.exists(key)) {
             this.startPlay(config);
         } else {
-            this.scene.load.once(`filecomplete-audio-${key}`, () => {
-                this.startPlay(config);
-            }, this);
-            this.scene.load.audio(key, urls);
-            this.scene.load.start();
+            // this.scene.load.once(`filecomplete-audio-${key}`, () => {
+            //     this.startPlay(config);
+            // }, this);
+            // this.scene.load.audio(key, urls);
+            // this.scene.load.start();
         }
     }
 
@@ -216,7 +209,7 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
 
     protected checkPointerDelection(pointer: Phaser.Input.Pointer) {
         if (!this.scene) return true;
-        return Math.abs(pointer.downX - pointer.upX) < 10 * this.dpr * this.uiScale ||
-            Math.abs(pointer.downY - pointer.upY) < 10 * this.dpr * this.uiScale;
+        return Math.abs(pointer.downX - pointer.upX) < 10 * this.dpr * this.scale ||
+            Math.abs(pointer.downY - pointer.upY) < 10 * this.dpr * this.scale;
     }
 }

@@ -1,5 +1,11 @@
 import { GridTableConfig } from "./GridTableConfig";
 import GridTable from "./GridTable.js";
+import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
+import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
+export interface IMaskConfig {
+    mask: boolean;
+    padding: number;
+}
 export class GameGridTable extends Phaser.Events.EventEmitter {
     private mGridTable: GridTable;
     private mConfig: GridTableConfig;
@@ -11,6 +17,21 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         this.mConfig = config;
         this.addListen();
     }
+
+    /**
+     * 调整gridtable遮照范围
+     * @param width
+     * @param height
+     * @param x
+     * @param y
+     */
+    public adjustMask(width, height, x: number = this.mConfig.x, y: number = this.mConfig.y) {
+        if (!this.mGridTable) return;
+        this.mGridTable.x = x;
+        this.mGridTable.y = y;
+        this.mGridTable.resize(width, height);
+    }
+
     public get gridTable(): GridTable {
         return this.mGridTable;
     }
@@ -22,9 +43,21 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         if (this.mGridTable) return this.mGridTable.getElement("table");
         return undefined;
     }
-    // public get cellParentCon(): Phaser.GameObjects.Container {
-    //     return this.mCellParentCon;
-    // }
+    /**
+     * Only worked when scrollMode is 0
+     * @param hei
+     */
+    public adjustCellHeight(hei: number) {
+        if (!this.mGridTable) return;
+    }
+    /**
+     * Only worked when scrollMode is 1
+     * @param wid
+     */
+    public adjusetCellWidth(wid: number) {
+        if (!this.mGridTable) return;
+        // this.mGridTable.
+    }
     public get items(): any[] {
         if (!this.mGridTable) return null;
         return this.mGridTable.items;

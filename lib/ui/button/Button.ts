@@ -1,7 +1,7 @@
 import { BaseUI } from "../baseUI/BaseUI";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
-import { MouseEvent } from "../interface/event/MouseEvent";
 import { IButtonState } from "../interface/button/IButtonState";
+import { CoreUI } from "../interface/event/MouseEvent";
 
 export enum ButtonState {
     Normal = "normal",
@@ -10,6 +10,10 @@ export enum ButtonState {
     Disable = "disable",
 }
 
+export enum ButtonSoundKey {
+
+}
+const GetValue = Phaser.Utils.Objects.GetValue;
 export class Button extends BaseUI implements IButtonState {
     protected soundGroup: ISoundGroup;
     protected mDownTime: number = 0;
@@ -23,7 +27,13 @@ export class Button extends BaseUI implements IButtonState {
     protected mIsMove: boolean = false;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
         super(scene);
-        this.soundGroup = music;
+        this.soundGroup = {
+            up: {
+                key: "click",
+                // urls: "./resources/sound/click.mp3"
+            }
+        };
+        Object.assign(this.soundGroup, music);
         this.mKey = key;
         this.mFrame = frame;
         this.mDownFrame = downFrame;
@@ -53,6 +63,7 @@ export class Button extends BaseUI implements IButtonState {
     }
 
     public addListen() {
+        this.removeListen();
         this.on("pointerdown", this.onPointerDownHandler, this);
         this.on("pointerup", this.onPointerUpHandler, this);
         this.on("pointermove", this.onPointerMoveHandler, this);
@@ -138,7 +149,7 @@ export class Button extends BaseUI implements IButtonState {
         if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
         if (!this.interactiveBoo) return;
         this.mIsMove = true;
-        this.emit(MouseEvent.Move);
+        this.emit(CoreUI.MouseEvent.Move);
     }
 
     protected onPointerUpHandler(pointer: Phaser.Input.Pointer) {
@@ -150,7 +161,7 @@ export class Button extends BaseUI implements IButtonState {
         if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
             if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
                 if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(MouseEvent.Tap, pointer, this);
+                this.emit(CoreUI.MouseEvent.Tap, pointer, this);
             }
         }
 
@@ -168,8 +179,8 @@ export class Button extends BaseUI implements IButtonState {
         this.buttonStateChange(ButtonState.Select);
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
-            this.emit(MouseEvent.Hold, this);
+            this.emit(CoreUI.MouseEvent.Hold, this);
         }, this.mPressTime);
-        this.emit(MouseEvent.Down, this);
+        this.emit(CoreUI.MouseEvent.Down, this);
     }
 }
