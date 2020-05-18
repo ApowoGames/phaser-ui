@@ -3,7 +3,8 @@ import Scroller from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
-
+import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
+import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
@@ -64,15 +65,49 @@ export class GameScroller extends BaseUI implements ISound {
         this.addListen();
     }
 
+    public setEnable(enable: boolean) {
+        if (this.mScroller) this.mScroller.setEnable(enable);
+    }
+
+    public setValue(value: number) {
+        if (this.mScroller) this.mScroller.setValue(value);
+    }
+
+    public adjustBackDeceleration(deceler: number) {
+        if (this.mScroller) this.mScroller.setBackDeceleration(deceler);
+    }
+
+    public adjustSlidingDeceleration(deceler: number) {
+        if (this.mScroller) this.mScroller.setSlidingDeceleration(deceler);
+    }
+
+    public adjustScrollMode(mode: number) {
+        if (!this.mConfig.scrollMode || this.mConfig.scrollMode !== mode) {
+            if (this.mScroller) this.mScroller.setOrientationMode(mode);
+        }
+        this.mConfig.scrollMode = mode;
+    }
+
+    public adjustDragThreshol(hold: number) {
+        if (this.mScroller) this.mScroller.setDragThreshold(hold);
+    }
+
+    /***
+    *  调整scroller遮照范围
+    * @param width
+    * @param height
+    * @param x
+    * @param y
+    */
     public adjustMask(width: number, height: number, x: number = this.mConfig.x, y: number = this.mConfig.y) {
-        this.mGameObject.clearMask();
-        const bg = this.scene.make.graphics(undefined, false);
-        bg.fillStyle(0);
-        bg.fillRect(0, 0, width, height);
-        bg.setPosition(x, y);
-        this.width = this.mConfig.width;
-        this.height = this.mConfig.height;
-        this.mGameObject.setMask(bg.createGeometryMask());
+        const mask = MaskToGameObject(this.mGameObject);
+        mask.x = x;
+        mask.y = y;
+        ResizeGameObject(mask, width, height);
+    }
+
+    public setBounds(value0: number, value1: number) {
+        this.mScroller.setBounds(value0, value1);
     }
 
     public get bounds(): number[] {
@@ -90,9 +125,22 @@ export class GameScroller extends BaseUI implements ISound {
         this.mScroller.setBounds(value0, value1);
     }
 
-    public setBounds(value0: number, value1: number) {
-        this.mScroller.setBounds(value0, value1);
-    }
+    // resize(width, height) {
+    //     if ((this.width === width) && (this.height === height)) {
+    //         return this;
+    //     }
+
+    //     super.resize(width, height);
+    //     if (this.cellsMask) {
+    //         ResizeGameObject(MaskToGameObject(this.cellsMask), width, height);
+    //     }
+
+    //     if (this.expandCellSize) {
+    //         this.table.setDefaultCellWidth(this.instWidth / this.table.colCount);
+    //     }
+    //     this.updateTable(true);
+    //     return this;
+    // }
 
     public clearInteractiveObject() {
         if (!this.mInteractiveList) return;
@@ -158,7 +206,7 @@ export class GameScroller extends BaseUI implements ISound {
         let tmpSize: number = 0;
         this.mInteractiveList.forEach((gameObject) => {
             if (gameObject) {
-                tmpSize += this.mConfig.orientation ? gameObject.width : gameObject.height;
+                tmpSize += this.mConfig.scrollMode ? gameObject.width : gameObject.height;
             }
         });
         //  this.setBounds(-tmpSize, 0);

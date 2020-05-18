@@ -10,6 +10,10 @@ export enum ButtonState {
     Disable = "disable",
 }
 
+export enum ButtonSoundKey {
+
+}
+const GetValue = Phaser.Utils.Objects.GetValue;
 export class Button extends BaseUI implements IButtonState {
     protected soundGroup: ISoundGroup;
     protected mDownTime: number = 0;
@@ -23,7 +27,13 @@ export class Button extends BaseUI implements IButtonState {
     protected mIsMove: boolean = false;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
         super(scene);
-        this.soundGroup = music;
+        this.soundGroup = {
+            up: {
+                key: "click",
+                // urls: "./resources/sound/click.mp3"
+            }
+        };
+        Object.assign(this.soundGroup, music);
         this.mKey = key;
         this.mFrame = frame;
         this.mDownFrame = downFrame;
@@ -42,11 +52,6 @@ export class Button extends BaseUI implements IButtonState {
         }
         this.setInteractive();
         this.addListen();
-        this.soundGroup = {
-            up: {
-                urls: "./resources/sound/click.mp3"
-            }
-        }
     }
 
     public get background(): Phaser.GameObjects.Image {

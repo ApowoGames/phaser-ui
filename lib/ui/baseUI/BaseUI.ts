@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-14 15:05:42
+ * @Last Modified time: 2020-05-18 14:45:01
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -125,23 +125,23 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
 
     public playSound(config: ISoundConfig) {
         if (this.silent) return;
-        if (config.key === undefined) {
-            if (typeof config.urls === "string") {
-                config.key = config.urls;
-            } else {
-                config.key = config.urls[0];
-            }
-        }
+        // if (config.key === undefined) {
+        //     if (typeof config.urls === "string") {
+        //         config.key = config.urls;
+        //     } else {
+        //         config.key = config.urls[0];
+        //     }
+        // }
         const key = config.key;
-        const urls = config.urls;
+        // const urls = config.urls;
         if (this.scene.cache.audio.exists(key)) {
             this.startPlay(config);
         } else {
-            this.scene.load.once(`filecomplete-audio-${key}`, () => {
-                this.startPlay(config);
-            }, this);
-            this.scene.load.audio(key, urls);
-            this.scene.load.start();
+            // this.scene.load.once(`filecomplete-audio-${key}`, () => {
+            //     this.startPlay(config);
+            // }, this);
+            // this.scene.load.audio(key, urls);
+            // this.scene.load.start();
         }
     }
 

@@ -18,7 +18,7 @@ export interface ScrollerConfig {
     /**
      * 0 vertical / 1 horizontal
      */
-    orientation?: number;
+    scrollMode?: number;
     threshold?: number; // 滚动延时 0为立刻滚动
     interactivedisDetection?: number; // 子对象交互事件派发 最大检测范围，如果up和down两次的pointer超过该距离就不会发送子对象事件
     slidingDeceleration?: number; // 拖动释放时是否减慢速度时间
