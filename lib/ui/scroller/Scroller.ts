@@ -64,6 +64,17 @@ export class GameScroller extends BaseUI implements ISound {
         this.addListen();
     }
 
+    public adjustMask(width: number, height: number, x: number = this.mConfig.x, y: number = this.mConfig.y) {
+        this.mGameObject.clearMask();
+        const bg = this.scene.make.graphics(undefined, false);
+        bg.fillStyle(0);
+        bg.fillRect(0, 0, width, height);
+        bg.setPosition(x, y);
+        this.width = this.mConfig.width;
+        this.height = this.mConfig.height;
+        this.mGameObject.setMask(bg.createGeometryMask());
+    }
+
     public get bounds(): number[] {
         return this.mConfig.bounds;
     }
