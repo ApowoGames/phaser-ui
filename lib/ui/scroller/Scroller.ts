@@ -122,7 +122,8 @@ export class GameScroller extends BaseUI implements ISound {
             this.clickContainer.y = this.mConfig.clickY;
             this.mGameObject.parentContainer.add(this.clickContainer);
         }
-        this.mScroller.setBounds(value0, value1);
+        if (value0 !== undefined && value1 !== undefined)
+            this.mScroller.setBounds(value0, value1);
     }
 
     // resize(width, height) {
