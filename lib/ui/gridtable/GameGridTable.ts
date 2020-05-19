@@ -48,11 +48,13 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
      * @param x
      * @param y
      */
-    public adjustMask(width, height, x: number = this.mConfig.x, y: number = this.mConfig.y) {
+    public adjustMask(x: number = this.mConfig.x, y: number = this.mConfig.y, width?: number, height?: number ) {
         if (!this.mGridTable) return;
         this.mGridTable.x = x;
         this.mGridTable.y = y;
-        this.mGridTable.resize(width, height);
+        if (width !== this.mGridTable.width || height !== this.mGridTable.height) {
+            this.mGridTable.resize(width, height);
+        }
     }
 
     public get gridTable(): GridTable {
@@ -147,6 +149,7 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
             this.table.tableOX = conx;
             this.table.tableOY = cony;
         }
+        this.adjustMask(x, y);
         this.mGridTable.layout();
     }
 

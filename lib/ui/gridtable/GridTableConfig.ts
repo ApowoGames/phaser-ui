@@ -60,6 +60,12 @@ export interface GridTableCoreConfig {
   cellOriginX?: number;
   // 子对象的originY 默认为0.5
   cellOriginY?: number;
+  // 子对象x偏移
+  cellPadX?: number;
+  // 子对象y偏移
+  cellPadY?: number;
+  zoom?: number;
+  dpr?: number;
   // Set true to clamp tableOX, tableOY when out-of-bound,
   // Set false when dragging by scroller
   clamplTableOY?: boolean;
