@@ -1,4 +1,4 @@
-import { GridTableConfig } from "./GridTableConfig";
+import { GridTableConfig, GridTableCoreConfig } from "./GridTableConfig";
 import GridTable from "./GridTable.js";
 import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
 import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
@@ -6,16 +6,39 @@ export interface IMaskConfig {
     mask: boolean;
     padding: number;
 }
+const GetValue = Phaser.Utils.Objects.GetValue;
 export class GameGridTable extends Phaser.Events.EventEmitter {
     private mGridTable: GridTable;
     private mConfig: GridTableConfig;
-    // private mCellParentCon: Phaser.GameObjects.Container;
     constructor(scene: Phaser.Scene, config?: GridTableConfig) {
         super();
-        // this.mCellParentCon = scene.make.container(undefined, false);
         this.mGridTable = new GridTable(scene, config);
         this.mConfig = config;
         this.addListen();
+    }
+
+    public adjustScrollMode(mode: number) {
+        // // Pre-process cell size
+        // this.mConfig.scrollMode = mode;
+        // const tableCoreConfig: GridTableCoreConfig;
+        // let cellWidth: number;
+        // let cellHeight: number;
+        // if (mode === 0) { // scroll y
+        //     cellWidth = GetValue(tableCoreConfig, "cellWidth", undefined);
+        //     this.expandCellSize = (cellWidth === undefined);
+        //     if (cellWidth === undefined) {
+        //         var columns = GetValue(tableCoreConfig, "columns", 1);
+        //         this.mConfig.cellWidth = this.width / columns;
+        //     }
+        // } else { // scroll x
+        //     // Swap cell width and cell height
+        //     cellWidth = GetValue(tableCoreConfig, "cellHeight", undefined);
+        //     cellHeight = GetValue(tableCoreConfig, 'cellWidth', undefined);
+        //     this.expandCellSize = (cellWidth === undefined);
+        //     config.cellWidth = cellWidth;
+        //     config.cellHeight = cellHeight;
+        // }
+        // this.table = new Table(this, config);
     }
 
     /**
@@ -49,6 +72,10 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
      */
     public adjustCellHeight(hei: number) {
         if (!this.mGridTable) return;
+        const cells = this.mGridTable.getCells();
+        for (let i: number = 0, len = cells.length; i < len; i++) {
+            this.mGridTable.setCellHeight(i, hei);
+        }
     }
     /**
      * Only worked when scrollMode is 1
@@ -56,7 +83,10 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
      */
     public adjusetCellWidth(wid: number) {
         if (!this.mGridTable) return;
-        // this.mGridTable.
+        const cells = this.mGridTable.getCells();
+        for (let i: number = 0, len = cells.length; i < len; i++) {
+            this.mGridTable.setCellWidth(i, wid);
+        }
     }
     public get items(): any[] {
         if (!this.mGridTable) return null;
