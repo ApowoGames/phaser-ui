@@ -157,6 +157,7 @@ export class GameScroller extends BaseUI implements ISound {
         if (!this.mInteractiveList) return;
         this.mInteractiveList.length = 0;
         this.mInteractiveList = [];
+        this.mScroller.setBounds(0, 0);
     }
 
     public setInteractiveObject(obj: any) {
@@ -214,13 +215,10 @@ export class GameScroller extends BaseUI implements ISound {
 
     public refreshBound() {
         if (!this.mInteractiveList) return;
-        let tmpSize: number = 0;
-        this.mInteractiveList.forEach((gameObject) => {
-            if (gameObject) {
-                tmpSize += this.mConfig.scrollMode ? gameObject.width : gameObject.height;
-            }
-        });
-        //  this.setBounds(-tmpSize, 0);
+        const tmpSize: number = this.mConfig.scrollMode ? this.mGameObject.width : this.mGameObject.height;
+        const baseSize: number = this.mConfig.scrollMode ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
+        const baseShowSize: number = this.mConfig.scrollMode ? this.mConfig.width : this.mConfig.height;
+        this.setBounds(baseSize, baseSize - tmpSize + baseShowSize);
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
