@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-18 15:47:51
+ * @Last Modified time: 2020-05-20 13:36:01
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
@@ -45,7 +45,7 @@ export class ProgressBar extends BaseUI {
         this.mBarMaskGraphics = this.scene.make.graphics(undefined, false);
         this.mBarMaskGraphics.fillStyle(0, 0);
         this.mBarMaskGraphics.fillRect(0, 0, 0, hei);
-        this.setMask(this.mBarMaskGraphics.createGeometryMask());
+        this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
         this.add([this.mBgSkin, this.mBarSkin, this.mText]);
         this.disInteractive();
     }
