@@ -11,7 +11,9 @@ export interface ProgressBarConfig {
     height: number;
     background: INinePatchSkinData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
     bar: INinePatchSkinData; // Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
-    textConfig: TextConfig;
+    dpr?: number;
+    scale?: number;
+    textConfig?: TextConfig;
     text?: string;
     music?: ISoundGroup;
 }
