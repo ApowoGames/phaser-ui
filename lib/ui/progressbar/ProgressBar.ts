@@ -45,7 +45,7 @@ export class ProgressBar extends BaseUI {
         this.mBarMaskGraphics = this.scene.make.graphics(undefined, false);
         this.mBarMaskGraphics.fillStyle(0, 0);
         this.mBarMaskGraphics.fillRect(0, 0, 0, hei);
-        this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
+       // this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
         this.add([this.mBgSkin, this.mBarSkin, this.mText]);
         this.disInteractive();
     }
