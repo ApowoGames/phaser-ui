@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-20 15:53:14
+ * @Last Modified time: 2020-05-20 18:48:06
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
@@ -22,7 +22,7 @@ export class ProgressBar extends BaseUI {
     private mBarSkin: NineSlicePatch;
     private mText: Phaser.GameObjects.Text;
     private mBarMaskGraphics: Phaser.GameObjects.Graphics;
-    private mTween: Phaser.Tweens.Tween;
+    // private mTween: Phaser.Tweens.Tween;
     private barWid: number;
     private curWid: number;
     constructor(scene: Phaser.Scene, config: ProgressBarConfig) {
@@ -45,39 +45,46 @@ export class ProgressBar extends BaseUI {
         this.mText = scene.make.text({
             style: Object.assign(textconfig, config.textConfig)
         }, false);
-        this.barWid = this.mBarSkin.width;
-        const wid: number = this.mBarSkin.width;
+        this.barWid = barSkinData.width;
         const hei: number = this.mBarSkin.height;
         this.mBarMaskGraphics = this.scene.make.graphics(undefined, false);
         this.mBarMaskGraphics.fillStyle(0, 1);
-        this.mBarMaskGraphics.fillRect(0, 0, wid, hei);
-        this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
+        this.mBarMaskGraphics.beginPath();
+        this.mBarMaskGraphics.fillRect(0, 0, 10, hei);
+        this.mBarMaskGraphics.setPosition(-this.barWid / 2, -hei / 2);
+        // this.mBarSkin.mask = this.mBarMaskGraphics.createGeometryMask();
         this.add([this.mBgSkin, this.mBarSkin, this.mText]);
         this.disInteractive();
     }
 
     public setProgress(curVal: number, maxVal: number) {
-        this.curWid = curVal / maxVal * this.barWid;
-        if (this.mTween) {
-            this.mTween.stop();
-            this.mTween.remove();
-        }
-        this.mTween = this.scene.tweens.add({
-            targets: this.mBarMaskGraphics,
-            duration: 100,
-            ease: "Linear",
-            scaleX: { value: 100 * curVal / maxVal },
-            onStart: () => {
-                this.onTweenStart();
-            },
-            onComplete: (tween, targets, element) => {
-                this.onTweenComplete();
-            },
-            onUpdate: (tween, targets, element) => {
-                this.onTweenUpdate();
-            },
-            onCompleteParams: [this]
-        });
+        this.curWid = (curVal / maxVal) * this.barWid;
+        const hei: number = this.mBarSkin.height;
+        this.mBarSkin.resize(this.curWid, hei);
+        this.mBarSkin.x = -this.barWid / 2 + this.curWid / 2;
+        // this.mBarMaskGraphics.clear();
+        // this.mBarMaskGraphics.fillRect(0, 0, this.curWid, hei);
+        // this.mBarMaskGraphics.setPosition(-this.barWid / 2, -hei / 2);
+        // if (this.mTween) {
+        //     this.mTween.stop();
+        //     this.mTween.remove();
+        // }
+        // this.mTween = this.scene.tweens.add({
+        //     targets: this.mBarMaskGraphics,
+        //     duration: 1000,
+        //     ease: "Linear",
+        //     scaleX: { value: curVal / maxVal },
+        //     onStart: () => {
+        //         this.onTweenStart();
+        //     },
+        //     onComplete: (tween, targets, element) => {
+        //         this.onTweenComplete();
+        //     },
+        //     onUpdate: (tween, targets, element) => {
+        //         this.onTweenUpdate();
+        //     },
+        //     onCompleteParams: [this]
+        // });
     }
 
     public setText(val: string) {
@@ -88,26 +95,29 @@ export class ProgressBar extends BaseUI {
     }
 
     public destory() {
-        if (this.mTween) {
-            this.mTween.stop();
-            this.mTween.remove();
-            this.mTween = null;
-        }
+        // if (this.mTween) {
+        //     this.mTween.stop();
+        //     this.mTween.remove();
+        //     this.mTween = null;
+        // }
         super.destroy();
     }
 
-    private onTweenStart() {
-        if (this.mConfig.music && this.mConfig.music.progress) this.playSound(this.mConfig.music.progress);
-        this.emit(ProgressBarEvent.tweenStart);
-    }
+    // private onTweenStart() {
+    //     this.mBarMaskGraphics.clear();
+    //     if (this.mConfig.music && this.mConfig.music.progress) this.playSound(this.mConfig.music.progress);
+    //     this.emit(ProgressBarEvent.tweenStart);
+    // }
 
-    private onTweenComplete() {
-        this.emit(ProgressBarEvent.tweenComplete);
-    }
+    // private onTweenComplete() {
+    //     this.emit(ProgressBarEvent.tweenComplete);
+    // }
 
-    private onTweenUpdate() {
-        this.mBarSkin.clearMask();
-        this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
-        this.emit(ProgressBarEvent.tweenUpdate);
-    }
+    // private onTweenUpdate() {
+    //     this.mBarMaskGraphics.clear();
+    //     // tslint:disable-next-line:no-console
+    //     console.log(this.mBarSkin.mask);
+    //     // this.mBaCSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
+    //     this.emit(ProgressBarEvent.tweenUpdate);
+    // }
 }
