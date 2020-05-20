@@ -100,7 +100,10 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
             this.mGridTable.layout();
         }
     }
-
+    setColumnCount(cnt) {
+        this.mGridTable.setColumnCount(cnt);
+        return this;
+    }
     public setT(value: number) {
         if (this.mGridTable) this.mGridTable.setT(value);
     }
