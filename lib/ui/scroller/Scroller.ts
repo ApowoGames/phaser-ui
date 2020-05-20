@@ -100,7 +100,17 @@ export class GameScroller extends BaseUI implements ISound {
     * @param y
     */
     public adjustMask(width: number, height: number, x: number = this.mConfig.x, y: number = this.mConfig.y) {
-        const mask = MaskToGameObject(this.mGameObject);
+        let mask = this.mGameObject.mask;
+        if (!mask) {
+            const config = this.mConfig;
+            mask = this.scene.make.graphics(undefined, false);
+            mask.fillStyle(0);
+            mask.fillRect(0, 0, width, height);
+            mask.setPosition(config.x, config.y);
+            this.width = width;
+            this.height = height;
+            this.mGameObject.setMask(mask.createGeometryMask());
+        }
         mask.x = x;
         mask.y = y;
         ResizeGameObject(mask, width, height);
@@ -122,7 +132,8 @@ export class GameScroller extends BaseUI implements ISound {
             this.clickContainer.y = this.mConfig.clickY;
             this.mGameObject.parentContainer.add(this.clickContainer);
         }
-        this.mScroller.setBounds(value0, value1);
+        if (value0 !== undefined && value1 !== undefined)
+            this.mScroller.setBounds(value0, value1);
     }
 
     // resize(width, height) {
