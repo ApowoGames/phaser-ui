@@ -3,17 +3,19 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-20 13:36:01
+ * @Last Modified time: 2020-05-20 15:53:14
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
 import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
 import { BaseUI } from "../baseUI/BaseUI";
+import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
 export enum ProgressBarEvent {
     tweenStart = "tweenStart",
     tweenComplete = "tweenComplete",
     tweenUpdate = "tweenUpdate"
 }
+const GetValue = Phaser.Utils.Objects.GetValue;
 export class ProgressBar extends BaseUI {
     private mConfig: ProgressBarConfig;
     private mBgSkin: NineSlicePatch;
@@ -22,6 +24,7 @@ export class ProgressBar extends BaseUI {
     private mBarMaskGraphics: Phaser.GameObjects.Graphics;
     private mTween: Phaser.Tweens.Tween;
     private barWid: number;
+    private curWid: number;
     constructor(scene: Phaser.Scene, config: ProgressBarConfig) {
         super(scene);
         this.mConfig = config;
@@ -31,27 +34,30 @@ export class ProgressBar extends BaseUI {
         this.height = config.height;
         this.setPosition(posX, posY);
         this.setSize(this.width, this.height);
+        this.dpr = GetValue(config, "dpr", 1);
+        this.scale = GetValue(config, "scale", 1);
         const bgSkinData: INinePatchSkinData = config.background;
         const barSkinData: INinePatchSkinData = config.bar;
-        this.mBgSkin = new NineSlicePatch(scene, bgSkinData.x, bgSkinData.y, bgSkinData.width, bgSkinData.height, bgSkinData.key, bgSkinData.frame, bgSkinData.config);
-        this.mBarSkin = new NineSlicePatch(scene, barSkinData.x, bgSkinData.y, bgSkinData.width, bgSkinData.height, bgSkinData.key, bgSkinData.frame, bgSkinData.config);
+        this.mBgSkin = new NineSlicePatch(scene, bgSkinData.x, bgSkinData.y, bgSkinData.width, bgSkinData.height, bgSkinData.key, bgSkinData.frame, bgSkinData.config, this.dpr, this.scale);
+        this.mBarSkin = new NineSlicePatch(scene, barSkinData.x, barSkinData.y, barSkinData.width, barSkinData.height, barSkinData.key, barSkinData.frame, barSkinData.config, this.dpr, this.scale);
         // 按钮文本
         const textconfig = {};
         this.mText = scene.make.text({
             style: Object.assign(textconfig, config.textConfig)
         }, false);
         this.barWid = this.mBarSkin.width;
+        const wid: number = this.mBarSkin.width;
         const hei: number = this.mBarSkin.height;
         this.mBarMaskGraphics = this.scene.make.graphics(undefined, false);
-        this.mBarMaskGraphics.fillStyle(0, 0);
-        this.mBarMaskGraphics.fillRect(0, 0, 0, hei);
+        this.mBarMaskGraphics.fillStyle(0, 1);
+        this.mBarMaskGraphics.fillRect(0, 0, wid, hei);
         this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
         this.add([this.mBgSkin, this.mBarSkin, this.mText]);
         this.disInteractive();
     }
 
     public setProgress(curVal: number, maxVal: number) {
-        const curWid: number = curVal / maxVal * this.barWid;
+        this.curWid = curVal / maxVal * this.barWid;
         if (this.mTween) {
             this.mTween.stop();
             this.mTween.remove();
@@ -60,9 +66,7 @@ export class ProgressBar extends BaseUI {
             targets: this.mBarMaskGraphics,
             duration: 100,
             ease: "Linear",
-            props: {
-                width: { value: curWid }
-            },
+            scaleX: { value: 100 * curVal / maxVal },
             onStart: () => {
                 this.onTweenStart();
             },
@@ -102,6 +106,8 @@ export class ProgressBar extends BaseUI {
     }
 
     private onTweenUpdate() {
+        this.mBarSkin.clearMask();
+        this.mBarSkin.setMask(this.mBarMaskGraphics.createGeometryMask());
         this.emit(ProgressBarEvent.tweenUpdate);
     }
 }

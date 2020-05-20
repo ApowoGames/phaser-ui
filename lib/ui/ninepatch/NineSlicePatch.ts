@@ -23,10 +23,17 @@ export class NineSlicePatch extends BaseUI {
         width: number,
         height: number,
         key: string, frame: string | number,
-        config?: IPatchesConfig) {
+        config?: IPatchesConfig, dpr?: number, scale?: number) {
         super(scene);
+        this.dpr = dpr;
+        this.scale = scale;
         this.patchesConfig = config;
         config = config || this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key);
+        // 对于config进行取整
+        this.patchesConfig.top = Math.round(this.patchesConfig.top);
+        if (this.patchesConfig.right) this.patchesConfig.right = Math.round(this.patchesConfig.right);
+        if (this.patchesConfig.bottom) this.patchesConfig.bottom = Math.round(this.patchesConfig.bottom);
+        if (this.patchesConfig.left) this.patchesConfig.left = Math.round(this.patchesConfig.left);
         normalizePatchesConfig(config);
         this.setSize(width, height);
         this.setTexture(key, frame);
@@ -104,8 +111,8 @@ export class NineSlicePatch extends BaseUI {
 
     protected createPatches(): void {
         // The positions we want from the base texture
-        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
-        const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
+        const textureXs: number[] = [0, this.patchesConfig.left / this.dpr, this.originFrame.width - this.patchesConfig.right / this.dpr, this.originFrame.width];
+        const textureYs: number[] = [0, this.patchesConfig.top / this.dpr, this.originFrame.height - this.patchesConfig.bottom / this.dpr, this.originFrame.height];
         let patchIndex: number = 0;
         for (let yi: number = 0; yi < 3; yi++) {
             for (let xi: number = 0; xi < 3; xi++) {
