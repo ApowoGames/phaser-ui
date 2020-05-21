@@ -49,7 +49,7 @@ export class GameScroller extends BaseUI implements ISound {
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
         // bg1.setPosition(-config.width / 2, -config.height / 2);
-        // container.add(bg);
+        // container.add(bg1);
         this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
             container.x = config.clickX;
@@ -82,10 +82,10 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     public adjustScrollMode(mode: number) {
-        if (!this.mConfig.scrollMode || this.mConfig.scrollMode !== mode) {
+        if (!this.mConfig.orientation || this.mConfig.orientation !== mode) {
             if (this.mScroller) this.mScroller.setOrientationMode(mode);
         }
-        this.mConfig.scrollMode = mode;
+        this.mConfig.orientation = mode;
     }
 
     public adjustDragThreshol(hold: number) {
@@ -205,6 +205,14 @@ export class GameScroller extends BaseUI implements ISound {
         return this.mGameObject.height / 2;
     }
 
+    public get boundPad0(): number {
+        return this.mScroller.boundPad0;
+    }
+
+    public get boundPad1(): number {
+        return this.mScroller.boundPad1;
+    }
+
     public destroy() {
         this.mMoveing = false;
         if (this.mGameObject) this.mGameObject.clearMask(true);
@@ -213,12 +221,31 @@ export class GameScroller extends BaseUI implements ISound {
         super.destroy();
     }
 
-    public refreshBound() {
+    /**
+     * 手动刷新滚动范围
+     * @param refreshSize刷新滚动范围数值，由于在某些场景下ui的宽高尺寸比较难用单一公式计算，所以可以直接外部传入刷新的数值
+     */
+    public refreshBound(refreshSize?: number) {
         if (!this.mInteractiveList) return;
-        const tmpSize: number = this.mConfig.scrollMode ? this.mGameObject.width : this.mGameObject.height;
-        const baseSize: number = this.mConfig.scrollMode ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
-        const baseShowSize: number = this.mConfig.scrollMode ? this.mConfig.width : this.mConfig.height;
-        this.setBounds(baseSize, baseSize - tmpSize + baseShowSize);
+        // 滚动容器尺寸
+        let totalSize: number = 0;
+        if (refreshSize !== undefined) {
+            totalSize = refreshSize;
+        } else {
+            this.mInteractiveList.forEach((cell) => {
+                if (cell) {
+                    totalSize += this.mConfig.orientation ? cell.width : cell.height;
+                }
+            });
+        }
+        // // 滚动容器尺寸
+        // const tmpSize: number = this.mConfig.orientation ? this.mGameObject.width : this.mGameObject.height;
+        // 父容器初始位置
+        const baseSize: number = this.mConfig.orientation ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
+        // 视口范围尺寸（滚动不能小于改尺寸）
+        const baseShowSize: number = this.mConfig.orientation ? this.mConfig.width : this.mConfig.height;
+        if (totalSize < baseShowSize) totalSize = baseShowSize;
+        this.setBounds(baseSize, baseSize - totalSize + baseShowSize);
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {

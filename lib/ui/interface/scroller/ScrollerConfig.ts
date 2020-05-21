@@ -8,17 +8,25 @@ export interface ScrollerConfig {
     width: number;
     height: number;
     /**
-     * [bound0;bound1]
-     */
-    bounds: number[];
-    /**
      * scoller 初始化时在bound0 / bound1
      */
-    value: number;
+    value?: number;
+    /**
+     * [bound0;bound1] 上下左右边界位置，如果不传则为0
+     */
+    bounds?: number[];
+    /**
+     * 边界偏移，默认为0 左，上
+     */
+    boundPad0?: number;
+    /**
+     * 边界偏移，默认为0 右下
+     */
+    boundPad1?: number;
     /**
      * 0 vertical / 1 horizontal
      */
-    scrollMode?: number;
+    orientation?: number;
     threshold?: number; // 滚动延时 0为立刻滚动
     interactivedisDetection?: number; // 子对象交互事件派发 最大检测范围，如果up和down两次的pointer超过该距离就不会发送子对象事件
     slidingDeceleration?: number; // 拖动释放时是否减慢速度时间
