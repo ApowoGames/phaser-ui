@@ -31,6 +31,7 @@ export class GameScroller extends BaseUI implements ISound {
     private mGameObject: any;
     private mRectangle: Phaser.Geom.Rectangle;
     private mInteractiveList: any[];
+    private basePoint: Phaser.Geom.Point;
     constructor(scene: Phaser.Scene, gameObject: any, config: ScrollerConfig) {
         super(scene);
         this.soundMap = new Map();
@@ -43,6 +44,8 @@ export class GameScroller extends BaseUI implements ISound {
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
         gameObject.setMask(bg.createGeometryMask());
+        this.mGameObject = gameObject;
+        this.basePoint = config.basePoint ? config.basePoint : new Phaser.Geom.Point(this.mGameObject.parentContainer.x, this.mGameObject.parentContainer.y);
         const container: Phaser.GameObjects.Container = scene.make.container(undefined, false);
         container.setSize(config.width, config.height);
         // const bg1 = scene.make.graphics(undefined, false);
@@ -50,7 +53,6 @@ export class GameScroller extends BaseUI implements ISound {
         // bg1.fillRect(0, 0, config.width, config.height);
         // bg1.setPosition(-config.width / 2, -config.height / 2);
         // container.add(bg1);
-        this.mGameObject = gameObject;
         if (this.mGameObject.parentContainer) {
             container.x = config.clickX;
             container.y = config.clickY;
@@ -241,7 +243,7 @@ export class GameScroller extends BaseUI implements ISound {
         // // 滚动容器尺寸
         // const tmpSize: number = this.mConfig.orientation ? this.mGameObject.width : this.mGameObject.height;
         // 父容器初始位置
-        const baseSize: number = this.mConfig.orientation ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
+        const baseSize: number = this.mConfig.orientation ? this.basePoint.x : this.basePoint.y;
         // 视口范围尺寸（滚动不能小于改尺寸）
         const baseShowSize: number = this.mConfig.orientation ? this.mConfig.width : this.mConfig.height;
         if (totalSize < baseShowSize) totalSize = baseShowSize;
