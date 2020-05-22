@@ -183,6 +183,10 @@ export class GameScrollerTest extends BaseUI implements ISound {
     }
 
     public clearItems() {
+        const list = this.mGameObject.list;
+        for (const item of list) {
+            item.destroy();
+        }
         this.mGameObject.list.length = 0;
         this.clearInteractiveObject();
     }
