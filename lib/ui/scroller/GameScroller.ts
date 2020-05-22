@@ -12,9 +12,9 @@ export enum ScrollerEvent {
     upoutBound = "upoutBound"
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class GameScroller extends BaseUI implements ISound {
+export class GameScrollerTest extends BaseUI implements ISound {
     protected soundGroup: ISoundGroup;
-    private mConfig: ScrollerConfig;
+    private mConfig: TestScrollerConfig;
     private mDisDelection: number;
     private mCellDownHandler: Function;
     private mCellUpHandler: Function;
@@ -27,39 +27,36 @@ export class GameScroller extends BaseUI implements ISound {
      */
     private mMoveing: boolean = false;
     private mScroller: Scroller;
-    private clickContainer: any;
-    private mGameObject: any;
+    private mGameObject: Phaser.GameObjects.Container;
+    private maskGraphic: Phaser.GameObjects.Graphics;
     private mRectangle: Phaser.Geom.Rectangle;
     private mInteractiveList: any[];
-    private basePoint: Phaser.Geom.Point;
-    constructor(scene: Phaser.Scene, gameObject: any, config: ScrollerConfig) {
+    constructor(scene: Phaser.Scene, config: TestScrollerConfig) {
         super(scene);
         this.soundMap = new Map();
         this.mConfig = config;
         this.soundGroup = config.music;
-        const bg = scene.make.graphics(undefined, false);
-        bg.fillStyle(0);
-        bg.fillRect(0, 0, config.width, config.height);
-        bg.setPosition(config.x, config.y);
+        this.x = config.x; this.y = config.y;
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
-        gameObject.setMask(bg.createGeometryMask());
-        this.mGameObject = gameObject;
-        this.basePoint = (config.basePoint ? config.basePoint : new Phaser.Geom.Point(this.mGameObject.parentContainer.x, this.mGameObject.parentContainer.y));
-        const container: Phaser.GameObjects.Container = scene.make.container(undefined, false);
-        container.setSize(config.width, config.height);
+        const zoom = config.zoom;
+        this.maskGraphic = scene.make.graphics(undefined, false);
+        this.maskGraphic.fillStyle(0);
+        this.maskGraphic.fillRect(-this.width * 0.5 * zoom, -this.height * 0.5 * zoom, this.width * zoom, this.height * zoom);
+        this.maskGraphic.setPosition(this.x * zoom, this.y * zoom);
+        this.add(this.maskGraphic);
+        this.mGameObject = scene.make.container(undefined, false);
+        this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
+        this.add(this.mGameObject);
         // const bg1 = scene.make.graphics(undefined, false);
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
         // bg1.setPosition(-config.width / 2, -config.height / 2);
-        // container.add(bg1);
-        if (this.mGameObject.parentContainer) {
-            container.x = config.clickX;
-            container.y = config.clickY;
-            this.mGameObject.parentContainer.add(container);
-        }
-        this.mScroller = new Scroller(container, config);
-        this.clickContainer = container;
+        // this.add(bg1);
+        if (!config.valuechangeCallback) config.valuechangeCallback = (value) => {
+            this.onScrollValueChange(value);
+        };
+        this.mScroller = new Scroller(this, config);
         this.mDisDelection = GetValue(config, "interactivedisDetection", 10);
         this.mCellDownHandler = GetValue(config, "celldownCallBack", undefined);
         this.mCellUpHandler = GetValue(config, "cellupCallBack", undefined);
@@ -102,58 +99,97 @@ export class GameScroller extends BaseUI implements ISound {
     * @param y
     */
     public adjustMask(width: number, height: number, x: number = this.mConfig.x, y: number = this.mConfig.y) {
-        let mask = this.mGameObject.mask;
-        if (!mask) {
-            const config = this.mConfig;
-            mask = this.scene.make.graphics(undefined, false);
-            mask.fillStyle(0);
-            mask.fillRect(0, 0, width, height);
-            mask.setPosition(config.x, config.y);
-            this.width = width;
-            this.height = height;
-            this.mGameObject.setMask(mask.createGeometryMask());
-        }
-        mask.x = x;
-        mask.y = y;
-        ResizeGameObject(mask, width, height);
+        // let mask = this.mGameObject.mask;
+        // if (!mask) {
+        //     const config = this.mConfig;
+        //     mask = this.scene.make.graphics(undefined, false);
+        //     mask.fillStyle(0);
+        //     mask.fillRect(0, 0, width, height);
+        //     mask.setPosition(config.x, config.y);
+        //     this.width = width;
+        //     this.height = height;
+        //     this.mGameObject.setMask(mask.createGeometryMask());
+        // }
+        // mask.x = x;
+        // mask.y = y;
+        // ResizeGameObject(mask, width, height);
+    }
+
+    public addItem(item: any) {
+        this.mGameObject.add(item);
+        this.setInteractiveObject(item);
     }
 
     public setBounds(value0: number, value1: number) {
         this.mScroller.setBounds(value0, value1);
     }
-
-    public get bounds(): number[] {
-        return this.mConfig.bounds;
+    /**
+     * 
+     * @param align 0 居左 1居中 2居右
+     */
+    public setAlign(align: number) {
+        this.mConfig.align = align;
+        this.Sort();
     }
-
-    public resize(width?: number, height?: number, value0?: number, value1?: number) {
-        this.width = width;
-        this.height = height;
-        if (this.mGameObject.parentContainer) {
-            this.clickContainer.x = this.mConfig.clickX;
-            this.clickContainer.y = this.mConfig.clickY;
-            this.mGameObject.parentContainer.add(this.clickContainer);
+    public Sort() {
+        let value = 0;
+        const list: any = this.mGameObject.list;
+        for (const item of list) {
+            if (this.mConfig.orientation === 1) {
+                item.x = item.width * item.originX + value;
+                value += item.width;
+            } else {
+                item.y = item.height * item.originY + value;
+                value += item.height;
+            }
         }
-        if (value0 !== undefined && value1 !== undefined)
-            this.mScroller.setBounds(value0, value1);
+        if (this.mConfig.orientation === 1) {
+            this.mGameObject.width = value;
+            for (const item of list) {
+                item.x -= value * 0.5;
+            }
+            value -= this.width;
+        } else {
+            this.mGameObject.height = value;
+            for (const item of list) {
+                item.y -= value * 0.5;
+            }
+            value -= this.height;
+        }
+
+        let leftBound = 0, rightBound = 0, bound = 0;
+        if (value < 0) {
+            if (this.mConfig.align === 0) {
+                leftBound = rightBound = -value / 2;
+            } else if (this.mConfig.align === 1) {
+                leftBound = rightBound = 0;
+            } else {
+                leftBound = rightBound = value / 2;
+            }
+            bound = leftBound;
+        } else {
+            leftBound = -value / 2;
+            rightBound = value / 2;
+            if (this.mConfig.align === 0) {
+                bound = leftBound;
+            } else if (this.mConfig.align === 1) {
+                bound = 0;
+            } else {
+                bound = rightBound;
+            }
+        }
+        this.setBounds(leftBound, rightBound);
+        this.setValue(bound);
     }
 
-    // resize(width, height) {
-    //     if ((this.width === width) && (this.height === height)) {
-    //         return this;
-    //     }
-
-    //     super.resize(width, height);
-    //     if (this.cellsMask) {
-    //         ResizeGameObject(MaskToGameObject(this.cellsMask), width, height);
-    //     }
-
-    //     if (this.expandCellSize) {
-    //         this.table.setDefaultCellWidth(this.instWidth / this.table.colCount);
-    //     }
-    //     this.updateTable(true);
-    //     return this;
-    // }
+    public clearItems() {
+        this.mGameObject.list.length = 0;
+        this.clearInteractiveObject();
+    }
+    public get bounds(): number[] {
+        // return this.mConfig.bounds;
+        return [];
+    }
 
     public clearInteractiveObject() {
         if (!this.mInteractiveList) return;
@@ -219,7 +255,6 @@ export class GameScroller extends BaseUI implements ISound {
         this.mMoveing = false;
         if (this.mGameObject) this.mGameObject.clearMask(true);
         if (this.mScroller) this.mScroller.destroy();
-        if (this.clickContainer) this.clickContainer.destroy();
         super.destroy();
     }
 
@@ -243,7 +278,7 @@ export class GameScroller extends BaseUI implements ISound {
         // // 滚动容器尺寸
         // const tmpSize: number = this.mConfig.orientation ? this.mGameObject.width : this.mGameObject.height;
         // 父容器初始位置
-        const baseSize: number = this.mConfig.orientation ? this.basePoint.x : this.basePoint.y;
+        const baseSize: number = this.mConfig.orientation ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
         // 视口范围尺寸（滚动不能小于改尺寸）
         const baseShowSize: number = this.mConfig.orientation ? this.mConfig.width : this.mConfig.height;
         if (totalSize < baseShowSize) totalSize = baseShowSize;
@@ -258,7 +293,7 @@ export class GameScroller extends BaseUI implements ISound {
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {
         // this.scene.input.off("pointermove", this.pointerMoveHandler, this);
         if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
-        const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
+        const inBound: boolean = this.checkPointerInBounds(this, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellDownHandler && !this.mMoveing) {
                 if (!this.mInteractiveList) return;
@@ -271,13 +306,13 @@ export class GameScroller extends BaseUI implements ISound {
                 }
             }
             const eventName: string = inBound ? ScrollerEvent.downinBound : ScrollerEvent.downoutBound;
-            (<any>this).emit(eventName, this.clickContainer);
+            (<any>this).emit(eventName, this);
         }
     }
     private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
         // this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-        const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
+        const inBound: boolean = this.checkPointerInBounds(this, pointer);
         if (inBound && this.checkPointerDelection(pointer)) {
             if (this.mCellUpHandler && !this.mMoveing) {
                 if (!this.mInteractiveList) return;
@@ -290,7 +325,7 @@ export class GameScroller extends BaseUI implements ISound {
                 }
             }
             const eventName: string = inBound ? ScrollerEvent.upinBound : ScrollerEvent.upoutBound;
-            (<any>this).emit(eventName, this.clickContainer);
+            (<any>this).emit(eventName, this);
         }
         this.mMoveing = false;
     }
@@ -314,4 +349,39 @@ export class GameScroller extends BaseUI implements ISound {
         }
         return false;
     }
+    private onScrollValueChange(value) {
+        if (this.mConfig.orientation === 1) {
+            this.mGameObject.x = value;
+        } else {
+            this.mGameObject.y = value;
+        }
+    }
+}
+class TestScrollerConfig {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    zoom?: number = 1;
+    /**
+     * 0 居左 1居中 2居右
+     */
+    align?: number = 0;
+    /**
+     * 0 vertical / 1 horizontal
+     */
+    orientation?: number;
+    threshold?: number; // 滚动延时 0为立刻滚动
+    interactivedisDetection?: number; // 子对象交互事件派发 最大检测范围，如果up和down两次的pointer超过该距离就不会发送子对象事件
+    slidingDeceleration?: number; // 拖动释放时是否减慢速度时间
+    backDeceleration?: number; //  拖出视口范围的弹性效果时间
+    enable?: boolean; // 是否能拖动
+    /**
+     * 0 点击音效  1滚动音效
+     */
+    music?: ISoundGroup;
+    valuechangeCallback?: Function; // 滚动条位置发生变化返回事件
+    valuechangeCallbackScope?: Function; //
+    celldownCallBack?: Function; // 子对象pointerdown 事件 可以把点击的对象抛出
+    cellupCallBack?: Function; // 子对象pointerup 事件 可以把点击的对象抛出
 }
