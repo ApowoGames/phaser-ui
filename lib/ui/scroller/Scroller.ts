@@ -12,7 +12,7 @@ export enum ScrollerEvent {
     upoutBound = "upoutBound"
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class GameScroller extends BaseUI implements ISound {
+export class BaseScroller extends BaseUI implements ISound {
     protected soundGroup: ISoundGroup;
     private mConfig: ScrollerConfig;
     private mDisDelection: number;

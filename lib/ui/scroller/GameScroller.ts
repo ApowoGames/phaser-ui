@@ -3,8 +3,6 @@ import Scroller from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
-import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
-import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
 export enum ScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
@@ -12,16 +10,12 @@ export enum ScrollerEvent {
     upoutBound = "upoutBound"
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class GameScrollerTest extends BaseUI implements ISound {
+export class GameScroller extends BaseUI implements ISound {
     protected soundGroup: ISoundGroup;
-    private mConfig: TestScrollerConfig;
+    private mConfig: ScrollerConfig;
     private mDisDelection: number;
     private mCellDownHandler: Function;
     private mCellUpHandler: Function;
-    /**
-     * 界面内滚动子对象偏移,根据横向和竖向来决定是x向还是y向
-     */
-    private mChildPad: number = 0;
     /**
      * 是否在移动中
      */
@@ -31,7 +25,9 @@ export class GameScrollerTest extends BaseUI implements ISound {
     private maskGraphic: Phaser.GameObjects.Graphics;
     private mRectangle: Phaser.Geom.Rectangle;
     private mInteractiveList: any[];
-    constructor(scene: Phaser.Scene, config: TestScrollerConfig) {
+    private mLeftBound: number;
+    private mRightBound: number;
+    constructor(scene: Phaser.Scene, config: ScrollerConfig, gameObject?: Phaser.GameObjects.Container) {
         super(scene);
         this.soundMap = new Map();
         this.mConfig = config;
@@ -45,9 +41,13 @@ export class GameScrollerTest extends BaseUI implements ISound {
         this.maskGraphic.fillRect(-this.width * 0.5 * zoom, -this.height * 0.5 * zoom, this.width * zoom, this.height * zoom);
         this.maskGraphic.setPosition(this.x * zoom, this.y * zoom);
         this.add(this.maskGraphic);
-        this.mGameObject = scene.make.container(undefined, false);
-        this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
-        this.add(this.mGameObject);
+        if (gameObject) {
+            this.mGameObject = gameObject;
+        } else {
+            this.mGameObject = scene.make.container(undefined, false);
+            this.add(this.mGameObject);
+        }
+        // this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
         // const bg1 = scene.make.graphics(undefined, false);
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
@@ -62,6 +62,10 @@ export class GameScrollerTest extends BaseUI implements ISound {
         this.mCellUpHandler = GetValue(config, "cellupCallBack", undefined);
         this.setInteractive();
         this.addListen();
+    }
+
+    public get view(): Phaser.GameObjects.Container {
+        return this.mGameObject;
     }
 
     public setEnable(enable: boolean) {
@@ -91,6 +95,14 @@ export class GameScrollerTest extends BaseUI implements ISound {
         if (this.mScroller) this.mScroller.setDragThreshold(hold);
     }
 
+    public updateScrollPos(pos: number) {
+        if (this.mConfig.orientation) {
+            this.mGameObject.x = pos;
+        } else {
+            this.mGameObject.y = pos;
+        }
+    }
+
     /***
     *  调整scroller遮照范围
     * @param width
@@ -99,35 +111,36 @@ export class GameScrollerTest extends BaseUI implements ISound {
     * @param y
     */
     public adjustMask(width: number, height: number, x: number = this.mConfig.x, y: number = this.mConfig.y) {
-        // let mask = this.mGameObject.mask;
-        // if (!mask) {
-        //     const config = this.mConfig;
-        //     mask = this.scene.make.graphics(undefined, false);
-        //     mask.fillStyle(0);
-        //     mask.fillRect(0, 0, width, height);
-        //     mask.setPosition(config.x, config.y);
-        //     this.width = width;
-        //     this.height = height;
-        //     this.mGameObject.setMask(mask.createGeometryMask());
-        // }
-        // mask.x = x;
-        // mask.y = y;
-        // ResizeGameObject(mask, width, height);
+        this.mGameObject.clearMask();
+        const mask = this.scene.make.graphics(undefined, false);
+        mask.fillStyle(0);
+        mask.fillRect(0, 0, width, height);
+        mask.setPosition(x, y);
+        this.mGameObject.setMask(mask.createGeometryMask());
     }
 
-    public addItem(item: any) {
+    public addItem(item: Phaser.GameObjects.GameObject) {
         this.mGameObject.add(item);
         this.setInteractiveObject(item);
+    }
+
+    public addItemAt(item: Phaser.GameObjects.GameObject, index: number) {
+        this.mGameObject.addAt(item, index);
+        // this.setInteractiveObject(item);
+    }
+
+    public getItemList(): Phaser.GameObjects.GameObject[] {
+        return this.mGameObject.list;
     }
 
     public setBounds(value0: number, value1: number) {
         this.mScroller.setBounds(value0, value1);
     }
     /**
-     * 
-     * @param align 0 居左 1居中 2居右
+     *
+     * @param align 2 居左 1居中 0居右 默认居左
      */
-    public setAlign(align: number) {
+    public setAlign(align: number = 2) {
         this.mConfig.align = align;
         this.Sort();
     }
@@ -178,6 +191,8 @@ export class GameScrollerTest extends BaseUI implements ISound {
                 bound = rightBound;
             }
         }
+        this.mLeftBound = leftBound;
+        this.mRightBound = rightBound;
         this.setBounds(leftBound, rightBound);
         this.setValue(bound);
     }
@@ -190,21 +205,9 @@ export class GameScrollerTest extends BaseUI implements ISound {
         this.mGameObject.list.length = 0;
         this.clearInteractiveObject();
     }
+
     public get bounds(): number[] {
-        // return this.mConfig.bounds;
-        return [];
-    }
-
-    public clearInteractiveObject() {
-        if (!this.mInteractiveList) return;
-        this.mInteractiveList.length = 0;
-        this.mInteractiveList = [];
-        this.mScroller.setBounds(0, 0);
-    }
-
-    public setInteractiveObject(obj: any) {
-        if (!this.mInteractiveList) this.mInteractiveList = [];
-        this.mInteractiveList.push(obj);
+        return [this.mLeftBound, this.mRightBound];
     }
 
     public removeInteractiveObject(obj: any) {
@@ -247,12 +250,9 @@ export class GameScrollerTest extends BaseUI implements ISound {
         return this.mGameObject.height / 2;
     }
 
-    public get boundPad0(): number {
-        return this.mScroller.boundPad0;
-    }
-
-    public get boundPad1(): number {
-        return this.mScroller.boundPad1;
+    public setInteractiveObject(obj: any) {
+        if (!this.mInteractiveList) this.mInteractiveList = [];
+        this.mInteractiveList.push(obj);
     }
 
     public destroy() {
@@ -262,31 +262,37 @@ export class GameScrollerTest extends BaseUI implements ISound {
         super.destroy();
     }
 
-    /**
-     * 手动刷新滚动范围
-     * @param refreshSize刷新滚动范围数值，由于在某些场景下ui的宽高尺寸比较难用单一公式计算，所以可以直接外部传入刷新的数值
-     */
-    public refreshBound(refreshSize?: number) {
+    // /**
+    //  * 手动刷新滚动范围
+    //  * @param refreshSize刷新滚动范围数值，由于在某些场景下ui的宽高尺寸比较难用单一公式计算，所以可以直接外部传入刷新的数值
+    //  */
+    // public refreshBound(refreshSize?: number) {
+    //     if (!this.mInteractiveList) return;
+    //     // 滚动容器尺寸
+    //     let totalSize: number = 0;
+    //     if (refreshSize !== undefined) {
+    //         totalSize = refreshSize;
+    //     } else {
+    //         this.mInteractiveList.forEach((cell) => {
+    //             if (cell) {
+    //                 totalSize += this.mConfig.orientation ? cell.width : cell.height;
+    //             }
+    //         });
+    //     }
+    //     // // 滚动容器尺寸
+    //     // const tmpSize: number = this.mConfig.orientation ? this.mGameObject.width : this.mGameObject.height;
+    //     // 父容器初始位置
+    //     const baseSize: number = this.mConfig.orientation ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
+    //     // 视口范围尺寸（滚动不能小于改尺寸）
+    //     const baseShowSize: number = this.mConfig.orientation ? this.mConfig.width : this.mConfig.height;
+    //     if (totalSize < baseShowSize) totalSize = baseShowSize;
+    //     this.setBounds(baseSize, baseSize - totalSize + baseShowSize);
+    // }
+    private clearInteractiveObject() {
         if (!this.mInteractiveList) return;
-        // 滚动容器尺寸
-        let totalSize: number = 0;
-        if (refreshSize !== undefined) {
-            totalSize = refreshSize;
-        } else {
-            this.mInteractiveList.forEach((cell) => {
-                if (cell) {
-                    totalSize += this.mConfig.orientation ? cell.width : cell.height;
-                }
-            });
-        }
-        // // 滚动容器尺寸
-        // const tmpSize: number = this.mConfig.orientation ? this.mGameObject.width : this.mGameObject.height;
-        // 父容器初始位置
-        const baseSize: number = this.mConfig.orientation ? this.mGameObject.parentContainer.x : this.mGameObject.parentContainer.y;
-        // 视口范围尺寸（滚动不能小于改尺寸）
-        const baseShowSize: number = this.mConfig.orientation ? this.mConfig.width : this.mConfig.height;
-        if (totalSize < baseShowSize) totalSize = baseShowSize;
-        this.setBounds(baseSize, baseSize - totalSize + baseShowSize);
+        this.mInteractiveList.length = 0;
+        this.mInteractiveList = [];
+        this.mScroller.setBounds(0, 0);
     }
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
@@ -360,32 +366,4 @@ export class GameScrollerTest extends BaseUI implements ISound {
             this.mGameObject.y = value;
         }
     }
-}
-class TestScrollerConfig {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    zoom?: number = 1;
-    /**
-     * 0 居左 1居中 2居右
-     */
-    align?: number = 0;
-    /**
-     * 0 vertical / 1 horizontal
-     */
-    orientation?: number;
-    threshold?: number; // 滚动延时 0为立刻滚动
-    interactivedisDetection?: number; // 子对象交互事件派发 最大检测范围，如果up和down两次的pointer超过该距离就不会发送子对象事件
-    slidingDeceleration?: number; // 拖动释放时是否减慢速度时间
-    backDeceleration?: number; //  拖出视口范围的弹性效果时间
-    enable?: boolean; // 是否能拖动
-    /**
-     * 0 点击音效  1滚动音效
-     */
-    music?: ISoundGroup;
-    valuechangeCallback?: Function; // 滚动条位置发生变化返回事件
-    valuechangeCallbackScope?: Function; //
-    celldownCallBack?: Function; // 子对象pointerdown 事件 可以把点击的对象抛出
-    cellupCallBack?: Function; // 子对象pointerup 事件 可以把点击的对象抛出
 }
