@@ -2,6 +2,7 @@ import { BaseUI } from "../baseUI/BaseUI";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { IButtonState } from "../interface/button/IButtonState";
 import { CoreUI } from "../interface/event/MouseEvent";
+import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
 
 export enum ButtonState {
     Normal = "normal",
@@ -19,7 +20,7 @@ export class Button extends BaseUI implements IButtonState {
     protected mDownTime: number = 0;
     protected mPressDelay = 1000;
     protected mPressTime: any;
-    protected mBackground: Phaser.GameObjects.Image;
+    protected mBackground: Phaser.GameObjects.Image | NineSlicePatch;
     protected mKey: string;
     protected mFrame: string;
     protected mDownFrame: string;
@@ -54,7 +55,7 @@ export class Button extends BaseUI implements IButtonState {
         this.addListen();
     }
 
-    public get background(): Phaser.GameObjects.Image {
+    public get background(): Phaser.GameObjects.Image | NineSlicePatch {
         return this.mBackground;
     }
 
