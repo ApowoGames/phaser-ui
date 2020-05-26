@@ -15,6 +15,7 @@ export class NinePatchTabButton extends TabButton {
         if (data) {
             this.btnData = data;
         }
+        this.setInteractive();
     }
 
     public set enable(value) {
@@ -37,8 +38,7 @@ export class NinePatchTabButton extends TabButton {
     }
 
     protected createBackground() {
-        this.mBackground = new NineSlicePatch(this.scene, 0, 0, 10, 10, this.mKey, this.mFrame, { left: 2, top: 2, right: 2, bottom: 2 });
+        this.mBackground = new NineSlicePatch(this.scene, 0, 0, 10, 10, this.mKey, this.mFrame, { left: 2, top: 2, right: 2, bottom: 2 },this.dpr,1);
         this.add(this.mBackground);
-        this.setSize(this.mBackground.width, this.mBackground.height);
     }
 }
