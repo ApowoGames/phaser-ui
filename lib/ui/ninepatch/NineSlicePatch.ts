@@ -41,8 +41,8 @@ export class NineSlicePatch extends BaseUI {
         if (this.width === width && this.height === height) {
             return this;
         }
-        width = Math.max(width, this.patchesConfig.left + this.patchesConfig.right);
-        height = Math.max(height, this.patchesConfig.top + this.patchesConfig.bottom);
+        // width = Math.max(width, this.patchesConfig.left + this.patchesConfig.right);
+        // height = Math.max(height, this.patchesConfig.top + this.patchesConfig.bottom);
         this.setSize(width, height);
         this.drawPatches();
         return;
