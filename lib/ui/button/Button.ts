@@ -38,12 +38,7 @@ export class Button extends BaseUI implements IButtonState {
         this.mKey = key;
         this.mFrame = frame;
         this.mDownFrame = downFrame;
-        this.mBackground = scene.make.image({
-            key,
-            frame
-        }, false);
-        this.setSize(this.mBackground.width, this.mBackground.height);
-        this.add(this.mBackground);
+        this.createBackground();
         if (text) {
             this.mText = this.scene.make.text(undefined, false)
                 .setOrigin(0.5, 0.5)
@@ -126,6 +121,14 @@ export class Button extends BaseUI implements IButtonState {
         }
     }
 
+    protected createBackground() {
+        this.mBackground = this.scene.make.image({
+            key: this.mKey,
+            frame: this.mFrame
+        }, false);
+        this.setSize(this.mBackground.width, this.mBackground.height);
+        this.add(this.mBackground);
+    }
     protected setBgFrame(frame: string) {
         this.mBackground.setFrame(frame);
         this.setSize(this.mBackground.width, this.mBackground.height);

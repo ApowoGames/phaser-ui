@@ -27,14 +27,7 @@ export class NineSlicePatch extends BaseUI {
         super(scene);
         this.dpr = dpr;
         this.scale = scale;
-        this.patchesConfig = config;
-        config = config || this.scene.cache.custom.ninePatch.get(frame ? `${frame}` : key);
-        // 对于config进行取整
-        this.patchesConfig.top = Math.round(this.patchesConfig.top);
-        if (this.patchesConfig.right) this.patchesConfig.right = Math.round(this.patchesConfig.right);
-        if (this.patchesConfig.bottom) this.patchesConfig.bottom = Math.round(this.patchesConfig.bottom);
-        if (this.patchesConfig.left) this.patchesConfig.left = Math.round(this.patchesConfig.left);
-        normalizePatchesConfig(config);
+        this.setConfig(config);
         this.setSize(width, height);
         this.setTexture(key, frame);
     }
@@ -53,6 +46,15 @@ export class NineSlicePatch extends BaseUI {
         this.setSize(width, height);
         this.drawPatches();
         return;
+    }
+
+    public setConfig(config: IPatchesConfig) {
+        this.patchesConfig = config;
+        this.patchesConfig.top = Math.round(this.patchesConfig.top);
+        if (this.patchesConfig.right) this.patchesConfig.right = Math.round(this.patchesConfig.right);
+        if (this.patchesConfig.bottom) this.patchesConfig.bottom = Math.round(this.patchesConfig.bottom);
+        if (this.patchesConfig.left) this.patchesConfig.left = Math.round(this.patchesConfig.left);
+        normalizePatchesConfig(config);
     }
 
     public setTexture(key: string, frame?: string | integer): this {

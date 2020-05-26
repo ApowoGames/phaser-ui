@@ -44,7 +44,7 @@ export class GameScrollerTest extends BaseUI implements ISound {
         this.maskGraphic.fillStyle(0);
         this.maskGraphic.fillRect(-this.width * 0.5 * zoom, -this.height * 0.5 * zoom, this.width * zoom, this.height * zoom);
         this.maskGraphic.setPosition(this.x * zoom, this.y * zoom);
-        this.add(this.maskGraphic);
+        // this.add(this.maskGraphic);
         this.mGameObject = scene.make.container(undefined, false);
         this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
         this.add(this.mGameObject);
