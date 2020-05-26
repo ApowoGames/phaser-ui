@@ -27,6 +27,11 @@ export class NinePatchTabButton extends TabButton {
         }
     }
 
+    public setSize(width: number, height: number) {
+        super.setSize(width, height);
+        this.mBackground.setSize(width, height);
+        return this;
+    }
     public getBtnData(): any {
         return this.btnData;
     }
