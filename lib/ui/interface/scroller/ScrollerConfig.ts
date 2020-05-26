@@ -3,10 +3,15 @@ import { ISoundConfig, ISoundGroup } from "../sound/ISoundConfig";
 export interface ScrollerConfig {
     x: number;
     y: number;
-    clickX: number;
-    clickY: number;
     width: number;
     height: number;
+    clickX?: number;
+    clickY?: number;
+    zoom?: number;
+    /**
+     * 0 居左 1居中 2居右
+     */
+    align?: number;
     /**
      * scoller 初始化时在bound0 / bound1
      */
