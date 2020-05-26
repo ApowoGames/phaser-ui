@@ -12,12 +12,14 @@ export class NinePatchTabButton extends TabButton {
     private configlist: IPatchesConfig[];
     private wid: number = 0;
     private hei: number = 0;
-    constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: IPatchesConfig[], data?: any) {
+    constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: IPatchesConfig[], dpr?: number, scale?: number, data?: any) {
         super(scene, key, normalFrame, downFrame, text);
         this.configlist = configlist;
         this.mBackground.setConfig(configlist[0]);
         this.wid = width;
         this.hei = height;
+        this.dpr = dpr || 1;
+        this.scale = scale || 1;
         this.setSize(width, height);
         if (data) {
             this.btnData = data;
