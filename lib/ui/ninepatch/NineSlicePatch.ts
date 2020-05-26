@@ -25,8 +25,8 @@ export class NineSlicePatch extends BaseUI {
         key: string, frame: string | number,
         config?: IPatchesConfig, dpr?: number, scale?: number) {
         super(scene);
-        this.dpr = dpr;
-        this.scale = scale;
+        this.dpr = dpr || 1;
+        this.scale = scale || 1;
         this.setConfig(config);
         this.setSize(width, height);
         this.setTexture(key, frame);
@@ -46,6 +46,10 @@ export class NineSlicePatch extends BaseUI {
         this.setSize(width, height);
         this.drawPatches();
         return;
+    }
+
+    public getConfig(): IPatchesConfig {
+        return this.patchesConfig;
     }
 
     public setConfig(config: IPatchesConfig) {

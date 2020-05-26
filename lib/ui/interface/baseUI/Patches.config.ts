@@ -12,4 +12,12 @@ const normalizePatchesConfig: (config: IPatchesConfig) => IPatchesConfig = (conf
     return config;
 };
 
-export { normalizePatchesConfig };
+const resetPatchesConfig: (config: IPatchesConfig) => IPatchesConfig = (config: IPatchesConfig) => {
+    config.top = 0;
+    config.bottom = 0;
+    config.left = 0;
+    config.right = 0;
+    return config;
+};
+
+export { normalizePatchesConfig, resetPatchesConfig };
