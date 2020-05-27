@@ -27,6 +27,7 @@ export class NineSlicePatch extends BaseUI {
         super(scene);
         this.dpr = dpr || 1;
         this.scale = scale || 1;
+        this.patchesConfig = { top: 0, left: 0, right: 0, bottom: 0 };
         this.setConfig(config);
         this.setSize(width, height);
         this.setTexture(key, frame);
@@ -53,7 +54,7 @@ export class NineSlicePatch extends BaseUI {
     }
 
     public setConfig(config: IPatchesConfig) {
-        this.patchesConfig = config;
+        Object.assign(this.patchesConfig, config);
         this.patchesConfig.top = Math.round(this.patchesConfig.top);
         if (this.patchesConfig.right) this.patchesConfig.right = Math.round(this.patchesConfig.right);
         if (this.patchesConfig.bottom) this.patchesConfig.bottom = Math.round(this.patchesConfig.bottom);
@@ -78,8 +79,10 @@ export class NineSlicePatch extends BaseUI {
         this.width = width;
         this.height = height;
         super.setSize(width, height);
-        this.finalXs = [0, this.patchesConfig.left, this.width - this.patchesConfig.right, this.width];
-        this.finalYs = [0, this.patchesConfig.top, this.height - this.patchesConfig.bottom, this.height];
+        const right: number = this.width - this.patchesConfig.right > 0 ? this.width - this.patchesConfig.right : this.patchesConfig.right;
+        const bottom: number = this.height - this.patchesConfig.bottom > 0 ? this.height - this.patchesConfig.bottom : this.patchesConfig.right;
+        this.finalXs = [0, this.patchesConfig.left, right, this.width];
+        this.finalYs = [0, this.patchesConfig.top, bottom, this.height];
         return this;
     }
 
@@ -139,11 +142,23 @@ export class NineSlicePatch extends BaseUI {
         this.removeAll(true);
         let patchIndex = 0;
         for (let yi = 0; yi < 3; yi++) {
+            // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两行不做处理
+            if (this.height < this.patchesConfig.bottom + this.patchesConfig.top && yi === 1) {
+                continue;
+            }
             for (let xi = 0; xi < 3; xi++) {
+                // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两列不做处理
+                if (this.width < this.patchesConfig.left + this.patchesConfig.right && xi === 1) {
+                    continue;
+                }
                 const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
                 const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
                 patchImg.setOrigin(0);
-                patchImg.setPosition(this.finalXs[xi] - this.width * this.originX, this.finalYs[yi] - this.height * this.originY);
+                let posX: number = 0;
+                let posY: number = 0;
+                posX = this.finalXs[xi] - this.width * this.originX;
+                posY = this.finalYs[yi] - this.height * this.originY;
+                patchImg.setPosition(posX, posY);
                 patchImg.setScale(
                     (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width,
                     (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height
@@ -165,5 +180,9 @@ export class NineSlicePatch extends BaseUI {
 
     protected getPatchNameByIndex(index: number): string {
         return `${this.originFrame.name}|${NineSlicePatch.patches[index]}`;
+    }
+
+    private calculScale(num0, num1): number {
+        return (num1 * num0) / (2 * num1 * (num1 + num0));
     }
 }
