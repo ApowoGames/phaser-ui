@@ -120,6 +120,7 @@ export class NineSlicePatch extends BaseUI {
 
     protected createPatches(): void {
         // The positions we want from the base texture
+        // 保存有x轴和y轴9宫坐标信息，如果存在坐标信息相同，则表示某一部分的图片尺寸为0，需要查看原因
         const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
         const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
         let patchIndex: number = 0;
@@ -157,6 +158,8 @@ export class NineSlicePatch extends BaseUI {
                 patchImg.setPosition(this.finalXs[xi] - this.width * this.originX, this.finalYs[yi] - this.height * this.originY);
                 let widScale: number = (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width;
                 let heiScale: number = (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height;
+                // 如果缩放后尺寸小于某一部分尺寸，则用当前部分对应计算做缩放，现在处理小于单边尺寸的逻辑是，只用左边和上边做比较处理，当缩放尺寸小于单边尺寸，则只会显示左边和上边的切片资源
+                // 九宫不应该出现缩放尺寸小于单边或者左+右，上+下的情况，以上操作只是为了实现需求
                 if (patch.width > this.width) widScale = this.width / patch.width;
                 if (patch.height > this.height) heiScale = this.height / patch.height;
                 patchImg.setScale(

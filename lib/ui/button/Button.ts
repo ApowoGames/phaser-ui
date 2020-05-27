@@ -35,8 +35,8 @@ export class Button extends BaseUI implements IButtonState {
     protected ninePatchConfig: NinePatchConfig;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup, dpr?: number, scale?: number, nineConfig?: NinePatchConfig) {
         super(scene);
-        this.dpr = dpr;
-        this.scale = scale;
+        this.dpr = dpr || 1;
+        this.scale = scale || 1;
         this.soundGroup = {
             up: {
                 key: "click",
