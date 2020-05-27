@@ -7,17 +7,9 @@ export class NinePatchTabButton extends TabButton {
     protected mKey: string;
     protected btnData: any;
     protected mBackground: NineSlicePatch;
-    protected mBackgroundNormal: NineSlicePatch;
-    private mScene: Phaser.Scene;
-    private configlist: IPatchesConfig[];
-    private wid: number = 0;
-    private hei: number = 0;
     constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: IPatchesConfig[], dpr?: number, scale?: number, data?: any) {
-        super(scene, key, normalFrame, downFrame, text);
-        this.configlist = configlist;
+        super(scene, key, normalFrame, downFrame, text, {}, dpr, scale, { width, height, configlist });
         this.mBackground.setConfig(configlist[0]);
-        this.wid = width;
-        this.hei = height;
         this.dpr = dpr || 1;
         this.scale = scale || 1;
         this.setSize(width, height);
@@ -28,21 +20,21 @@ export class NinePatchTabButton extends TabButton {
         this.enable = true;
     }
     changeNormal() {
-        if (this.configlist && this.configlist.length > 0) {
-            // resetPatchesConfig(this.mBackground.getConfig());
-            this.mBackground.setConfig(this.configlist[0]);
-            this.setSize(this.wid, this.hei);
-        }
+        // if (this.configlist && this.configlist.length > 0) {
+        // resetPatchesConfig(this.mBackground.getConfig());
+        // this.mBackground.setConfig(this.configlist[0]);
+        //     this.setSize(this.wid, this.hei);
+        // }
         this.setBgFrame(this.mFrame);
     }
 
     changeDown() {
         if (this.mDownFrame) {
-            if (this.configlist && this.configlist.length > 1) {
-                // resetPatchesConfig(this.mBackground.getConfig());
-                this.mBackground.setConfig(this.configlist[1]);
-                this.setSize(this.wid, this.hei);
-            }
+            // if (this.configlist && this.configlist.length > 1) {
+            // resetPatchesConfig(this.mBackground.getConfig());
+            // this.mBackground.setConfig(this.configlist[0]);
+            //     this.setSize(this.wid, this.hei);
+            // }
             this.setBgFrame(this.mDownFrame);
         }
     }
@@ -67,7 +59,15 @@ export class NinePatchTabButton extends TabButton {
     }
 
     protected createBackground() {
-        this.mBackground = new NineSlicePatch(this.scene, 0, 0, 10, 10, this.mKey, this.mFrame, { left: 2, top: 2, right: 2, bottom: 2 }, this.dpr, 1);
+        const config: IPatchesConfig = this.ninePatchConfig.configlist[0];
+        const width = this.ninePatchConfig.width;
+        const height = this.ninePatchConfig.height;
+        this.mBackground = new NineSlicePatch(this.scene, 0, 0, width, height, this.mKey, this.mFrame, { left: config.left, top: config.top, right: config.right, bottom: config.bottom }, this.dpr, 1);
         this.add(this.mBackground);
+    }
+
+    protected setBgFrame(frame: string) {
+        this.mBackground.setFrame(frame);
+        // this.setSize(this.mBackground.width, this.mBackground.height);
     }
 }

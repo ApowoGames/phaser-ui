@@ -3,6 +3,7 @@ import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { IButtonState } from "../interface/button/IButtonState";
 import { CoreUI } from "../interface/event/MouseEvent";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
+import { IPatchesConfig } from "../interface/baseUI/Patches.config";
 
 export enum ButtonState {
     Normal = "normal",
@@ -15,6 +16,11 @@ export enum ButtonSoundKey {
 
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
+export interface NinePatchConfig {
+    width: number;
+    height: number;
+    configlist: IPatchesConfig[];
+}
 export class Button extends BaseUI implements IButtonState {
     protected soundGroup: ISoundGroup;
     protected mDownTime: number = 0;
@@ -26,8 +32,11 @@ export class Button extends BaseUI implements IButtonState {
     protected mDownFrame: string;
     protected mText: Phaser.GameObjects.Text;
     protected mIsMove: boolean = false;
-    constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup) {
+    protected ninePatchConfig: NinePatchConfig;
+    constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup, dpr?: number, scale?: number, nineConfig?: NinePatchConfig) {
         super(scene);
+        this.dpr = dpr;
+        this.scale = scale;
         this.soundGroup = {
             up: {
                 key: "click",
@@ -35,6 +44,7 @@ export class Button extends BaseUI implements IButtonState {
             }
         };
         Object.assign(this.soundGroup, music);
+        this.ninePatchConfig = nineConfig;
         this.mKey = key;
         this.mFrame = frame;
         this.mDownFrame = downFrame;

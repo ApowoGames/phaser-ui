@@ -120,8 +120,8 @@ export class NineSlicePatch extends BaseUI {
 
     protected createPatches(): void {
         // The positions we want from the base texture
-        const textureXs: number[] = [0, this.patchesConfig.left / this.dpr, this.originFrame.width - this.patchesConfig.right / this.dpr, this.originFrame.width];
-        const textureYs: number[] = [0, this.patchesConfig.top / this.dpr, this.originFrame.height - this.patchesConfig.bottom / this.dpr, this.originFrame.height];
+        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
+        const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
         let patchIndex: number = 0;
         for (let yi: number = 0; yi < 3; yi++) {
             for (let xi: number = 0; xi < 3; xi++) {
