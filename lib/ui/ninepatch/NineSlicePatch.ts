@@ -154,14 +154,14 @@ export class NineSlicePatch extends BaseUI {
                 const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
                 const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
                 patchImg.setOrigin(0);
-                let posX: number = 0;
-                let posY: number = 0;
-                posX = this.finalXs[xi] - this.width * this.originX;
-                posY = this.finalYs[yi] - this.height * this.originY;
-                patchImg.setPosition(posX, posY);
+                patchImg.setPosition(this.finalXs[xi] - this.width * this.originX, this.finalYs[yi] - this.height * this.originY);
+                let widScale: number = (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width;
+                let heiScale: number = (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height;
+                if (patch.width > this.width) widScale = this.width / patch.width;
+                if (patch.height > this.height) heiScale = this.height / patch.height;
                 patchImg.setScale(
-                    (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width,
-                    (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height
+                    widScale,
+                    heiScale
                 );
                 this.add(patchImg);
                 patchImg.setTint(this.internalTint);
