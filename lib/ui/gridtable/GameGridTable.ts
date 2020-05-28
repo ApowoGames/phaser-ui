@@ -48,7 +48,7 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
      * @param x
      * @param y
      */
-    public adjustMask(x: number = this.mConfig.x, y: number = this.mConfig.y, width?: number, height?: number ) {
+    public adjustMask(x: number = this.mConfig.x, y: number = this.mConfig.y, width?: number, height?: number) {
         if (!this.mGridTable) return;
         this.mGridTable.x = x;
         this.mGridTable.y = y;
@@ -103,6 +103,13 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
     setColumnCount(cnt) {
         this.mGridTable.setColumnCount(cnt);
         return this;
+    }
+    getCells() {
+        return this.mGridTable.cells;
+    }
+
+    getCell(cellIdx) {
+        return this.mGridTable.getCell(cellIdx, true);
     }
     public setT(value: number) {
         if (this.mGridTable) this.mGridTable.setT(value);
