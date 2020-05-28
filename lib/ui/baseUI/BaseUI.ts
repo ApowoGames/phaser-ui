@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-19 05:37:55
+ * @Last Modified time: 2020-05-28 16:26:20
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -21,10 +21,6 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
      * 声音map
      */
     public soundMap: Map<string, Phaser.Sound.BaseSound>;
-    /**
-     * ui-scene
-     */
-    protected scene: Phaser.Scene;
     /**
      * 是否静音
      */
@@ -53,7 +49,6 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
     protected mShow: boolean = false;
     constructor(scene: Phaser.Scene, dpr?: number, scale?: number) {
         super(scene);
-        this.scene = scene;
         this.dpr = dpr || 1;
         this.scale = scale || 1;
         this.soundMap = new Map();

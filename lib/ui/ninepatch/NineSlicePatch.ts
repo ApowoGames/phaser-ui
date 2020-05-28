@@ -1,9 +1,4 @@
 import { IPatchesConfig, normalizePatchesConfig } from "../interface/baseUI/Patches.config";
-import { INinePatchConfig } from "../interface/ninepatch/INinePatchConfig";
-import { Tool } from "../tool/Tool";
-import { Transform } from "../interface/pos/Transform";
-import { INinePatchSkinData } from "../interface/ninepatch/INinePatchSkinData";
-import { Align } from "../interface/pos/Align";
 import { BaseUI } from "../baseUI/BaseUI";
 
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -24,7 +19,7 @@ export class NineSlicePatch extends BaseUI {
         height: number,
         key: string, frame: string | number,
         config?: IPatchesConfig, dpr?: number, scale?: number) {
-        super(scene);
+        super(scene, dpr, scale);
         this.dpr = dpr || 1;
         this.scale = scale || 1;
         this.patchesConfig = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -76,8 +71,6 @@ export class NineSlicePatch extends BaseUI {
     }
 
     public setSize(width: number, height: number): this {
-        this.width = width;
-        this.height = height;
         super.setSize(width, height);
         const right: number = this.width - this.patchesConfig.right > 0 ? this.width - this.patchesConfig.right : this.patchesConfig.right;
         const bottom: number = this.height - this.patchesConfig.bottom > 0 ? this.height - this.patchesConfig.bottom : this.patchesConfig.right;
@@ -157,17 +150,22 @@ export class NineSlicePatch extends BaseUI {
                 const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
                 const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
                 patchImg.setOrigin(0);
-                patchImg.setPosition(this.finalXs[xi] - this.width * this.originX, this.finalYs[yi] - this.height * this.originY);
-                let widScale: number = (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width;
-                let heiScale: number = (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height;
-                // 如果缩放后尺寸小于某一部分尺寸，则用当前部分对应计算做缩放，现在处理小于单边尺寸的逻辑是，只用左边和上边做比较处理，当缩放尺寸小于单边尺寸，则只会显示左边和上边的切片资源
-                // 九宫不应该出现缩放尺寸小于单边或者左+右，上+下的情况，以上操作只是为了实现需求
-                if (patch.width > this.width) widScale = this.width / patch.width;
-                if (patch.height > this.height) heiScale = this.height / patch.height;
-                patchImg.setScale(
-                    widScale,
-                    heiScale
+                patchImg.setPosition(
+                    (this.finalXs[xi] * 1000 - this.width * this.originX * 1000) / 1000,
+                    (this.finalYs[yi] * 1000 - this.height * this.originY * 1000) / 1000
                 );
+                // let widScale: number = (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width;
+                // let heiScale: number = (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height;
+                // // 如果缩放后尺寸小于某一部分尺寸，则用当前部分对应计算做缩放，现在处理小于单边尺寸的逻辑是，只用左边和上边做比较处理，当缩放尺寸小于单边尺寸，则只会显示左边和上边的切片资源
+                // // 九宫不应该出现缩放尺寸小于单边或者左+右，上+下的情况，以上操作只是为了实现需求
+                // if (patch.width > this.width) widScale = this.width / patch.width;
+                // if (patch.height > this.height) heiScale = this.height / patch.height;
+                // patchImg.setScale(
+                //     widScale,
+                //     heiScale
+                // );
+                patchImg.displayWidth = this.finalXs[xi + 1] - this.finalXs[xi];
+                patchImg.displayHeight = this.finalYs[yi + 1] - this.finalYs[yi];
                 this.add(patchImg);
                 if (this.internalTint) patchImg.setTint(this.internalTint);
                 patchImg.tintFill = tintFill;

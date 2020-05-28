@@ -1,10 +1,9 @@
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
 import { IButtonState } from "../interface/button/IButtonState";
 import { IPatchesConfig } from "../interface/baseUI/Patches.config";
+import { BaseUI } from "../baseUI/BaseUI";
 import { CoreUI } from "../interface/event/MouseEvent";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
-import { BaseUI } from "../baseUI/BaseUI";
-import { ButtonState } from "./Button";
 
 export class NineSliceButton extends BaseUI implements IButtonState {
     protected mLabel: Phaser.GameObjects.Text;
@@ -15,15 +14,14 @@ export class NineSliceButton extends BaseUI implements IButtonState {
     protected mFrame_down: string;
     protected mFrame_over: string;
     protected btnData: any;
-    protected soundGroup: ISoundGroup;
-    protected mIsMove: boolean = false;
-    protected mDownTime: number = 0;
-    protected mPressDelay = 1000;
-    protected mPressTime: any;
-    private mScene: Phaser.Scene;
-    constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, config?: IPatchesConfig, music?: ISoundGroup, data?: any) {
+    constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, dpr?: number, scale?: number, config?: IPatchesConfig, music?: ISoundGroup, data?: any) {
         super(scene, x, y);
+        this.x = x;
+        this.y = y;
+        this.mKey = key;
         this.mFrame = frame ? frame : "__BASE";
+        this.dpr = dpr || 1;
+        this.scale = scale || 1;
         this.initFrame();
         this.setSize(width, height);
         this.mNingBg = new NineSlicePatch(this.scene, 0, 0, width, height, key, this.mFrame_nrmal, config);
@@ -31,13 +29,7 @@ export class NineSliceButton extends BaseUI implements IButtonState {
         if (data) {
             this.btnData = data;
         }
-        this.soundGroup = {
-            up: {
-                key: "click",
-                // urls: "./resources/sound/click.mp3"
-            }
-        };
-        Object.assign(this.soundGroup, music);
+
         this.mLabel = this.scene.make.text(undefined, false)
             .setOrigin(0.5, 0.5)
             .setSize(this.width, this.height)
@@ -46,6 +38,17 @@ export class NineSliceButton extends BaseUI implements IButtonState {
         this.add(this.mLabel);
         this.setInteractive(new Phaser.Geom.Rectangle(0, 0, width, height), Phaser.Geom.Rectangle.Contains);
         this.addListen();
+    }
+
+    public addListen() {
+        this.removeListen();
+        this.on("pointerdown", this.onPointerDown, this);
+        this.on("pointerup", this.onPointerUp, this);
+    }
+
+    public removeListen() {
+        this.off("pointerdown", this.onPointerDown, this);
+        this.off("pointerup", this.onPointerUp, this);
     }
 
     public set enable(value) {
@@ -90,6 +93,7 @@ export class NineSliceButton extends BaseUI implements IButtonState {
     }
 
     public destroy(): void {
+        this.removeListen();
         if (this.mLabel) this.mLabel.destroy();
         super.destroy();
     }
@@ -102,6 +106,9 @@ export class NineSliceButton extends BaseUI implements IButtonState {
         return this;
     }
 
+    // public setState(val: string) {
+    // }
+
     public changeNormal() {
         this.setFrame(this.mFrame_nrmal);
     }
@@ -111,17 +118,9 @@ export class NineSliceButton extends BaseUI implements IButtonState {
         this.setFrame(this.mFrame_down);
     }
 
-    public addListen() {
-        this.removeListen();
-        this.on("pointerdown", this.onPointerDownHandler, this);
-        this.on("pointerup", this.onPointerUpHandler, this);
-        this.on("pointermove", this.onPointerMoveHandler, this);
-    }
-
-    public removeListen() {
-        this.off("pointerdown", this.onPointerDownHandler, this);
-        this.off("pointerup", this.onPointerUpHandler, this);
-        this.off("pointermove", this.onPointerMoveHandler, this);
+    protected changeOver() {
+        // this.setTexture()
+        this.setFrame(this.mFrame_over);
     }
 
     protected isExists(frame: string) {
@@ -130,67 +129,17 @@ export class NineSliceButton extends BaseUI implements IButtonState {
         return false;
     }
 
-    protected onPointerMoveHandler(pointer: Phaser.Input.Pointer) {
-        if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
-        if (!this.interactiveBoo) return;
-        this.mIsMove = true;
-        this.emit(CoreUI.MouseEvent.Move);
-    }
-
-    protected onPointerUpHandler(pointer: Phaser.Input.Pointer) {
-        if (!this.interactiveBoo) {
-            if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
-            return;
-        }
-        this.buttonStateChange(ButtonState.Normal);
-        if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-            if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
-                if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(CoreUI.MouseEvent.Tap, pointer, this);
-            }
-        }
-
-        clearTimeout(this.mPressDelay);
-        this.mIsMove = false;
-        this.mDownTime = 0;
-    }
-
-    protected onPointerDownHandler(pointer) {
+    protected onPointerDown(pointer) {
         this.changeDown();
     }
 
-    protected buttonStateChange(state: ButtonState) {
-        switch (state) {
-            case ButtonState.Normal:
-                this.changeNormal();
-                break;
-            case ButtonState.Over:
-                break;
-            case ButtonState.Select:
-                this.changeDown();
-                break;
-            case ButtonState.Disable:
-                break;
-        }
+    protected onPointerUp(pointer) {
+        this.changeNormal();
+        this.emit(CoreUI.MouseEvent.Tap, pointer, this);
     }
 
     get label(): Phaser.GameObjects.Text {
         return this.mLabel;
-    }
-
-    private scaleHandler() {
-        this.mScene.tweens.add({
-            targets: this,
-            duration: 50,
-            ease: "Linear",
-            props: {
-                scaleX: { value: .5 },
-                scaleY: { value: .5 },
-            },
-            yoyo: true,
-            repeat: 0,
-        });
-        this.scaleX = this.scaleY = 1;
     }
 
     private initFrame() {
