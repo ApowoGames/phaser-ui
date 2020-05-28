@@ -116,6 +116,8 @@ export class NineSlicePatch extends BaseUI {
 
     public clearTint() {
         this.each((patch: Phaser.GameObjects.Image) => patch.clearTint());
+        this.internalTint = undefined;
+        this.tintFill = false;
     }
 
     protected createPatches(): void {
@@ -167,7 +169,7 @@ export class NineSlicePatch extends BaseUI {
                     heiScale
                 );
                 this.add(patchImg);
-                patchImg.setTint(this.internalTint);
+                if (this.internalTint) patchImg.setTint(this.internalTint);
                 patchImg.tintFill = tintFill;
                 ++patchIndex;
             }
