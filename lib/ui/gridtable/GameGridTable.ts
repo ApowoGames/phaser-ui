@@ -105,7 +105,7 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         return this;
     }
     getCells() {
-        return this.mGridTable.cells;
+        return this.mGridTable.getCells();
     }
 
     getCell(cellIdx) {
