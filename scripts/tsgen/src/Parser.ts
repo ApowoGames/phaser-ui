@@ -39,14 +39,13 @@ export class Parser {
 
         let ignored = [];
 
-        let result ; // = '/// <reference types="./matter" />\n\n';
+        let result = ""; // = '/// <reference types="./matter" />\n\n';
 
         result = result.concat(this.topLevel.reduce((out: string, obj: dom.TopLevelDeclaration) => {
             return out + dom.emit(obj);
         }, ''));
 
-        if (ignored.length > 0)
-        {
+        if (ignored.length > 0) {
             console.log('ignored top level properties:');
             console.log(ignored);
         }
@@ -58,10 +57,11 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-
+            if (doclet.longname === "TooqinUI.BaseUI.BaseMediator.updateViewPos") {
+                console.log(doclet);
+            }
             // TODO: Custom temporary rules
-            switch (doclet.longname)
-            {
+            switch (doclet.longname) {
                 case 'Phaser.GameObjects.Components.Alpha':
                 case 'Phaser.GameObjects.Components.AlphaSingle':
                 case 'Phaser.GameObjects.Components.Animation':
@@ -103,8 +103,7 @@ export class Parser {
                     break;
             }
 
-            if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1)
-            {
+            if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1) {
                 doclet.kind = 'mixin';
             }
 
@@ -298,7 +297,7 @@ export class Parser {
         ___s: true }
          */
 
-            // console.log('namespace:', doclet.longname);
+        // console.log('namespace:', doclet.longname);
 
         let obj = dom.create.namespace(doclet.name);
 
@@ -546,6 +545,7 @@ export class Parser {
                 break;
         }
         if (doclet.readonly || doclet.kind === 'constant') obj.flags |= dom.DeclarationFlags.ReadOnly;
+        // if ((<any>obj).name === "updateViewPos") console.log(doclet);
         if (doclet.scope === 'static') obj.flags |= dom.DeclarationFlags.Static;
     }
 
@@ -553,7 +553,7 @@ export class Parser {
         if (doclet.tags)
             for (let tag of doclet.tags) {
                 if (tag.originalTitle === 'generic') {
-                    
+
                     /**
                      * {string} K - [key]
                      * 1 = string | 2 = null | 3 = K | 4 = key
@@ -565,11 +565,11 @@ export class Parser {
                     const [_, _type, _defaultType, _name, _paramsNames] = matches;
 
                     const typeParam = dom.create.typeParameter(
-                        _name, 
+                        _name,
                         _type == null ? null : dom.create.typeParameter(_type)
                     );
-                    
-                    if(_defaultType != null) {
+
+                    if (_defaultType != null) {
                         typeParam.defaultType = dom.create.typeParameter(_defaultType);
                     }
 

@@ -5,7 +5,7 @@ import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
 import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
-export enum ScrollerEvent {
+export enum BaseScrollerEvent {
     downinBound = "downinBound",
     downoutBound = "downoutBound",
     upinBound = "upinBound",
@@ -270,7 +270,7 @@ export class BaseScroller extends BaseUI implements ISound {
                     }
                 }
             }
-            const eventName: string = inBound ? ScrollerEvent.downinBound : ScrollerEvent.downoutBound;
+            const eventName: string = inBound ? BaseScrollerEvent.downinBound : BaseScrollerEvent.downoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
     }
@@ -289,7 +289,7 @@ export class BaseScroller extends BaseUI implements ISound {
                     }
                 }
             }
-            const eventName: string = inBound ? ScrollerEvent.upinBound : ScrollerEvent.upoutBound;
+            const eventName: string = inBound ? BaseScrollerEvent.upinBound : BaseScrollerEvent.upoutBound;
             (<any>this).emit(eventName, this.clickContainer);
         }
         this.mMoveing = false;
