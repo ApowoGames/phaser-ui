@@ -350,6 +350,8 @@ class Parser {
             let optional = false;
             obj.jsDocComment = '';
             for (let paramDoc of doclet.params) {
+                if (!paramDoc || !paramDoc.name)
+                    console.log(doclet);
                 // TODO REMOVE TEMP FIX
                 if (paramDoc.name.indexOf('.') != -1) {
                     console.log(`Warning: ignoring param with '.' for '${doclet.longname}' in ${doclet.meta.filename}@${doclet.meta.lineno}`);
