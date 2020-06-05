@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-28 16:26:20
+ * @Last Modified time: 2020-06-04 16:30:08
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -117,7 +117,6 @@ export class BaseUI extends Phaser.GameObjects.Container implements ISound {
         // this.scene.input.off("pointerup", this.sceneClick, this);
         // this.off("pointerup", this.uiClick, this);
     }
-
     public playSound(config: ISoundConfig) {
         if (this.silent) return;
         // if (config.key === undefined) {
