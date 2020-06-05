@@ -275,6 +275,9 @@ export class BaseScroller extends BaseUI implements ISound {
         }
     }
     private pointerUpHandler(pointer: Phaser.Input.Pointer, gameObject) {
+        if (gameObject && this.mInteractiveList && this.mInteractiveList.length > 0) {
+            if (this.mInteractiveList.indexOf(gameObject[0]) === -1 && gameObject[0] !== this.clickContainer) return;
+        }
         // this.scene.input.on("pointermove", this.pointerMoveHandler, this);
         if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
         const inBound: boolean = this.checkPointerInBounds(this.clickContainer, pointer);
