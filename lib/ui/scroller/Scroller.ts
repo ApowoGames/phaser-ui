@@ -228,7 +228,7 @@ export class BaseScroller extends BaseUI implements ISound {
      * @param refreshSize刷新滚动范围数值，由于在某些场景下ui的宽高尺寸比较难用单一公式计算，所以可以直接外部传入刷新的数值
      */
     public refreshBound(refreshSize?: number) {
-        if (!this.mInteractiveList) return;
+        // if (!this.mInteractiveList) return;
         // 滚动容器尺寸
         let totalSize: number = 0;
         if (refreshSize !== undefined) {
