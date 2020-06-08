@@ -108,6 +108,17 @@ export class SelectCallItem extends BaseUI {
         this.mSelectBG.visible = false;
     }
 }
+/**
+ * @class ComboBox
+ * @memberof TooqinUI.ComboBox
+ * @constructor
+ * @param {Phaser.Scene} scene
+ * @param {*} config (export interface IComboboxConfig {wid: number;hei: number;
+    resKey: string;resPng: string;resJson: string;resBg: string;
+    resArrow: string;fontStyle: { size: number, color: string, bold: boolean };
+    up: boolean;clickCallBack: Function;boxMusic?: ISoundGroup;itemMusic?: ISoundGroup;
+  })
+ */
 export class ComboBox extends BaseUI implements ISelectCallUI {
     protected itemList: SelectCallItem[];
     private soundGroup: ISoundGroup;

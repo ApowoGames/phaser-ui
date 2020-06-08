@@ -18,13 +18,7 @@ export class BaseScroller extends BaseUI implements ISound {
     private mDisDelection: number;
     private mCellDownHandler: Function;
     private mCellUpHandler: Function;
-    /**
-     * 界面内滚动子对象偏移,根据横向和竖向来决定是x向还是y向
-     */
     private mChildPad: number = 0;
-    /**
-     * 是否在移动中
-     */
     private mMoveing: boolean = false;
     private mScroller: Scroller;
     private clickContainer: any;
@@ -223,10 +217,6 @@ export class BaseScroller extends BaseUI implements ISound {
         super.destroy();
     }
 
-    /**
-     * 手动刷新滚动范围
-     * @param refreshSize刷新滚动范围数值，由于在某些场景下ui的宽高尺寸比较难用单一公式计算，所以可以直接外部传入刷新的数值
-     */
     public refreshBound(refreshSize?: number) {
         if (!this.mInteractiveList) return;
         // 滚动容器尺寸
