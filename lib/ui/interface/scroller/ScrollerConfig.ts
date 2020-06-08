@@ -16,6 +16,12 @@ export interface ScrollerConfig {
      * scoller 初始化时在bound0 / bound1
      */
     value?: number;
+
+    /**
+     * 单元之间间隔距离
+     */
+    space?: number;
+
     /**
      * [bound0;bound1] 上下左右边界位置，如果不传则为0
      */
