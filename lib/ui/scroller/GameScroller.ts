@@ -39,7 +39,8 @@ export class GameScroller extends BaseUI implements ISound {
         this.maskGraphic = scene.make.graphics(undefined, false);
         this.maskGraphic.fillStyle(0);
         this.maskGraphic.fillRect(-this.width * 0.5 * zoom, -this.height * 0.5 * zoom, this.width * zoom, this.height * zoom);
-        this.maskGraphic.setPosition(this.x * zoom, this.y * zoom);
+        const worldpos = this.getWorldTransformMatrix();
+        this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
         // this.add(this.maskGraphic);
         if (gameObject) {
             this.mGameObject = gameObject;
@@ -47,7 +48,7 @@ export class GameScroller extends BaseUI implements ISound {
             this.mGameObject = scene.make.container(undefined, false);
             this.add(this.mGameObject);
         }
-        // this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
+        this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
         // const bg1 = scene.make.graphics(undefined, false);
         // bg1.fillStyle(0, .2);
         // bg1.fillRect(0, 0, config.width, config.height);
@@ -103,6 +104,11 @@ export class GameScroller extends BaseUI implements ISound {
         }
     }
 
+    public refreshMask() {
+        const worldpos = this.getWorldTransformMatrix();
+        this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
+    }
+
     /***
     *  调整scroller遮照范围
     * @param width
@@ -146,25 +152,32 @@ export class GameScroller extends BaseUI implements ISound {
     }
     public Sort() {
         let value = 0;
+        const space = (this.mConfig.space === undefined ? 0 : this.mConfig.space);
         const list: any = this.mGameObject.list;
+        const activeArr: any[] = [];
         for (const item of list) {
+            if (item.visible) {
+                activeArr.push(item);
+            }
+        }
+        for (const item of activeArr) {
             if (this.mConfig.orientation === 1) {
                 item.x = item.width * item.originX + value;
-                value += item.width;
+                value += item.width + space;
             } else {
                 item.y = item.height * item.originY + value;
-                value += item.height;
+                value += item.height + space;
             }
         }
         if (this.mConfig.orientation === 1) {
             this.mGameObject.width = value;
-            for (const item of list) {
+            for (const item of activeArr) {
                 item.x -= value * 0.5;
             }
             value -= this.width;
         } else {
             this.mGameObject.height = value;
-            for (const item of list) {
+            for (const item of activeArr) {
                 item.y -= value * 0.5;
             }
             value -= this.height;
