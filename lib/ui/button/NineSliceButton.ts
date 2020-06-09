@@ -145,14 +145,17 @@ export class NineSliceButton extends BaseUI implements IButtonState {
     private initFrame() {
         const frame = this.mFrame ? this.mFrame : this.mKey;
         this.mFrame_nrmal = `${frame}_normal`;
+        if (!this.isExists(this.mFrame_nrmal)) {
+            this.mFrame_nrmal = this.mFrame;
+        }
         let down = `${frame}_down`;
         if (!this.isExists(down)) {
-            down = `${frame}_normal`;
+            down = this.mFrame_nrmal;
         }
         this.mFrame_down = down;
         let over = `${frame}_over`;
         if (!this.isExists(over)) {
-            over = `${frame}_normal`;
+            over = this.mFrame_nrmal;
         }
         this.mFrame_over = over;
     }

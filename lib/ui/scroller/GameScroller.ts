@@ -150,7 +150,7 @@ export class GameScroller extends BaseUI implements ISound {
         this.mConfig.align = align;
         this.Sort();
     }
-    public Sort() {
+    public Sort(isFixed: boolean = false) {
         let value = 0;
         const space = (this.mConfig.space === undefined ? 0 : this.mConfig.space);
         const list: any = this.mGameObject.list;
@@ -206,8 +206,18 @@ export class GameScroller extends BaseUI implements ISound {
         }
         this.mLeftBound = leftBound;
         this.mRightBound = rightBound;
+        let value0 = bound;
+        if (isFixed) {
+            value0 = (this.mConfig.orientation === 1 ? this.mGameObject.x : this.mGameObject.y);
+            if (value0 < bound) {
+                value0 += Math.abs(bound - value0);
+            } else if (value0 > bound) {
+                value0 -= Math.abs(bound - value0);
+            }
+        }
+
         this.setBounds(leftBound, rightBound);
-        this.setValue(bound);
+        this.setValue(value0);
     }
 
     public clearItems() {
