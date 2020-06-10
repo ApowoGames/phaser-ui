@@ -10,9 +10,9 @@ module.exports = {
     output: {
         pathinfo: true,
         path: path.resolve(__dirname, './dist'),
-        filename: 'rex[name].min.js',
+        filename: 'Tooqin[name].min.js',
         library: {
-            root: 'rex[name]'
+            root: 'Tooqin[name]'
         },
         libraryTarget: 'umd',
         umdNamedDefine: true,

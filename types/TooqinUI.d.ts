@@ -1,99 +1,356 @@
-declare namespace TooqinUI.BaseMediator {
+declare namespace tooqinui {
     /**
      * BaseMediator
      */
     class BaseMediator {
+        protected mShow: boolean;
+
+        mUIType: any;
+
+        UIType: any;
+
+        updateViewPos(): void;
+
+        tweenExpand(show: boolean): void;
+
+        getView(): void;
+
+        hide(): void;
+
+        isSceneUI(): boolean;
+
+        isShow(): boolean;
+
+        resize(width: number, height: number): void;
+
+        show(param: any): void;
+
+        update(param: any): void;
+
+        setParam(param: any): void;
+
+        getParam(): any;
+
+        destroy(): void;
+
     }
 
-    var mShow: boolean;
-
-    var mUIType: any;
-
-    var UIType: any;
-
-    function updateViewPos(): void;
-
-    function tweenExpand(show: boolean): void;
-
-    function getView(): void;
-
-    function hide(): void;
-
-    function isSceneUI(): boolean;
-
-    function isShow(): boolean;
-
-    function resize(width: number, height: number): void;
-
-    function show(param: any): void;
-
-    function update(param: any): void;
-
-    function setParam(param: any): void;
-
-    function getParam(): any;
-
-    function destroy(): void;
-
-}
-
-declare namespace TooqinUI.BaseUI {
     /**
      * BaseUI
      */
     class BaseUI {
         constructor(scene: Phaser.Scene, dpr: number, scale: number);
 
-        protected silent: boolean;
 
-        protected mInitialized: boolean;
+        destroy(): void;
 
-        protected interactiveBoo: boolean;
+    }
 
-        protected mShow: boolean;
+    function BBCodeText(scene: Phaser.Scene, x: number, y: number, text: Phaser.GameObjects.Text, style: any): any;
 
-        protected dpr: number;
+    enum ButtonState {
+    }
 
-        protected scale: number;
+    /**
+     * Button
+     */
+    class Button {
+        constructor(scene: Phaser.Scene, key: string, frame: string, downFrame: string, text: string);
 
-        soundMap: Map<string, Phaser.Sound.BaseSound>;
+        protected mDownTime: number;
 
-        setFollow(gameObject: any, froscene: Phaser.Scene, posFunc: Function): void;
+        protected mPressDelay: number;
 
-        updatePos(): void;
+        protected mIsMove: boolean;
 
-        setInteractive(shape: any, callback: Phaser.Types.Input.HitAreaCallback, dropZone: boolean): void;
+        /**
+         * {width:number,height:number,configList:IPatchesConfig[](top:number,left?:number,right?:number,bottom?:number)}
+         */
+        protected ninePatchConfig: any;
 
-        disInteractive(): void;
+        protected mKey: string;
+
+        protected mFrame: string;
+
+        protected mDownFrame: string;
+
+        static background: Phaser.GameObjects.Image;
+
+        static text: Phaser.GameObjects.Text;
 
         addListen(): void;
 
         removeListen(): void;
 
-        playSound(config: any): void;
+        mute(boo: boolean): void;
 
-        /**
-         * {key:string,field:TooqinUI.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
-         */
-        startPlay(config: any): void;
+        changeNormal(): void;
 
-        stopSound(): void;
+        changeDown(): void;
 
-        pauseSound(): void;
+        setFrame(frame: string | number): void;
 
-        resumeSound(): void;
+        setText(val: string): void;
 
-        setSilent(boo: boolean): void;
+        setTextStyle(style: any): void;
 
-        checkPointerDelection(pointer: Phaser.Input.Pointer): void;
+        setFontStyle(val: string): void;
+
+        setTextOffset(x: number, y: number): void;
+
+        setTextColor(color: string): void;
+
+        createBackground(): void;
+
+        setBgFrame(frame: string | number): void;
+
+        buttonStateChange(state: tooqinui.Button.ButtonState): void;
+
+        onPointerMoveHandler(pointer: Phaser.Input.Pointer): void;
+
+        onPointerUpHandler(pointer: Phaser.Input.Pointer): void;
+
+        onPointerDownHandler(pointer: Phaser.Input.Pointer): void;
 
     }
 
-    function destroy(): void;
+    /**
+     * NineSliceButton
+     */
+    class NineSliceButton {
+        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text: string, dpr: number, scale: number, config: any, music: any, data: any);
+
+        protected mLabel: Phaser.GameObjects.Text;
+
+        addListen(): void;
+
+        removeListen(): void;
+
+        getBtnData(): any;
+
+        setText(text: string): void;
+
+        getText(): string;
+
+        setTextStyle(style: any): void;
+
+        setFontStyle(val: string): void;
+
+        setTextOffset(x: number, y: number): void;
+
+        setFrame(frame: string | number): void;
+
+        destroy(): void;
+
+        setFrameNormal(normal: string, down: string, over: string): void;
+
+        changeNormal(): void;
+
+        changeDown(): void;
+
+        changeOver(): void;
+
+        isExists(frame: string): void;
+
+        onPointerDown(pointer: Phaser.Input.Pointer): void;
+
+        onPointerUp(pointer: Phaser.Input.Pointer): void;
+
+        label: any;
+
+        initFrame(): void;
+
+    }
+
+    /**
+     * SelectCallItem
+     */
+    class SelectCallItem {
+        /**
+         * 
+         * @param selectCallUI {selectCall(data:ISelectCallItemdata)} {IselectCallItemdata(text:string,data:any,index:number)}
+         */
+        constructor(scene: Phaser.Scene, selectCallUI: any, wid: number, hei: number, music: any);
+
+        protected mSelectCallUI: any;
+
+        protected soundGroup: any;
+
+        protected text: Phaser.GameObjects.Text;
+
+        protected mSelectBG: Phaser.GameObjects.Graphics;
+
+        setInteractive(): void;
+
+        addListen(): void;
+
+        removeListen(): void;
+
+        itemData: any;
+
+        destroy: any;
+
+        selected: boolean;
+
+        overHandler(): void;
+
+        selectHandler(): void;
+
+        outHandler(): void;
+
+    }
+
+    /**
+     * ComboBox
+     */
+    class ComboBox {
+        constructor(scene: Phaser.Scene, config: any);
+
+        itemList: any;
+
+        selectCall(itemData: any): void;
+
+        addListen(): void;
+
+        removeListen(): void;
+
+        destroy(): void;
+
+        init(): void;
+
+        onLoadCompleteHandler(): void;
+
+        openHandler(): void;
+
+        showTween(open: boolean): void;
+
+        showTweenItem(open: boolean): void;
+
+        createTexture(): Phaser.GameObjects.Graphics;
+
+    }
+
+    /**
+     * GameGridTable
+     */
+    class GameGridTable {
+        /**
+         * 
+         * @param config (GridTableConfig,GridTableCoreConfig)
+         */
+        constructor(scene: Phaser.Scene, config: any);
+
+        /**
+         * 调整gridtable遮照范围
+         */
+        adjustMask(width: number, height: number, x: number, y: number): void;
+
+        gridTable: any;
+
+        childrenMap: any;
+
+        table: any;
+
+        /**
+         * Only worked when scrollMode is 0
+         */
+        adjustCellHeight(hei: number): void;
+
+        /**
+         * Only worked when scrollMode is 1
+         */
+        adjusetCellWidth(wid: number): void;
+
+        items: any;
+
+        setItems(items: any): void;
+
+        setColumnCount(cnt: number): void;
+
+        getCells(): any;
+
+        getCell(cellIdx: number): any;
+
+        setT(value: number): void;
+
+        addListen(): void;
+
+        removeListen(): void;
+
+        x: number;
+
+        y: number;
+
+        refresh(): void;
+
+        layout(): void;
+
+        refreshPos(x: number, y: number, conx: number, cony: number): void;
+
+        destroy(): void;
+
+        cellTapHandler(cell: any): void;
+
+    }
+
+    enum InputTextEvent {
+        Change,
+        Click,
+        DBClick,
+        Focus,
+        Blur,
+    }
+
+    enum SoundField {
+        Background,
+        Element,
+        Effect,
+    }
+
+    /**
+     * NineSlicePatch
+     */
+    class NineSlicePatch {
+        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number);
+
+        resize(width: number, height: number): void;
+
+        getConfig(): any;
+
+        setConfig(config: any): void;
+
+        setTexture(key: string, frame: string): void;
+
+        setFrame(frame: string): void;
+
+        setSize(width: number, height: number): void;
+
+        setTint(tint: any): void;
+
+        setTintFill(tint: any): void;
+
+        tintFill: any;
+
+        clearTine(): void;
+
+        createPatches(): void;
+
+        drawPatches(): void;
+
+        createPatchFrame(patch: string, x: number, y: number, width: number, height: number): void;
+
+        getPatchNameByIndex(index: number): void;
+
+        calculScale(num0: number, num1: number): number;
+
+    }
+
+    enum ProgressBarEvent {
+    }
 
 }
 
-declare namespace TooqinUI.BaseSizer {
+declare namespace tooqinui.BaseSizer {
     function AddChildrenMap(key: any, gameObject: any): void;
 
     /**
@@ -227,271 +484,6 @@ declare namespace Base {
 
 }
 
-declare namespace TooqinUI.BBCodeText {
-    function BBCodeText(scene: Phaser.Scene, x: number, y: number, text: Phaser.GameObjects.Text, style: any): any;
-
-}
-
-declare namespace TooqinUI.Button {
-    enum ButtonState {
-    }
-
-    /**
-     * Button
-     */
-    class Button {
-        constructor(scene: Phaser.Scene, key: string, frame: string, downFrame: string, text: string);
-
-    }
-
-    var mDownTime: number;
-
-    var mPressDelay: number;
-
-    var mIsMove: boolean;
-
-    /**
-     * {width:number,height:number,configList:IPatchesConfig[](top:number,left?:number,right?:number,bottom?:number)}
-     */
-    var ninePatchConfig: any;
-
-    var mKey: string;
-
-    var mFrame: string;
-
-    var mDownFrame: string;
-
-    var background: Phaser.GameObjects.Image;
-
-    var text: Phaser.GameObjects.Text;
-
-    function addListen(): void;
-
-    function removeListen(): void;
-
-    function mute(boo: boolean): void;
-
-    function changeNormal(): void;
-
-    function changeDown(): void;
-
-    function setFrame(frame: string | number): void;
-
-    function setText(val: string): void;
-
-    function setTextStyle(style: any): void;
-
-    function setFontStyle(val: string): void;
-
-    function setTextOffset(x: number, y: number): void;
-
-    function setTextColor(color: string): void;
-
-    function createBackground(): void;
-
-    function setBgFrame(frame: string | number): void;
-
-    function buttonStateChange(state: TooqinUI.Button.ButtonState): void;
-
-    function onPointerMoveHandler(pointer: Phaser.Input.Pointer): void;
-
-    function onPointerUpHandler(pointer: Phaser.Input.Pointer): void;
-
-    function onPointerDownHandler(pointer: Phaser.Input.Pointer): void;
-
-}
-
-declare namespace TooqinUI.NineSliceButton {
-    /**
-     * NineSliceButton
-     */
-    class NineSliceButton {
-        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text: string, dpr: number, scale: number, config: any, music: any, data: any);
-
-    }
-
-    var mLabel: Phaser.GameObjects.Text;
-
-    function addListen(): void;
-
-    function removeListen(): void;
-
-    function getBtnData(): any;
-
-    function setText(text: string): void;
-
-    function getText(): string;
-
-    function setTextStyle(style: any): void;
-
-    function setFontStyle(val: string): void;
-
-    function setTextOffset(x: number, y: number): void;
-
-    function setFrame(frame: string | number): void;
-
-    function destroy(): void;
-
-    function setFrameNormal(normal: string, down: string, over: string): void;
-
-    function changeNormal(): void;
-
-    function changeDown(): void;
-
-    function changeOver(): void;
-
-    function isExists(frame: string): void;
-
-    function onPointerDown(pointer: Phaser.Input.Pointer): void;
-
-    function onPointerUp(pointer: Phaser.Input.Pointer): void;
-
-    var label: any;
-
-    function initFrame(): void;
-
-}
-
-declare namespace TooqinUI.SelectCallItem {
-    /**
-     * SelectCallItem
-     */
-    class SelectCallItem {
-        /**
-         * 
-         * @param selectCallUI {selectCall(data:ISelectCallItemdata)} {IselectCallItemdata(text:string,data:any,index:number)}
-         */
-        constructor(scene: Phaser.Scene, selectCallUI: any, wid: number, hei: number, music: any);
-
-    }
-
-    var mSelectCallUI: any;
-
-    var soundGroup: any;
-
-    var text: Phaser.GameObjects.Text;
-
-    var mSelectBG: Phaser.GameObjects.Graphics;
-
-    function setInteractive(): void;
-
-    function addListen(): void;
-
-    function removeListen(): void;
-
-    var itemData: any;
-
-    var destroy: any;
-
-    var selected: boolean;
-
-    function overHandler(): void;
-
-    function selectHandler(): void;
-
-    function outHandler(): void;
-
-}
-
-declare namespace TooqinUI.ComboBox {
-    /**
-     * ComboBox
-     */
-    class ComboBox {
-        constructor(scene: Phaser.Scene, config: any);
-
-    }
-
-    var itemList: any;
-
-    function selectCall(itemData: any): void;
-
-    function addListen(): void;
-
-    function removeListen(): void;
-
-    function destroy(): void;
-
-    function init(): void;
-
-    function onLoadCompleteHandler(): void;
-
-    function openHandler(): void;
-
-    function showTween(open: boolean): void;
-
-    function showTweenItem(open: boolean): void;
-
-    function createTexture(): Phaser.GameObjects.Graphics;
-
-}
-
-declare namespace TooqinUI.GameGridTable {
-    /**
-     * GameGridTable
-     */
-    class GameGridTable {
-        /**
-         * 
-         * @param config (GridTableConfig,GridTableCoreConfig)
-         */
-        constructor(scene: Phaser.Scene, config: any);
-
-    }
-
-    /**
-     * 调整gridtable遮照范围
-     */
-    function adjustMask(width: number, height: number, x: number, y: number): void;
-
-    var gridTable: any;
-
-    var childrenMap: any;
-
-    var table: any;
-
-    /**
-     * Only worked when scrollMode is 0
-     */
-    function adjustCellHeight(hei: number): void;
-
-    /**
-     * Only worked when scrollMode is 1
-     */
-    function adjusetCellWidth(wid: number): void;
-
-    var items: any;
-
-    function setItems(items: any): void;
-
-    function setColumnCount(cnt: number): void;
-
-    function getCells(): any;
-
-    function getCell(cellIdx: number): any;
-
-    function setT(value: number): void;
-
-    function addListen(): void;
-
-    function removeListen(): void;
-
-    var x: number;
-
-    var y: number;
-
-    function refresh(): void;
-
-    function layout(): void;
-
-    function refreshPos(x: number, y: number, conx: number, cony: number): void;
-
-    function destroy(): void;
-
-    function cellTapHandler(cell: any): void;
-
-}
-
 declare namespace FramesSkin {
     /**
      * 切换多帧对象frame
@@ -502,29 +494,7 @@ declare namespace FramesSkin {
 
 declare type InputTextEvent = string;
 
-declare namespace TooqinUI {
-    enum InputTextEvent {
-        Change,
-        Click,
-        DBClick,
-        Focus,
-        Blur,
-    }
-
-    enum SoundField {
-        Background,
-        Element,
-        Effect,
-    }
-
-    var NineSlicePatch: any;
-
-    enum ProgressBarEvent {
-    }
-
-}
-
-declare namespace TooqinUI.CoreUI {
+declare namespace tooqinui.CoreUI {
     enum MouseEvent {
     }
 
@@ -533,17 +503,6 @@ declare namespace TooqinUI.CoreUI {
 declare type SoundField = string;
 
 declare class MessageBox {
-}
-
-declare namespace TooqinUI.NinePatch {
-    /**
-     * NineSlicePatch
-     */
-    class NineSlicePatch {
-        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number);
-
-    }
-
 }
 
 declare namespace Panel {
@@ -568,15 +527,15 @@ declare namespace GameScroller {
 
 }
 
-declare namespace TooqinUI.Utils {
+declare namespace tooqinui.Utils {
     function GetParentSizer(gameObject: any): any;
 
     function GetTopmostSizer(gameObject: any): any;
 
 }
 
-declare module 'tooqinUI' {
-    export = TooqinUI;
+declare module 'tooqinui' {
+    export = tooqinui;
 
 }
 

@@ -30,8 +30,8 @@ export class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqinUI');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('TooqinUI'));
+        const phaserPkgModuleDOM = dom.create.module('tooqinui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqinui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
 
@@ -57,7 +57,7 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-            if (doclet.longname === "TooqinUI.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "tooqinui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules

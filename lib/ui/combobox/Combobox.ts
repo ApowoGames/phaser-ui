@@ -110,7 +110,7 @@ export class SelectCallItem extends BaseUI {
 }
 /**
  * @class ComboBox
- * @memberof TooqinUI.ComboBox
+ * @memberof tooqinui.ComboBox
  * @constructor
  * @param {Phaser.Scene} scene
  * @param {*} config (export interface IComboboxConfig {wid: number;hei: number;

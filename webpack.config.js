@@ -12,7 +12,7 @@ switch (testMode) {
     phaser = path.join(phaserModule, "src/phaser.js");
     break;
   case "1":
-    var phaserModule = path.join(__dirname, "/../rex-phaser/"); // My tested phaser
+    var phaserModule = path.join(__dirname, "/../gxm-phaser/"); // My tested phaser
     phaser = path.join(phaserModule, "src/phaser.js");
     break;
   case "2":

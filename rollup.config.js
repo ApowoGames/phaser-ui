@@ -11,8 +11,8 @@ const pluginList = require('./plugin-list.js');
 let outputs = [];
 for (var key in pluginList) {
     let inputFile = pluginList[key];
-    let outFile = `./dist/rex${key}.min.js`;
-    let libName = `rex${key}`;
+    let outFile = `./dist/Tooqin${key}.min.js`;
+    let libName = `Tooqin${key}`;
     // console.log(inputFile)
     // console.log(outFile)
     // console.log(libName)
