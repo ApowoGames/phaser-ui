@@ -84,6 +84,7 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
+                case 'tooqinui.IButtonState':
                     doclet.kind = 'mixin';
                     break;
 
@@ -251,9 +252,9 @@ export class Parser {
     private resolveParents(docs: any[]) {
         for (let doclet of docs) {
             let obj = this.objects[doclet.longname];
-            if (!obj || doclet.kind !== 'class') continue;
+            if (!obj) continue; // || doclet.kind !== 'class') continue;
 
-            let o = obj as dom.ClassDeclaration;
+            let o = obj as any; //as dom.ClassDeclaration;
 
             // resolve augments
             if (doclet.augments && doclet.augments.length) {
@@ -268,7 +269,11 @@ export class Parser {
                         console.log(`ERROR: Did not find base type: ${augment} for ${doclet.longname}`);
                     } else {
                         if (baseType.kind == 'class') {
-                            o.baseType = dom.create.class(name);
+                            if (doclet.kind === 'mixin') {
+                                o.baseTypes = [dom.create.class(name)];
+                            } else {
+                                o.baseType = dom.create.class(name);
+                            }
                         } else {
                             o.implements.push(dom.create.interface(name));
                         }
@@ -428,7 +433,7 @@ export class Parser {
             obj.jsDocComment = '';
 
             for (let paramDoc of doclet.params) {
-                if (!paramDoc||!paramDoc.name) console.log(doclet);
+                if (!paramDoc || !paramDoc.name) console.log(doclet);
                 // TODO REMOVE TEMP FIX
                 if (paramDoc.name.indexOf('.') != -1) {
                     console.log(`Warning: ignoring param with '.' for '${doclet.longname}' in ${doclet.meta.filename}@${doclet.meta.lineno}`);
