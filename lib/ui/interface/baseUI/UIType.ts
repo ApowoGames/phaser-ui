@@ -1,9 +1,18 @@
-/*
- * @Author: gxm
- * @Date: 2020-03-06 13:53:28
- * @Last Modified by: gxm
- * @Last Modified time: 2020-03-26 18:13:14
+/**
+ * @typedef {number} UIType
  */
+/**
+ * @enum {UIType}
+ * @memberof tooqinui
+ * @readonly
+ * @property {number} None 0
+ * @property {number} Scene 1
+ * @property {number} Normal 2
+ * @property {number} Pop 3
+ * @property {number} Tips 4
+ * @property {number} Monopoly 5
+ * @property {number} Activity 6
+*/
 export enum UIType {
     None, // 默认ui类型
     Scene, // 场景内常驻ui
