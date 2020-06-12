@@ -1,10 +1,10 @@
 {
-  "name": "tooqinui",
+  "name": "tooqingui",
   "version": "0.0.3",
-  "description": "tooqinui Plugins",
+  "description": "tooqingui Plugins",
   "author": "Gxm",
   "main": "./dist/index.js",
-  "types": "./types/tooqinui.d.ts",
+  "types": "./types/tooqingui.d.ts",
   "scripts": {
     "watch": "webpack --config webpack.config.js",
     "build": "rollup -c rollup.config.js",

@@ -67,9 +67,9 @@ class Parser {
                 case 'tooqingui.IButtonState':
                 case 'tooqingui.IMediator':
                 case 'tooqingui.IAbstractPanel':
-                case 'tooqingui.IAbstructInteractiveObject':
-                case 'tooqingui.IAbstructItem':
-                case 'tooqingui.IAbstructUI':
+                case 'tooqingui.IAbstractInteractiveObject':
+                case 'tooqingui.IAbstractItem':
+                case 'tooqingui.IAbstractUI':
                 case 'tooqingui.ISetInteractive':
                 case 'tooqingui.ISound':
                 case 'tooqingui.Patchesconfig':
