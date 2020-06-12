@@ -3,7 +3,7 @@
  */
 /**
  * @enum {UIType}
- * @memberof tooqinui
+ * @memberof tooqingui
  * @readonly
  * @property {number} None 0
  * @property {number} Scene 1

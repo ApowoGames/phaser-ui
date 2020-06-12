@@ -17,7 +17,7 @@ export interface UIFollowConfig {
 
 /**
  * @class BaseUI
- * @memberof TooqinUI
+ * @memberof tooqingui
  * @extends Phaser.GameObjects.Container
  */
 export class BaseUI extends Phaser.GameObjects.Container implements ISound {

@@ -18,8 +18,8 @@ class Parser {
         // add integer alias
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqinui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqinui'));
+        const phaserPkgModuleDOM = dom.create.module('tooqingui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
     emit() {
@@ -37,7 +37,7 @@ class Parser {
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "tooqinui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -64,7 +64,16 @@ class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqinui.IButtonState':
+                case 'tooqingui.IButtonState':
+                case 'tooqingui.IMediator':
+                case 'tooqingui.IAbstractPanel':
+                case 'tooqingui.IAbstructInteractiveObject':
+                case 'tooqingui.IAbstructItem':
+                case 'tooqingui.IAbstructUI':
+                case 'tooqingui.ISetInteractive':
+                case 'tooqingui.ISound':
+                case 'tooqingui.Patchesconfig':
+                case 'tooqingui.UIType':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript
@@ -233,14 +242,18 @@ class Parser {
                     }
                     else {
                         if (baseType.kind === 'class') {
-                            if(doclet.kind === 'mixin'){
+                            if (doclet.kind === 'mixin') {
                                 o.baseTypes = [dom.create.class(name)];
-                            }else{
+                            } else {
                                 o.baseType = dom.create.class(name);
                             }
                         }
                         else {
-                            o.implements.push(dom.create.interface(name));
+                            if (doclet.kind === 'mixin') {
+                                o.baseTypes = [dom.create.interface(name)];
+                            } else {
+                                o.implements.push(dom.create.interface(name));
+                            }
                         }
                     }
                 }

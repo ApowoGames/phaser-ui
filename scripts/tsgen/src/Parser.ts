@@ -30,8 +30,8 @@ export class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqinui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqinui'));
+        const phaserPkgModuleDOM = dom.create.module('tooqingui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
 
@@ -57,7 +57,7 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-            if (doclet.longname === "tooqinui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -84,7 +84,7 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqinui.IButtonState':
+                case 'tooqingui.IButtonState':
                     doclet.kind = 'mixin';
                     break;
 
