@@ -1,6 +1,6 @@
 import { UIType } from "./UIType";
 
-export interface IAbstructUI {
+export interface IAbstractUI {
     id: number;
     UIType: UIType;
 }

@@ -1,9 +1,9 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
-import { IAbstructItem } from "../interface/baseUI/IAbstructItem";
+import { IAbstractItem } from "../interface/baseUI/IAbstractItem";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
-export interface ISelectCallItemdata extends IAbstructItem {
+export interface ISelectCallItemdata extends IAbstractItem {
     text: string;
     data: any;
 }

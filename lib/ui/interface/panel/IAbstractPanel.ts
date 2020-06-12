@@ -1,6 +1,6 @@
-import { IAbstructUI } from "../baseUI/IAbstructUI";
+import { IAbstractUI } from "../baseUI/IAbstractUI";
 
-export interface IAbstractPanel extends IAbstructUI {
+export interface IAbstractPanel extends IAbstractUI {
     isShow(): boolean;
     setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function);
     tweenExpand(show: boolean);

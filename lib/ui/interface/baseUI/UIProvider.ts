@@ -1,6 +1,6 @@
-import { IAbstructUI } from "./IAbstructUI";
+import { IAbstractUI } from "./IAbstractUI";
 
 export interface UIProvider {
     scene: Phaser.Scene;
-    parent?: IAbstructUI;
+    parent?: IAbstractUI;
 }
