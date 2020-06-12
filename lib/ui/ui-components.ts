@@ -7,6 +7,9 @@ import Canvas from "./canvas/Canvas.js";
 import { NineSlicePatch } from "./ninepatch/NineSlicePatch";
 import Sizer from "./sizer/Sizer.js";
 import GridSizer from "./gridsizer/GridSizer.js";
+import { BaseUI } from "./baseUI/BaseUI.js";
+import { BaseMediator } from "./baseUI/BaseMediator.js";
+import { Panel } from "./panel/Panel.js";
 
 import Label from "./label/Label.js";
 import Buttons from "./buttons/Buttons.js";
@@ -41,6 +44,9 @@ export {
   NineSlicePatch,
   Sizer,
   GridSizer,
+  BaseUI,
+  BaseMediator,
+  Panel,
   // FixWidthSizer,
   // OverlapSizer,
 
