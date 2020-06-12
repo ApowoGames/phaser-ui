@@ -6,8 +6,8 @@
   "main": "./dist/index.js",
   "types": "./types/tooqingui.d.ts",
   "scripts": {
-    "watch": "webpack --config webpack.config.js",
-    "build": "rollup -c rollup.config.js",
+    "watch": "rimraf types && rimraf dist && webpack --config webpack.config.js",
+    "build": "rimraf dist && rollup -c rollup.config.js",
     "build-tsc": "cd lib/ui && tsc",
     "build-tsgen": "cd scripts/tsgen && tsc",
     "tsgen": "cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"

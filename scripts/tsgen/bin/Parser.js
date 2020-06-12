@@ -73,7 +73,8 @@ class Parser {
                 case 'tooqingui.ISetInteractive':
                 case 'tooqingui.ISound':
                 case 'tooqingui.Patchesconfig':
-                case 'tooqingui.UIType':
+                case 'tooqingui.ISoundConfig':
+                case 'tooqingui.ISoundGroup':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript

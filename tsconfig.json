@@ -2,10 +2,19 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es6",
-    "lib": ["es2015", "webworker", "dom"],
+    "lib": [
+      "es2015",
+      "webworker",
+      "dom"
+    ],
     "declaration": false,
     "sourceMap": false,
-    "typeRoots": ["node_modules/@types", "node_modules/phaser/types"]
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/phaser/types"
+    ]
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
