@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs-extra");
 const path = require("path");
-require("phaser");
-const Parser_1 = require("../src/Parser");
+// require("phaser"); FATAL: Unable to load template: window is not defined 无法加载
+const Parser_1 = require("./Parser");
 function publish(data, opts) {
     // remove undocumented stuff.
     data({ undocumented: true }).remove();

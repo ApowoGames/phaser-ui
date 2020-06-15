@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import 'phaser';
+// import 'phaser'; FATAL: Unable to load template: window is not defined 无法加载
 import { Parser } from './Parser';
 
 export function publish(data: any, opts: any) {
