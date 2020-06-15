@@ -31,7 +31,7 @@ export class Parser {
 
         // add declare module
         const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('Tooqingui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
 
@@ -57,7 +57,7 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "Tooqingui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -84,9 +84,28 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqingui.IButtonState':
-                case 'tooqingui.ScrollerConfig':
-                case 'tooqingui.ISelectCallUI':
+                case 'Tooqingui.IButtonState':
+                case 'Tooqingui.IMediator':
+                case 'Tooqingui.IAbstractPanel':
+                case 'Tooqingui.IAbstractInteractiveObject':
+                case 'Tooqingui.IAbstractItem':
+                case 'Tooqingui.IAbstractUI':
+                case 'Tooqingui.ISetInteractive':
+                case 'Tooqingui.ISound':
+                case 'Tooqingui.Patchesconfig':
+                case 'Tooqingui.ISoundConfig':
+                case 'Tooqingui.ISoundGroup':
+                case 'Tooqingui.IMaskConfig':
+                case 'Tooqingui.GridTableConfig':
+                case 'Tooqingui.SliderConfig':
+                case 'Tooqingui.GridTableCoreConfig':
+                case 'Tooqingui.ScrollerableConfig':
+                case 'Tooqingui.NinePatchConfig':
+                case 'Tooqingui.IPatchesConfig':
+                case 'Tooqingui.ISelectCallItemdata':
+                case 'Tooqingui.ScrollerConfig':
+                case 'Tooqingui.ISelectCallUI':
+                case 'Tooqingui.IComboboxConfig':
                     doclet.kind = 'mixin';
                     break;
 

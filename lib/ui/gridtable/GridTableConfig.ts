@@ -6,7 +6,7 @@ export interface GridTableConfig {
   y?: number;
   type?: string;
   scrollMode?: number; // 0===>v  1===>h
-  background?: any; // (<any>this.scene).TooqingUI.add.roundRectangle(0, 0, 2, 2, 0, 0xFF9900, .2),基本用来调整mask
+  background?: any; // (<any>this.scene).Tooqingui.add.roundRectangle(0, 0, 2, 2, 0, 0xFF9900, .2),基本用来调整mask
   table?: GridTableCoreConfig;
   slider?: SliderConfig;
   scroller?: ScrollerableConfig;

@@ -3,16 +3,16 @@ import GridTable from "./GridTable.js";
 import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
 import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
 /** 
- * @namespace tooqingui.IMaskConfig 
+ * @namespace Tooqingui.IMaskConfig 
  */
 export interface IMaskConfig {
     /**
-     * @name tooqingui.IMaskConfig#mask
+     * @name Tooqingui.IMaskConfig#mask
      * @type {boolean}
      */
     mask: boolean;
     /**
-     * @name tooqingui.IMaskConfig#padding
+     * @name Tooqingui.IMaskConfig#padding
      * @type {number}
      */
     padding: number;

@@ -4,8 +4,7 @@
     },
     "source": {
         "include": [
-            "../../lib/ui/",
-            "../../dist/"
+            "../../lib/ui/"
         ],
         "exclude": [
         ],

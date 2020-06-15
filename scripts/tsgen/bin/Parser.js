@@ -19,12 +19,12 @@ class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
         // add declare module
         const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('Tooqingui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
     emit() {
         let ignored = [];
-        let result = ""; // = '/// <reference types="./matter" />\n\n';
+        let result = '/// <reference types="../scripts/phaser" />\n\n';
         result = result.concat(this.topLevel.reduce((out, obj) => {
             return out + dom.emit(obj);
         }, ''));
@@ -37,7 +37,7 @@ class Parser {
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "Tooqingui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -64,28 +64,28 @@ class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqingui.IButtonState':
-                case 'tooqingui.IMediator':
-                case 'tooqingui.IAbstractPanel':
-                case 'tooqingui.IAbstractInteractiveObject':
-                case 'tooqingui.IAbstractItem':
-                case 'tooqingui.IAbstractUI':
-                case 'tooqingui.ISetInteractive':
-                case 'tooqingui.ISound':
-                case 'tooqingui.Patchesconfig':
-                case 'tooqingui.ISoundConfig':
-                case 'tooqingui.ISoundGroup':
-                case 'tooqingui.IMaskConfig':
-                case 'tooqingui.GridTableConfig':
-                case 'tooqingui.SliderConfig':
-                case 'tooqingui.GridTableCoreConfig':
-                case 'tooqingui.ScrollerableConfig':
-                case 'tooqingui.NinePatchConfig':
-                case 'tooqingui.IPatchesConfig':
-                case 'tooqingui.ISelectCallItemdata':
-                case 'tooqingui.ScrollerConfig':
-                case 'tooqingui.ISelectCallUI':
-                case 'tooqingui.IComboboxConfig':
+                case 'Tooqingui.IButtonState':
+                case 'Tooqingui.IMediator':
+                case 'Tooqingui.IAbstractPanel':
+                case 'Tooqingui.IAbstractInteractiveObject':
+                case 'Tooqingui.IAbstractItem':
+                case 'Tooqingui.IAbstractUI':
+                case 'Tooqingui.ISetInteractive':
+                case 'Tooqingui.ISound':
+                case 'Tooqingui.Patchesconfig':
+                case 'Tooqingui.ISoundConfig':
+                case 'Tooqingui.ISoundGroup':
+                case 'Tooqingui.IMaskConfig':
+                case 'Tooqingui.GridTableConfig':
+                case 'Tooqingui.SliderConfig':
+                case 'Tooqingui.GridTableCoreConfig':
+                case 'Tooqingui.ScrollerableConfig':
+                case 'Tooqingui.NinePatchConfig':
+                case 'Tooqingui.IPatchesConfig':
+                case 'Tooqingui.ISelectCallItemdata':
+                case 'Tooqingui.ScrollerConfig':
+                case 'Tooqingui.ISelectCallUI':
+                case 'Tooqingui.IComboboxConfig':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript

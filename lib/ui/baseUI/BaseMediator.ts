@@ -44,7 +44,7 @@ export class BaseMediator implements IMediator {
     }
 
     /**
-     * @method tooqingui.BaseMediator#getView
+     * @method Tooqingui.BaseMediator#getView
      * @return {*}
      */
     getView(): Panel {

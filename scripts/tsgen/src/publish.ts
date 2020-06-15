@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import 'phaser';
 import { Parser } from './Parser';
 
 export function publish(data: any, opts: any) {
