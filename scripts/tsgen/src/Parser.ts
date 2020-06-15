@@ -296,9 +296,14 @@ export class Parser {
                                 o.baseType = dom.create.class(name);
                             }
                         } else {
-                            o.implements.push(dom.create.interface(name));
+                            if (doclet.kind === 'mixin') {
+                                o.baseTypes = [dom.create.interface(name)];
+                            } else {
+                                o.implements.push(dom.create.interface(name));
+                            }
                         }
                     }
+
                 }
             }
         }

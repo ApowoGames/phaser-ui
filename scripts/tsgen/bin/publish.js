@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs-extra");
 const path = require("path");
-const Parser_1 = require("./Parser");
+require("phaser");
+const Parser_1 = require("../src/Parser");
 function publish(data, opts) {
     // remove undocumented stuff.
     data({ undocumented: true }).remove();
