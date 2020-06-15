@@ -26,7 +26,7 @@ export class TextBox extends Phaser.Events.EventEmitter {
                 this.mTextEdit = new TextEdit(this.mBBCodeText);
                 this.mTextEdit.open(editConfig, closeHandler);
             }
-            // (<any>scene).plugins.get("rextexteditplugin").edit(this.mBBCodeText, editConfig);
+            // (<any>scene).plugins.get("Tooqingtexteditplugin").edit(this.mBBCodeText, editConfig);
         }, this);
     }
 

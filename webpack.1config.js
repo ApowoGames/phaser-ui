@@ -12,7 +12,7 @@ switch (testMode) {
         phaser = path.join(phaserModule, 'src/phaser.js');
         break;
     case '1':
-        var phaserModule = path.join(__dirname, '/../rex-phaser/'); // My tested phaser
+        var phaserModule = path.join(__dirname, '/../Tooqing-phaser/'); // My tested phaser
         phaser = path.join(phaserModule, 'src/phaser.js');
         break;
     case '2':
@@ -104,8 +104,8 @@ module.exports = {
     resolve: {
         alias: {
             'phaser': phaser,
-            // 'rexPlugins': path.resolve(__dirname, 'plugins/'),
-            // 'rexTemplates': path.resolve(__dirname, 'templates/'),
+            // 'TooqingPlugins': path.resolve(__dirname, 'plugins/'),
+            // 'TooqingTemplates': path.resolve(__dirname, 'templates/'),
         }
     }
 }

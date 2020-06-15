@@ -7,7 +7,7 @@ export enum SoundField {
 export interface ISoundConfig {
     key?: string;
     // urls: string | string[];
-    field?: SoundField;
+    field?: number;
     soundConfig?: Phaser.Types.Sound.SoundConfig;
 }
 

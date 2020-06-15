@@ -85,6 +85,8 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
                 case 'tooqingui.IButtonState':
+                case 'tooqingui.ScrollerConfig':
+                case 'tooqingui.ISelectCallUI':
                     doclet.kind = 'mixin';
                     break;
 

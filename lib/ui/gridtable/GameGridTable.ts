@@ -2,8 +2,19 @@ import { GridTableConfig, GridTableCoreConfig } from "./GridTableConfig";
 import GridTable from "./GridTable.js";
 import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
 import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
+/** 
+ * @namespace tooqingui.IMaskConfig 
+ */
 export interface IMaskConfig {
+    /**
+     * @name tooqingui.IMaskConfig#mask
+     * @type {boolean}
+     */
     mask: boolean;
+    /**
+     * @name tooqingui.IMaskConfig#padding
+     * @type {number}
+     */
     padding: number;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;

@@ -132,7 +132,7 @@ module.exports = {
     // 'dialogquest': './lib/dialog-quest/DialogQuest.js',
 
     // Plain class
-    // rex ui
+    // Tooqing ui
     'bbcodetext': './lib/ui/bbcodetext/BBCodeText.js',
     'buttons': './lib/ui/buttons/Buttons.js',
     'canvas': './lib/ui/canvas/Canvas.js',

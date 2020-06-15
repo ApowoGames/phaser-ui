@@ -2,8 +2,8 @@ import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
 import { IButtonState } from "../interface/button/IButtonState";
 import { IPatchesConfig } from "../interface/baseUI/Patches.config";
 import { BaseUI } from "../baseUI/BaseUI";
-import { CoreUI } from "../interface/event/MouseEvent";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
+import { ClickEvent } from "../interface/event/ClickEvent";
 
 export class NineSliceButton extends BaseUI implements IButtonState {
     protected mLabel: Phaser.GameObjects.Text;
@@ -135,7 +135,7 @@ export class NineSliceButton extends BaseUI implements IButtonState {
 
     protected onPointerUp(pointer) {
         this.changeNormal();
-        this.emit(CoreUI.MouseEvent.Tap, pointer, this);
+        this.emit(ClickEvent.Tap, pointer, this);
     }
 
     get label(): Phaser.GameObjects.Text {

@@ -75,6 +75,17 @@ class Parser {
                 case 'tooqingui.Patchesconfig':
                 case 'tooqingui.ISoundConfig':
                 case 'tooqingui.ISoundGroup':
+                case 'tooqingui.IMaskConfig':
+                case 'tooqingui.GridTableConfig':
+                case 'tooqingui.SliderConfig':
+                case 'tooqingui.GridTableCoreConfig':
+                case 'tooqingui.ScrollerableConfig':
+                case 'tooqingui.NinePatchConfig':
+                case 'tooqingui.IPatchesConfig':
+                case 'tooqingui.ISelectCallItemdata':
+                case 'tooqingui.ScrollerConfig':
+                case 'tooqingui.ISelectCallUI':
+                case 'tooqingui.IComboboxConfig':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript

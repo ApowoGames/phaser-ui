@@ -116,16 +116,16 @@ export class NineSlicePatch extends BaseUI {
     protected createPatches(): void {
         // The positions we want from the base texture
         // 保存有x轴和y轴9宫坐标信息，如果存在坐标信息相同，则表示某一部分的图片尺寸为0，需要查看原因
-        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
+        const textuTooqings: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
         const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
         let patchIndex: number = 0;
         for (let yi: number = 0; yi < 3; yi++) {
             for (let xi: number = 0; xi < 3; xi++) {
                 this.createPatchFrame(
                     this.getPatchNameByIndex(patchIndex),
-                    textureXs[xi], // x
+                    textuTooqings[xi], // x
                     textureYs[yi], // y
-                    textureXs[xi + 1] - textureXs[xi], // width
+                    textuTooqings[xi + 1] - textuTooqings[xi], // width
                     textureYs[yi + 1] - textureYs[yi] // height
                 );
                 ++patchIndex;
