@@ -329,8 +329,13 @@ export class Parser {
          */
 
         // console.log('namespace:', doclet.longname);
+        let obj;
+        if (doclet.name === 'Class') {
+            obj = dom.create.namespace("Phaser");
+        } else {
+            obj = dom.create.namespace(doclet.name);
+        }
 
-        let obj = dom.create.namespace(doclet.name);
 
         return obj;
     }
@@ -529,7 +534,7 @@ export class Parser {
         if (name === 'float') return 'number';
         if (name === 'function') return 'Function';
         if (name === 'Array.<function()>') return 'Function[]';
-        if (name === 'array') return 'any[]';
+        if (name === 'array' || name === 'Array') return 'any[]';
 
         if (name.startsWith('Array<')) {
             let matches = name.match(/^Array<(.*)>$/);

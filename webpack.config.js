@@ -32,7 +32,7 @@ const assetsFolder = process.env.assets || "./assets";
 const htmlTemplate = process.env.htmltemplate || "./examples/index.tmpl";
 
 module.exports = {
-  mode: "none",
+  mode: "development",
   entry: "./lib/ui/ui-components.ts",
   output: {
     pathinfo: true,

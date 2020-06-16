@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/13.2.0/bin/node /usr/local/Cellar/yarn/1.19.2/libexec/bin/yarn.js publish
+  /usr/local/Cellar/node/13.2.0/bin/node /usr/local/Cellar/yarn/1.19.2/libexec/bin/yarn.js add -D phaser
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,49 +14,28 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: canceled
-      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.19.2/libexec/lib/cli.js:136846:13)
-      at Interface.emit (events.js:210:5)
-      at Interface._ttyWrite (readline.js:885:16)
-      at ReadStream.onkeypress (readline.js:191:10)
-      at ReadStream.emit (events.js:210:5)
-      at emitKeys (internal/readline/utils.js:433:14)
-      at emitKeys.next (<anonymous>)
-      at ReadStream.onData (readline.js:1151:36)
-      at ReadStream.emit (events.js:210:5)
-      at addChunk (_stream_readable.js:326:12)
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:60:26)
 
 npm manifest: 
   {
-    "name": "phaser3-rex-plugins",
-    "version": "0.0.1",
-    "description": "Plugins of phaser3",
-    "author": "Rex",
-    "files": [
-      "plugins",
-      "templates",
-      "dist"
-    ],
+    "name": "tooqingui",
+    "version": "0.0.7",
+    "description": "Tooqingui Plugins",
+    "author": "Gxm",
     "main": "./dist/index.js",
+    "types": "./types/tooqingui.d.ts",
     "scripts": {
-      "watch": "webpack --config webpack.config.js",
-      "build": "rollup -c rollup.config.js",
+      "watch": "rimraf types && rimraf dist && webpack --config webpack.config.js",
+      "build": "rimraf dist && rollup -c rollup.config.js",
       "build-tsc": "cd lib/ui && tsc",
       "build-tsgen": "cd scripts/tsgen && tsc",
       "tsgen": "cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"
-    },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/rexrainbow/phaser3-rex-notes"
     },
     "keywords": [
       "phaser3"
     ],
     "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/rexrainbow/phaser3-rex-notes/issues"
-    },
-    "homepage": "https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html",
     "devDependencies": {
       "@babel/core": "^7.9.0",
       "@babel/polyfill": "^7.8.7",
@@ -73,7 +52,6 @@ npm manifest:
       "eslint-plugin-import": "^2.20.2",
       "expose-loader": "^0.7.5",
       "html-webpack-plugin": "^3.2.0",
-      "phaser": "3.23.0",
       "raw-loader": "^0.5.1",
       "rollup": "^2.7.3",
       "rollup-plugin-babel": "^4.4.0",
@@ -1078,7 +1056,7 @@ Lockfile:
   "@webassemblyjs/utf8@1.9.0":
     version "1.9.0"
     resolved "https://registry.yarnpkg.com/@webassemblyjs/utf8/-/utf8-1.9.0.tgz#04d33b636f78e6a6813227e82402f7637b6229ab"
-    integrity sha512-GZbQlWtopBTP0u7cHrEx+73yZKrQoBMpwkGEIqlacljhXCkVM1kMQge/Mf+csMJAjEdSwhOyLAS0AoR3AG5P8w==
+    integrity sha512-GZbQlWtopBTP0u7cHTooqing+73yZKrQoBMpwkGEIqlacljhXCkVM1kMQge/Mf+csMJAjEdSwhOyLAS0AoR3AG5P8w==
   
   "@webassemblyjs/wasm-edit@1.9.0":
     version "1.9.0"
@@ -5604,7 +5582,7 @@ Lockfile:
   prr@~1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
-    integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
+    integrity sha1-0/wRS6BplaTooqingok/SEzrHXj19HY=
   
   pseudomap@^1.0.2:
     version "1.0.2"

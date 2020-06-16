@@ -37,11 +37,19 @@ class Parser {
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "Tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "module" || doclet.longname === "Plugin") {
+                continue;
+            }
+            if (doclet.longname === "Matter") {
                 console.log(doclet);
+                continue;
             }
             // TODO: Custom temporary rules
             switch (doclet.longname) {
+                case 'module:MatterAttractors':
+                case 'module:MatterWrap':
+                    doclet.longname = doclet.name;
+                    break;
                 case 'Phaser.GameObjects.Components.Alpha':
                 case 'Phaser.GameObjects.Components.AlphaSingle':
                 case 'Phaser.GameObjects.Components.Animation':
@@ -110,6 +118,7 @@ class Parser {
             let container = this.objects;
             switch (doclet.kind) {
                 case 'namespace':
+                case 'module':
                     obj = this.createNamespace(doclet);
                     container = this.namespaces;
                     break;
@@ -291,7 +300,13 @@ class Parser {
         ___s: true }
          */
         // console.log('namespace:', doclet.longname);
-        let obj = dom.create.namespace(doclet.name);
+        let obj;
+        if (doclet.name === 'Class') {
+            obj = dom.create.namespace("Phaser");
+            console.log(obj);
+        } else {
+            obj = dom.create.namespace(doclet.name);
+        }
         return obj;
     }
     createClass(doclet) {
@@ -444,7 +459,7 @@ class Parser {
             return 'Function';
         if (name === 'Array.<function()>')
             return 'Function[]';
-        if (name === 'array')
+        if (name === 'array' || name === 'Array')
             return 'any[]';
         if (name.startsWith('Array<')) {
             let matches = name.match(/^Array<(.*)>$/);
