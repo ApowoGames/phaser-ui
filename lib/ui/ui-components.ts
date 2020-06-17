@@ -1,4 +1,4 @@
-import "phaser";
+import "tooqinggamephaser";
 import RoundRectangle from "./roundrectangle/RoundRectangle.js";
 import BBCodeText from "./bbcodetext/BBCodeText.js";
 import TagText from "./tagtext/TagText.js";
