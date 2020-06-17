@@ -5372,9 +5372,9 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-phaser@3.23.0:
+phaser@^3.23.0:
   version "3.23.0"
-  resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.23.0.tgz#9f3c02d358ced75e70e42d6fa51b37d17f37ee25"
+  resolved "https://registry.npmjs.org/phaser/-/phaser-3.23.0.tgz#9f3c02d358ced75e70e42d6fa51b37d17f37ee25"
   integrity sha512-tl8dZT5onDxor8Yf+QjxAk2fY4E0vy3oxc+ZsZiI8ppDwr3gWz7XA6hjVRnmEbAF64NcjRwWLU80VvKLi81VtQ==
   dependencies:
     eventemitter3 "^3.1.0"
