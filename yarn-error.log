@@ -21,7 +21,7 @@ npm manifest:
   {
     "name": "tooqingui",
     "version": "0.0.7",
-    "description": "Tooqingui Plugins",
+    "description": "tooqingui Plugins",
     "author": "Gxm",
     "main": "./dist/index.js",
     "types": "./types/tooqingui.d.ts",

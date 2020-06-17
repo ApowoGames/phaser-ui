@@ -4,7 +4,7 @@ import { TextConfig } from "../text/TextConfig";
 import { ISoundGroup } from "../sound/ISoundConfig";
 import { INinePatchSkinData } from "../ninepatch/INinePatchSkinData";
 
-export interface ProgressBarConfig {
+export interface ProgressBarConfig {  //Todo I?
     x: number;
     y: number;
     width: number;

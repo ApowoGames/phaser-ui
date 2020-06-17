@@ -32,15 +32,17 @@ const assetsFolder = process.env.assets || "./assets";
 const htmlTemplate = process.env.htmltemplate || "./examples/index.tmpl";
 
 module.exports = {
-  mode: "development",
-  entry: "./lib/ui/ui-components.ts",
+  mode: "none",
+  entry: { tooqingui: "./lib/ui/ui-components.ts" },
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, "dist"),
     publicPath: "./dist/",
-    library: "[name]",
-    libraryTarget: "commonjs",
+    library: "tooqingui",
+    libraryTarget: "umd",
+    libraryExport:"default",
     filename: "index.js",
+    umdNamedDefine: true
   },
   watch: true,
   module: {

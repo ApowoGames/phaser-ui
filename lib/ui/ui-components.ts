@@ -1,4 +1,4 @@
-import "tooqinggamephaser";
+import "phaser";
 import RoundRectangle from "./roundrectangle/RoundRectangle.js";
 import BBCodeText from "./bbcodetext/BBCodeText.js";
 import TagText from "./tagtext/TagText.js";
@@ -28,8 +28,26 @@ import IsPointerInBounds from "../plugins/utils/input/IsPointerInBounds.js";
 import { Show, Hide, IsShown } from "./utils/Hide.js";
 import Edit from "../plugins/behaviors/textedit/Edit.js";
 import { WaitEvent, WaitComplete } from "./utils/WaitEvent.js";
-
-export {
+import { BaseUI } from "./baseUI/BaseUI.js";
+import { BaseMediator } from "./baseUI/BaseMediator.js";
+import { Button } from "./button/Button.js";
+import { NineSliceButton } from "./button/NineSliceButton.js";
+import { ComboBox } from "./combobox/Combobox.js";
+import { GameGridTable } from "./gridtable/GameGridTable.js";
+import { NinePatchSkin } from "./interface/ninepatch/NinePatchSkin.js";
+import { MessageBox } from "./messageBox/MessageBox.js";
+import { NinePatch } from "./ninepatch/NinePatch.js";
+import { NineSlicePatch } from "./ninepatch/NineSlicePatch.js";
+import { Panel } from "./panel/Panel.js";
+import { ProgressBar } from "./progressbar/ProgressBar.js";
+import { GameScroller } from "./scroller/GameScroller.js";
+import { BaseScroller } from "./scroller/Scroller.js";
+import { NinePatchTabButton } from "./tab/NinePatchTabButton.js";
+import { TabButton } from "./tab/TabButton.js";
+/**
+ * @namespace tooqingui
+ */
+const tooqingui = {
   RoundRectangle,
   BBCodeText,
   TagText,
@@ -37,16 +55,29 @@ export {
   Canvas,
   Sizer,
   GridSizer,
-  // FixWidthSizer,
-  // OverlapSizer,
+  BaseUI,
+  BaseMediator,
+  Button,
+  NineSliceButton,
+  ComboBox,
+  GameGridTable,
+  NinePatchSkin,
+  MessageBox,
+  NinePatch,
+  NineSlicePatch,
+  Panel,
+  ProgressBar,
+  GameScroller,
+  BaseScroller,
+  NinePatchTabButton,
+  TabButton,
+
 
   Label,
   Buttons,
   Slider,
   GridTable,
   Menu,
-  // NumberBar,
-  // Pages,
   TextBlock,
   TextArea,
   ScrollableBlock,
@@ -64,4 +95,5 @@ export {
   Edit,
   WaitEvent,
   WaitComplete,
-};
+}
+module.exports = tooqingui;
