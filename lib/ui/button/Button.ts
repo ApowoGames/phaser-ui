@@ -194,7 +194,7 @@ export class Button extends BaseUI implements IButtonState {
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
             this.emit(CoreUI.MouseEvent.Hold, this);
-        },  this.mPressTime);
+        }, this.mPressTime);
         this.emit(CoreUI.MouseEvent.Down, this);
     }
 }
