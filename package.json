@@ -1,13 +1,13 @@
 {
-  "name": "tooqingui",
+  "name": "tooqinui",
   "version": "0.0.3",
-  "description": "tooqingui Plugins",
+  "description": "tooqinui Plugins",
   "author": "Gxm",
   "main": "./dist/index.js",
-  "types": "./types/tooqingui.d.ts",
+  "types": "./types/tooqinui.d.ts",
   "scripts": {
-    "watch": "rimraf types && rimraf dist && webpack --config webpack.config.js",
-    "build": "rimraf dist && rollup -c rollup.config.js",
+    "watch": "webpack --config webpack.config.js",
+    "build": "rollup -c rollup.config.js",
     "build-tsc": "cd lib/ui && tsc",
     "build-tsgen": "cd scripts/tsgen && tsc",
     "tsgen": "cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"

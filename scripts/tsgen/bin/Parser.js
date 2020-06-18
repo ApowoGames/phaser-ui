@@ -18,8 +18,8 @@ class Parser {
         // add integer alias
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        const phaserPkgModuleDOM = dom.create.module('tooqinui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqinui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
     emit() {
@@ -37,7 +37,7 @@ class Parser {
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "tooqinui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -64,17 +64,6 @@ class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqingui.IButtonState':
-                case 'tooqingui.IMediator':
-                case 'tooqingui.IAbstractPanel':
-                case 'tooqingui.IAbstractInteractiveObject':
-                case 'tooqingui.IAbstractItem':
-                case 'tooqingui.IAbstractUI':
-                case 'tooqingui.ISetInteractive':
-                case 'tooqingui.ISound':
-                case 'tooqingui.Patchesconfig':
-                case 'tooqingui.ISoundConfig':
-                case 'tooqingui.ISoundGroup':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript
@@ -213,13 +202,13 @@ class Parser {
                 console.log(`Didn't find type ${doclet.longname} ???`);
                 continue;
             }
-            if (!obj._parent) continue;
+            if (!obj._parent)
+                continue;
             if (doclet.inherited) { // remove inherited members if they aren't from an interface
-                if (doclet.kind === 'mixin') { console.log(doclet) }
                 let from = this.objects[doclet.inherits];
                 if (!from || !from._parent)
                     throw `'${doclet.longname}' should inherit from '${doclet.inherits}', which is not defined.`;
-                if (from._parent.kind !== 'interface') {
+                if (from._parent.kind != 'interface') {
                     obj._parent.members.splice(obj._parent.members.indexOf(obj), 1);
                     obj._parent = null;
                 }
@@ -229,7 +218,7 @@ class Parser {
     resolveParents(docs) {
         for (let doclet of docs) {
             let obj = this.objects[doclet.longname];
-            if (!obj) //|| (doclet.kind !== 'class'))
+            if (!obj || doclet.kind !== 'class')
                 continue;
             let o = obj;
             // resolve augments
@@ -242,19 +231,11 @@ class Parser {
                         console.log(`ERROR: Did not find base type: ${augment} for ${doclet.longname}`);
                     }
                     else {
-                        if (baseType.kind === 'class') {
-                            if (doclet.kind === 'mixin') {
-                                o.baseTypes = [dom.create.class(name)];
-                            } else {
-                                o.baseType = dom.create.class(name);
-                            }
+                        if (baseType.kind == 'class') {
+                            o.baseType = dom.create.class(name);
                         }
                         else {
-                            if (doclet.kind === 'mixin') {
-                                o.baseTypes = [dom.create.interface(name)];
-                            } else {
-                                o.implements.push(dom.create.interface(name));
-                            }
+                            o.implements.push(dom.create.interface(name));
                         }
                     }
                 }

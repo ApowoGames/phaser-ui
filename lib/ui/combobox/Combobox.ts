@@ -1,9 +1,9 @@
 import { IComboboxConfig } from "../interface/combobox/IComboboxConfig";
-import { IAbstractItem } from "../interface/baseUI/IAbstractItem";
+import { IAbstructItem } from "../interface/baseUI/IAbstructItem";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
 
-export interface ISelectCallItemdata extends IAbstractItem {
+export interface ISelectCallItemdata extends IAbstructItem {
     text: string;
     data: any;
 }
@@ -110,7 +110,7 @@ export class SelectCallItem extends BaseUI {
 }
 /**
  * @class ComboBox
- * @memberof tooqingui.ComboBox
+ * @memberof tooqinui.ComboBox
  * @constructor
  * @param {Phaser.Scene} scene
  * @param {*} config (export interface IComboboxConfig {wid: number;hei: number;

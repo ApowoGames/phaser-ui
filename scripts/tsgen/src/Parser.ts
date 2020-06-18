@@ -30,8 +30,8 @@ export class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        const phaserPkgModuleDOM = dom.create.module('tooqinui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqinui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
 
@@ -57,7 +57,7 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "tooqinui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -84,7 +84,6 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqingui.IButtonState':
                     doclet.kind = 'mixin';
                     break;
 
@@ -252,9 +251,9 @@ export class Parser {
     private resolveParents(docs: any[]) {
         for (let doclet of docs) {
             let obj = this.objects[doclet.longname];
-            if (!obj) continue; // || doclet.kind !== 'class') continue;
+            if (!obj || doclet.kind !== 'class') continue;
 
-            let o = obj as any; //as dom.ClassDeclaration;
+            let o = obj as dom.ClassDeclaration;
 
             // resolve augments
             if (doclet.augments && doclet.augments.length) {
@@ -269,11 +268,7 @@ export class Parser {
                         console.log(`ERROR: Did not find base type: ${augment} for ${doclet.longname}`);
                     } else {
                         if (baseType.kind == 'class') {
-                            if (doclet.kind === 'mixin') {
-                                o.baseTypes = [dom.create.class(name)];
-                            } else {
-                                o.baseType = dom.create.class(name);
-                            }
+                            o.baseType = dom.create.class(name);
                         } else {
                             o.implements.push(dom.create.interface(name));
                         }
@@ -433,7 +428,7 @@ export class Parser {
             obj.jsDocComment = '';
 
             for (let paramDoc of doclet.params) {
-                if (!paramDoc || !paramDoc.name) console.log(doclet);
+                if (!paramDoc||!paramDoc.name) console.log(doclet);
                 // TODO REMOVE TEMP FIX
                 if (paramDoc.name.indexOf('.') != -1) {
                     console.log(`Warning: ignoring param with '.' for '${doclet.longname}' in ${doclet.meta.filename}@${doclet.meta.lineno}`);
