@@ -86,9 +86,10 @@ export class BaseMediator implements IMediator {
     destroy() {
         this.mShow = false;
         this.mParam = null;
-        if (this.mView) {
-            this.mView.destroy();
-            this.mView = undefined;
+        let view = this.getView();
+        if (view) {
+            view.destroy();
+            view = undefined;
         }
     }
 }

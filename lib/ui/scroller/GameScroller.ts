@@ -77,10 +77,6 @@ export class GameScroller extends BaseUI implements ISound {
         if (this.mScroller) this.mScroller.setValue(value);
     }
 
-    public getValue() {
-        return this.mScroller.value;
-    }
-
     public adjustBackDeceleration(deceler: number) {
         if (this.mScroller) this.mScroller.setBackDeceleration(deceler);
     }
@@ -156,7 +152,6 @@ export class GameScroller extends BaseUI implements ISound {
     }
     public Sort(isFixed: boolean = false) {
         let value = 0;
-        const offset = (isFixed ? this.getScrollBound() : 0);
         const space = (this.mConfig.space === undefined ? 0 : this.mConfig.space);
         const list: any = this.mGameObject.list;
         const activeArr: any[] = [];
@@ -213,51 +208,16 @@ export class GameScroller extends BaseUI implements ISound {
         this.mRightBound = rightBound;
         let value0 = bound;
         if (isFixed) {
-            value0 += offset;
-            if (value0 < leftBound) value0 = leftBound;
-            if (value0 > rightBound) value0 = rightBound;
+            value0 = (this.mConfig.orientation === 1 ? this.mGameObject.x : this.mGameObject.y);
+            if (value0 < bound) {
+                value0 += Math.abs(bound - value0);
+            } else if (value0 > bound) {
+                value0 -= Math.abs(bound - value0);
+            }
         }
 
         this.setBounds(leftBound, rightBound);
         this.setValue(value0);
-    }
-
-    public getScrollBound() {
-        let scrollValue = 0;
-        let contentValue = 0;
-        let bound = 0;
-        if (this.mConfig.orientation === 1) {
-            scrollValue = this.width;
-            contentValue = this.mGameObject.width;
-        } else {
-            scrollValue = this.height;
-            contentValue = this.mGameObject.height;
-        }
-        bound = contentValue - scrollValue;
-        if (bound < 0) {
-            if (this.mConfig.align === 0) {
-                bound = -bound / 2;
-            } else if (this.mConfig.align === 1) {
-                bound = 0;
-            } else {
-                bound = bound / 2;
-            }
-        } else {
-            if (this.mConfig.align === 0) {
-                bound = -bound / 2;
-            } else if (this.mConfig.align === 1) {
-                bound = 0;
-            } else {
-                bound = bound / 2;
-            }
-        }
-        let offset = 0;
-        if (this.mConfig.orientation === 1) {
-            offset = this.mGameObject.x - bound;
-        } else {
-            offset = this.mGameObject.y - bound;
-        }
-        return offset;
     }
 
     public clearItems() {
