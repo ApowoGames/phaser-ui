@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs-extra");
 const path = require("path");
-// require("phaser"); FATAL: Unable to load template: window is not defined 无法加载
+// import 'phaser'; FATAL: Unable to load template: window is not defined 无法加载
 const Parser_1 = require("./Parser");
 function publish(data, opts) {
     // remove undocumented stuff.
@@ -22,4 +22,4 @@ function publish(data, opts) {
     fs.writeFileSync(path.join(opts.destination, 'tooqingui.d.ts'), out);
 }
 exports.publish = publish;
-;
+

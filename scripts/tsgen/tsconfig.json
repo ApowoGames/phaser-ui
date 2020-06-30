@@ -10,7 +10,8 @@
         "outDir": "./bin/"
     },
     "include": [
-        "src/**/*.ts",
+        "src/*.ts",
         "./node_modules/@types/**/*.d.ts"
-    ]
+    ],
+   // "files": ["../../node_modules/phaser/types/phaser.d.ts"]
 }

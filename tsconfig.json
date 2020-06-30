@@ -7,13 +7,21 @@
       "webworker",
       "dom"
     ],
+    "allowJs": true,
     "declaration": false,
     "sourceMap": false,
     "typeRoots": [
-      "node_modules/@types"
-    ]
+      "plugins/@types",
+    ],
+    "esModuleInterop": true,
   },
+  "include": [
+    "lib/",
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+  ],
+  "files": [
+    "node_modules/phaser/types/phaser.d.ts"
   ]
 }

@@ -7,9 +7,6 @@ class Parser {
         this.topLevel = [];
         this.objects = {};
         this.namespaces = {};
-        const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
-        this.topLevel.push(phaserPkgModuleDOM);
         // parse doclets and create corresponding dom objects
         this.parseObjects(docs);
         this.resolveObjects(docs);
@@ -21,6 +18,9 @@ class Parser {
         // add integer alias
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
         // add declare module
+        const phaserPkgModuleDOM = dom.create.module('tooqingui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        this.topLevel.push(phaserPkgModuleDOM);
     }
     emit() {
         let ignored = [];
@@ -34,22 +34,24 @@ class Parser {
         }
         return result;
     }
+    // private parserPhaserObjects(phaseName: string) {
+    //     let doc;
+    //     switch (phaseName) {
+    //         case "Phaser.GameObjects.DOMElement":
+    //             doc = Phaser.GameObjects.DOMElement;
+    //             doc.kind = "class";
+    //             break;
+    //     }
+    //     return doc;
+    // }
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "module" || doclet.longname === "Plugin") {
-                continue;
-            }
-            if (doclet.longname === "Matter") {
+            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
-                continue;
             }
             // TODO: Custom temporary rules
             switch (doclet.longname) {
-                case 'module:MatterAttractors':
-                case 'module:MatterWrap':
-                    doclet.longname = doclet.name;
-                    break;
                 case 'Phaser.GameObjects.Components.Alpha':
                 case 'Phaser.GameObjects.Components.AlphaSingle':
                 case 'Phaser.GameObjects.Components.Animation':
@@ -111,14 +113,15 @@ class Parser {
                     doclet.isEnum = true;
                     break;
             }
-            if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1) {
-                doclet.kind = 'mixin';
+            if (doclet.longname) {
+                if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1) {
+                    doclet.kind = 'mixin';
+                }
             }
             let obj;
             let container = this.objects;
             switch (doclet.kind) {
                 case 'namespace':
-                case 'module':
                     obj = this.createNamespace(doclet);
                     container = this.namespaces;
                     break;
@@ -146,6 +149,7 @@ class Parser {
                     obj = this.createEvent(doclet);
                     break;
                 default:
+                    console.log(doclet);
                     console.log('Ignored doclet kind: ' + doclet.kind);
                     break;
             }
@@ -259,6 +263,13 @@ class Parser {
                     let wrappingName = name.match(/[^<]+/s)[0]; //gets everything up to a first < (to handle augments with type parameters)
                     let baseType = this.objects[wrappingName];
                     if (!baseType) {
+                        // 第三方库引入时，无法解决解析第三方库类型，所以下面直接将当前类的父类，父接口写如下直接赋值
+                        if (wrappingName === "Phaser.GameObjects.Components.Origin") {
+                            o.implements.push(dom.create.interface(name));
+                        }
+                        else {
+                            o.baseType = wrappingName;
+                        }
                         console.log(`ERROR: Did not find base type: ${augment} for ${doclet.longname}`);
                     }
                     else {
@@ -273,7 +284,8 @@ class Parser {
                         else {
                             if (doclet.kind === 'mixin') {
                                 o.baseTypes = [dom.create.interface(name)];
-                            } else {
+                            }
+                            else {
                                 o.implements.push(dom.create.interface(name));
                             }
                         }
@@ -303,8 +315,8 @@ class Parser {
         let obj;
         if (doclet.name === 'Class') {
             obj = dom.create.namespace("Phaser");
-            console.log(obj);
-        } else {
+        }
+        else {
             obj = dom.create.namespace(doclet.name);
         }
         return obj;

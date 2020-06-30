@@ -4,28 +4,28 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 
 // Phaser webpack config
-var phaser;
-const testMode = process.env.testmode || "0";
-switch (testMode) {
-  case "0":
-    var phaserModule = path.join(__dirname, "/node_modules/phaser/"); // Official released phaser
-    phaser = path.join(phaserModule, "src/phaser.js");
-    break;
-  case "1":
-    var phaserModule = path.join(__dirname, "/../gxm-phaser/"); // My tested phaser
-    phaser = path.join(phaserModule, "src/phaser.js");
-    break;
-  case "2":
-    var phaserModule = path.join(__dirname, "/../phaser/"); // Lastest phaser
-    phaser = path.join(phaserModule, "src/phaser.js");
-    break;
-  default:
-    var phaserModule = path.join(__dirname, testMode); // Other phaser path
-    phaser = path.join(phaserModule, "src/phaser.js");
-    break;
-}
+// var phaser;
+// const testMode = process.env.testmode || "0";
+// switch (testMode) {
+//   case "0":
+//     var phaserModule = path.join(__dirname, "/node_modules/phaser/"); // Official released phaser
+//     phaser = path.join(phaserModule, "src/phaser.js");
+//     break;
+//   case "1":
+//     var phaserModule = path.join(__dirname, "/../gxm-phaser/"); // My tested phaser
+//     phaser = path.join(phaserModule, "src/phaser.js");
+//     break;
+//   case "2":
+//     var phaserModule = path.join(__dirname, "/../phaser/"); // Lastest phaser
+//     phaser = path.join(phaserModule, "src/phaser.js");
+//     break;
+//   default:
+//     var phaserModule = path.join(__dirname, testMode); // Other phaser path
+//     phaser = path.join(phaserModule, "src/phaser.js");
+//     break;
+// }
 
-console.log("Phaser path:" + phaser);
+// console.log("Phaser path:" + phaser);
 
 const projectMain = process.env.main;
 const assetsFolder = process.env.assets || "./assets";
@@ -37,11 +37,9 @@ module.exports = {
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, "dist"),
-    publicPath: "./dist/",
     library: "tooqingui",
     libraryTarget: "umd",
-    libraryExport:"default",
-    filename: "index.js",
+    filename: "tooqingui.js",
     umdNamedDefine: true
   },
   watch: true,
@@ -50,20 +48,16 @@ module.exports = {
       {
         test: /\.js$/,
         use: ["babel-loader"],
-        include: path.join(__dirname, "src"),
-      },
-      {
-        test: /phaser-split\.js$/,
-        use: ["expose-loader?Phaser"],
+        include: path.join(__dirname, "lib"),
       },
       {
         test: [/\.vert$/, /\.frag$/],
         use: "raw-loader",
       },
-      { test: /\.ts$/, loader: "ts-loader", exclude: "/node_modules/" },
+      { test: /\.ts$/, loader: "ts-loader", exclude: ["/node_modules/", "/lib/"] },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".js"],
   },
 };

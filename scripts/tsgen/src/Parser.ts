@@ -5,7 +5,7 @@ const regexEndLine = /^(.*)\r\n|\n|\r/gm;
 export class Parser {
 
     topLevel: dom.TopLevelDeclaration[];
-    objects: { [key: string]: dom.DeclarationBase };
+    objects: { [key: string]: any };
     namespaces: { [key: string]: dom.NamespaceDeclaration };
 
     constructor(docs: any[]) {
@@ -13,19 +13,15 @@ export class Parser {
         this.topLevel = [];
         this.objects = {};
         this.namespaces = {};
-
         // parse doclets and create corresponding dom objects
         this.parseObjects(docs);
-
         this.resolveObjects(docs);
-
         // removes members inherited from classes
         // possibly could be avoided if mixins were defined as such before JSDoc parses them and then we could globally remove all inherited (not
         // overridden) members globally from the parsed DB
         this.resolveInheritance(docs);
 
         this.resolveParents(docs);
-
         // add integer alias
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
@@ -52,6 +48,17 @@ export class Parser {
 
         return result;
     }
+
+    // private parserPhaserObjects(phaseName: string) {
+    //     let doc;
+    //     switch (phaseName) {
+    //         case "Phaser.GameObjects.DOMElement":
+    //             doc = Phaser.GameObjects.DOMElement;
+    //             doc.kind = "class";
+    //             break;
+    //     }
+    //     return doc;
+    // }
 
     private parseObjects(docs: any[]) {
         for (let i = 0; i < docs.length; i++) {
@@ -125,9 +132,12 @@ export class Parser {
                     break;
             }
 
-            if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1) {
-                doclet.kind = 'mixin';
+            if (doclet.longname) {
+                if ((doclet.longname.indexOf('Phaser.Physics.Arcade.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Impact.Components.') == 0 || doclet.longname.indexOf('Phaser.Physics.Matter.Components.') == 0) && doclet.longname.indexOf('#') == -1) {
+                    doclet.kind = 'mixin';
+                }
             }
+
 
             let obj: dom.DeclarationBase;
             let container = this.objects;
@@ -161,6 +171,7 @@ export class Parser {
                     obj = this.createEvent(doclet);
                     break;
                 default:
+                    console.log(doclet);
                     console.log('Ignored doclet kind: ' + doclet.kind);
                     break;
             }
@@ -285,8 +296,13 @@ export class Parser {
                     let wrappingName = name.match(/[^<]+/s)[0];//gets everything up to a first < (to handle augments with type parameters)
 
                     let baseType = this.objects[wrappingName] as dom.ClassDeclaration | dom.InterfaceDeclaration;
-
                     if (!baseType) {
+                        // 第三方库引入时，无法解决解析第三方库类型，所以下面直接将当前类的父类，父接口写如下直接赋值
+                        if (wrappingName === "Phaser.GameObjects.Components.Origin") {
+                            o.implements.push(dom.create.interface(name));
+                        } else {
+                            o.baseType = wrappingName;
+                        }
                         console.log(`ERROR: Did not find base type: ${augment} for ${doclet.longname}`);
                     } else {
                         if (baseType.kind == 'class') {
