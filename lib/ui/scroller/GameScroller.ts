@@ -174,6 +174,7 @@ export class GameScroller extends BaseUI implements ISound {
                 value += item.height + space;
             }
         }
+        value -= space;
         if (this.mConfig.orientation === 1) {
             this.mGameObject.width = value;
             for (const item of activeArr) {

@@ -7,7 +7,6 @@ import Canvas from "./canvas/Canvas.js";
 import { NineSlicePatch } from "./ninepatch/NineSlicePatch";
 import Sizer from "./sizer/Sizer.js";
 import GridSizer from "./gridsizer/GridSizer.js";
-
 import Label from "./label/Label.js";
 import Buttons from "./buttons/Buttons.js";
 import { Button } from "./button/Button";

@@ -165,6 +165,7 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         }
         this.adjustMask(x, y);
         this.mGridTable.layout();
+        this.resetMask();
     }
 
     public destroy() {
