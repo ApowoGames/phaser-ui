@@ -265,7 +265,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         if (!this.scene) {
             return;
         }
-        this.scene.load.on(Phaser.Loader.Events.FILE_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.on(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
         this.scene.load.once(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
         this.scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
         this.scene.load.start();
@@ -275,7 +275,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         if (!this.scene) {
             return;
         }
-        this.scene.load.off(Phaser.Loader.Events.FILE_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.off(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
         this.scene.load.off(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
         this.scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
     }

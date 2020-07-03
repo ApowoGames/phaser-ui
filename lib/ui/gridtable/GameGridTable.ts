@@ -147,10 +147,6 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         if (this.mGridTable) this.mGridTable.refresh();
     }
 
-    resetMask(x?:number,y?:number,width?:number,height?:number){
-        if (this.mGridTable) this.mGridTable.resetMask(x,y,width,height);
-    }
-
     public layout() {
         if (this.mGridTable) this.mGridTable.layout();
     }
@@ -165,7 +161,6 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
         }
         this.adjustMask(x, y);
         this.mGridTable.layout();
-        this.resetMask();
     }
 
     public destroy() {

@@ -1,7 +1,7 @@
 {
-  "name": "tooqinui",
-  "version": "0.0.3",
-  "description": "tooqinui Plugins",
+  "name": "tooqingui",
+  "version": "0.5.8",
+  "description": "tooqingui Plugins",
   "author": "Gxm",
   "main": "./dist/index.js",
   "types": "./types/tooqinui.d.ts",
