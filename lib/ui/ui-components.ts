@@ -3,6 +3,7 @@ import BBCodeText from "./bbcodetext/BBCodeText.js";
 import TagText from "./tagtext/TagText.js";
 import Container from "./container/Container.js";
 import Canvas from "./canvas/Canvas.js";
+import NineSlicePatch from "./ninepatch/NineSlicePatch";
 import Sizer from "./sizer/Sizer.js";
 import GridSizer from "./gridsizer/GridSizer.js";
 import Label from "./label/Label.js";
@@ -10,6 +11,7 @@ import Buttons from "./buttons/Buttons.js";
 import Slider from "./slider/Slider.js";
 import GridTable from "./gridtable/GridTable.js";
 import Menu from "./menu/Menu.js";
+import TextBox from "./textBox/TextBox";
 import TextBlock from "./textblock/TextBlock.js";
 import TextArea from "./textarea/TextArea.js";
 import ScrollableBlock from "./scrollableblock/ScrollableBlock.js";
@@ -31,10 +33,9 @@ import { Button } from "./button/Button.js";
 import NineSliceButton from "./button/NineSliceButton.js";
 import { ComboBox } from "./combobox/Combobox.js";
 import { GameGridTable } from "./gridtable/GameGridTable.js";
-import NinePatchSkin from "./interface/ninepatch/NinePatchSkin.js";
+import { NinePatchSkin } from "./interface/ninepatch/NinePatchSkin.js";
 import MessageBox from "./messageBox/MessageBox.js";
 import NinePatch from "./ninepatch/NinePatch.js";
-import NineSlicePatch from "./ninepatch/NineSlicePatch.js";
 import Panel from "./panel/Panel.js";
 import ProgressBar from "./progressbar/ProgressBar.js";
 import GameScroller from "./scroller/GameScroller.js";
@@ -44,6 +45,7 @@ import TabButton from "./tab/TabButton.js";
 import SetText from "../ui/textarea/SetText.js";
 import AppendText from "../ui/textarea/AppendText.js";
 import UIType from "../ui/interface/baseUI/UIType.js";
+import GameSlider from "../ui/slider/GameSlider";
 export = {
   UIType,
   InputText,
@@ -52,6 +54,7 @@ export = {
   TagText,
   Container,
   Canvas,
+  NineSlicePatch,
   Sizer,
   GridSizer,
   BaseUI,
@@ -63,7 +66,6 @@ export = {
   NinePatchSkin,
   MessageBox,
   NinePatch,
-  NineSlicePatch,
   Panel,
   ProgressBar,
   GameScroller,
@@ -85,6 +87,7 @@ export = {
   Press,
   Rotate,
   Flip,
+  GameSlider,
   GetParentSizer,
   GetTopmostSizer,
   IsPointerInBounds,
