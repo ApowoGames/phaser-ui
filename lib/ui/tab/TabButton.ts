@@ -1,7 +1,6 @@
 import { Button, ButtonState, NinePatchConfig } from "../button/Button";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { CoreUI } from "../interface/event/MouseEvent";
-import { IPatchesConfig } from "../interface/baseUI/Patches.config";
 export class TabButton extends Button {
     protected mSelected: boolean = false;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup, dpr?: number, scale?: number, nineConfig?: NinePatchConfig) {
