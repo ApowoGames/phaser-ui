@@ -1,5 +1,6 @@
 /node_modules/*
 /dist/*
 /index.html
+/lib/ui/**/*.ts
 /out
 package-lock.json
