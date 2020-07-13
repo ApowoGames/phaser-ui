@@ -22,4 +22,4 @@ function publish(data, opts) {
     fs.writeFileSync(path.join(opts.destination, 'tooqingui.d.ts'), out);
 }
 exports.publish = publish;
-
+;
