@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
-
+const ConfigWebpackPlugin = require("config-webpack");
 // Phaser webpack config
 // var phaser;
 // const testMode = process.env.testmode || "0";
@@ -60,4 +60,9 @@ module.exports = {
   resolve: {
     extensions: [".js"],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+    WEBGL_RENDERER: true, // I did this to make webpack work, but I'm not really sure it should always be true
+    CANVAS_RENDERER: true, // I did this to make webpack work, but I'm not really sure it should always be true
+  })]
 };

@@ -830,7 +830,7 @@ declare namespace tooqingui {
      * NineSlicePatch
      */
     class NineSlicePatch extends tooqingui.BaseUI {
-        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number);
+        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame?: string, config?: any, dpr?: number, scale?: number);
 
         resize(width: number, height: number): void;
 

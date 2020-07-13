@@ -1,6 +1,6 @@
 {
   "name": "tooqingui",
-  "version": "0.5.7",
+  "version": "0.6.6",
   "description": "tooqingui Plugins",
   "author": "Gxm",
   "main": "./dist/tooqingui.js",
@@ -26,6 +26,7 @@
     "browser-sync-webpack-plugin": "^2.2.2",
     "chart.js": "^2.9.3",
     "clean-webpack-plugin": "^0.1.19",
+    "config-webpack": "^1.0.4",
     "copy-webpack-plugin": "^4.6.0",
     "dts-dom": "^3.6.0",
     "eslint": "^5.16.0",

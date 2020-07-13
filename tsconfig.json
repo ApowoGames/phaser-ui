@@ -16,10 +16,10 @@
     "esModuleInterop": true,
   },
   "include": [
-    "lib/",
+    "lib",
   ],
   "exclude": [
-    "node_modules",
+    "node_modules","dist"
   ],
   "files": [
     "node_modules/phaser/types/phaser.d.ts"
