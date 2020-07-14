@@ -27,9 +27,9 @@ declare namespace tooqingui {
 
         resize(width: number, height: number): void;
 
-        show(param: any): void;
+        show(param?: any): void;
 
-        update(param: any): void;
+        update(param?: any): void;
 
         setParam(param: any): void;
 

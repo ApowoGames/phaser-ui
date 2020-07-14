@@ -1,6 +1,6 @@
 {
-  "name": "tooqingui",
-  "version": "0.6.9",
+  "name": "phaser-ui",
+  "version": "0.0.1",
   "description": "tooqingui Plugins",
   "author": "Gxm",
   "main": "./dist/tooqingui.js",
@@ -56,5 +56,16 @@
     "papaparse": "^4.6.3",
     "phaser": "^3.23.0",
     "webfontloader": "^1.6.28"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ApowoGames/phaser-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ApowoGames/phaser-ui/issues"
+  },
+  "homepage": "https://github.com/ApowoGames/phaser-ui#readme"
 }
