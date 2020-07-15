@@ -14,7 +14,7 @@
 
 1. yarn add phaser-ui
 
-## phaser-rexui 部分api(基于rexui https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
+## phaser-rexui 部分demo(基于rexui https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
 
 - Webgl shader effect
     - [Swirl](https://codepen.io/rexuirainbow/full/RBXQBo)
