@@ -1,6 +1,6 @@
-# Notes of Phaser3 engine
+# 基于 Phaser3 引擎
 
-## Links
+## 链接
 
 - [Phaser3](https://github.com/photonstorm/phaser)
     - [Discord channel](https://discord.gg/phaser)
@@ -10,9 +10,9 @@
     - [tooqingui](https://Tooqingrainbow.github.io/phaser3-Tooqing-notes/docs/site/ui-overview/)
     - [Discord channel](https://discord.gg/kWkuFZK)
 
-## Demo
+## 例子
 
-### Prepare
+### 准备
 
 1. Install [node.js](https://nodejs.org/en/) (ver 10+, for rollup)
 2. Click `install.bat`
@@ -35,13 +35,13 @@
 - Folder `docs` : Some notes of phaser3, and my plugins.
     - `site\index.html` : Entry point.
 
-## Showcase
+## phaser-rexui 部分api
 
 - Webgl shader effect
-    - [Swirl](https://codepen.io/Tooqingrainbow/full/RBXQBo)
-    - [Pixelation](https://codepen.io/Tooqingrainbow/full/MqgmgE)
-    - [Toonify](https://codepen.io/Tooqingrainbow/full/ErWNXa)
-- [Virtual joystick](https://codepen.io/Tooqingrainbow/full/oyqvQY)
+    - [Swirl](https://codepen.io/rexuirainbow/full/RBXQBo)
+    - [Pixelation](https://codepen.io/rexuirainbow/full/MqgmgE)
+    - [Toonify](https://codepen.io/rexuirainbow/full/ErWNXa)
+- [Virtual joystick](https://codepen.io/rexuirainbow/full/oyqvQY)
 - Path finder
     - [Find area, get path](https://codepen.io/Tooqingrainbow/full/qvJwjJ)
     - [Move from high to low](https://codepen.io/Tooqingrainbow/full/NJOmQg)
@@ -68,3 +68,9 @@
     - [Video](https://codepen.io/Tooqingrainbow/pen/Gazmyz)
     - [Anchor](https://codepen.io/Tooqingrainbow/pen/jJqXxB)
     - [Round-rectangle](https://codepen.io/Tooqingrainbow/pen/ZqqJjG)
+    
+### 生成声明文件流程（Phaser3-ui项目）
+1. 利用tsc指令将ts脚本转换成js脚本
+2. 利用jsdoc的api对于js脚本属性和方法进行描述，再使用tsgen指令，生成phaserui.d.ts声明文件
+3. 利用watch指令将ui库的js脚本打包成phaserui.js
+4. 修改项目version，利用npm发布phaserui包
