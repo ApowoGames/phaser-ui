@@ -309,7 +309,7 @@ declare namespace phaserui {
     /**
      * Button
      */
-    class Button extends phaserui.IButtonState {
+    class Button extends phaserui.BaseUI implements phaserui.IButtonState {
         constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: phaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
 
         protected mDownTime: number;
@@ -564,112 +564,64 @@ declare namespace phaserui {
 
     }
 
-    namespace GridTableConfig {
-        var x: number;
-
-        var y: number;
-
-        var type: string;
-
-        var scrollMode: number;
-
-        var background: any;
-
-        var table: any;
-
-        var slider: any;
-
-        var scroller: any;
-
-        var clamplChildOY: boolean;
-
-        var header: any;
-
-        var footer: any;
-
-        var child: any;
-
-        var space: any;
-
-        var expand: any;
-
-        var align: any;
-
-        var createCellContainerCallback: Function;
-
-        var items: any[];
-
-        var name: string;
-
+    interface GridTableConfig {
+        x: number;
+        y: number;
+        type: string;
+        scrollMode: number;
+        background: any;
+        table: any;
+        slider: any;
+        scroller: any;
+        clamplChildOY: boolean;
+        header: any;
+        footer: any;
+        child: any;
+        space: any;
+        expand: any;
+        align: any;
+        createCellContainerCallback: Function;
+        items: any[];
+        name: string;
     }
 
-    namespace GridTableCoreConfig {
-        var width: number;
-
-        var height: number;
-
-        var scrollMode: number;
-
-        var cellWidth: number;
-
-        var cellHeight: number;
-
-        var cellsCount: number;
-
-        var columns: number;
-
-        var interactive: boolean;
-
-        var reuseCellContainer: boolean;
-
-        var tableOX: number;
-
-        var tableOY: number;
-
-        var cellVisibleCallback: Function;
-
-        var cellVisibleCallbackScope: number[];
-
-        var cellInvisibleCallback: Function;
-
-        var cellInvisibleCallbackScope: number[];
-
-        var cellOriginX: number;
-
-        var cellOriginY: number;
-
-        var cellPadX: number;
-
-        var cellPadY: number;
-
-        var zoom: number;
-
-        var dpr: number;
-
-        var clampTableOY: boolean;
-
-        var mask: any;
-
+    interface GridTableCoreConfig {
+        width: number;
+        height: number;
+        scrollMode: number;
+        cellWidth: number;
+        cellHeight: number;
+        cellsCount: number;
+        columns: number;
+        interactive: boolean;
+        reuseCellContainer: boolean;
+        tableOX: number;
+        tableOY: number;
+        cellVisibleCallback: Function;
+        cellVisibleCallbackScope: number[];
+        cellInvisibleCallback: Function;
+        cellInvisibleCallbackScope: number[];
+        cellOriginX: number;
+        cellOriginY: number;
+        cellPadX: number;
+        cellPadY: number;
+        zoom: number;
+        dpr: number;
+        clampTableOY: boolean;
+        mask: any;
     }
 
-    namespace SliderConfig {
-        var background: any;
-
-        var track: any;
-
-        var thumb: any;
-
-        var input: Phaser.Input.InputPlugin;
-
+    interface SliderConfig {
+        background: any;
+        track: any;
+        thumb: any;
+        input: Phaser.Input.InputPlugin;
     }
 
-    namespace ScrollerableConfig {
-        var threshold: number;
-
-        var slidingDeceleration: number;
-
-        var backDeceleration: number;
-
+    interface ScrollerableConfig {
+        threshold: number;
+        slidingDeceleration: number;
+        backDeceleration: number;
     }
 
     /**
@@ -724,47 +676,33 @@ declare namespace phaserui {
 
     const ElementEvents: any;
 
-    namespace IAbstractInteractiveObject {
-        var selected: boolean;
-
-        var enabled: boolean;
-
+    interface IAbstractInteractiveObject {
+        selected: boolean;
+        enabled: boolean;
     }
 
-    namespace IAbstractItem {
-        var index: number;
-
+    interface IAbstractItem extends phaserui.IAbstractInteractiveObject{
+        index: number;
     }
 
-    namespace IAbstractUI {
-        var id: number;
-
-        var UIType: phaserui.UIType;
-
+    interface IAbstractUI {
+        id: number;
+        UIType: phaserui.UIType;
     }
 
-    namespace ISetInteractive {
-        function setInteractive(): void;
-
-        function disInteractive(): void;
-
+    interface ISetInteractive {
+        setInteractive(): void;
+        disInteractive(): void;
     }
 
-    namespace ISound {
-        var soundMap: any;
-
-        function playSound(config: Phaser.Sound.BaseSound): void;
-
-        function startPlay(config: Phaser.Sound.BaseSound): void;
-
-        function stopSound(): void;
-
-        function pauseSound(): void;
-
-        function resumeSound(): void;
-
-        function setSilent(boo: boolean): void;
-
+    interface ISound {
+        soundMap: any;
+        playSound(config: Phaser.Sound.BaseSound): void;
+        startPlay(config: Phaser.Sound.BaseSound): void;
+        stopSound(): void;
+        pauseSound(): void;
+        resumeSound(): void;
+        setSilent(boo: boolean): void;
     }
 
     enum UIType {
@@ -777,38 +715,24 @@ declare namespace phaserui {
         Activity,
     }
 
-    namespace IButtonState {
-        function changeNormal(): void;
-
-        function changeDown(): void;
-
+    interface IButtonState {
+        changeNormal(): void;
+        changeDown(): void;
     }
 
-    namespace IComboboxConfig {
-        var wid: number;
-
-        var hei: number;
-
-        var resKey: string;
-
-        var resPng: string;
-
-        var resJson: string;
-
-        var resBg: string;
-
-        var resArrow: string;
-
-        var fontStyle: any;
-
-        var up: boolean;
-
-        var clickCallBack: Function;
-
-        var boxMusic: any;
-
-        var itemMusic: any;
-
+    interface IComboboxConfig {
+        wid: number;
+        hei: number;
+        resKey: string;
+        resPng: string;
+        resJson: string;
+        resBg: string;
+        resArrow: string;
+        fontStyle: any;
+        up: boolean;
+        clickCallBack: Function;
+        boxMusic: any;
+        itemMusic: any;
     }
 
     enum ClickEvent {
@@ -849,23 +773,15 @@ declare namespace phaserui {
 
     }
 
-    namespace IAbstractPanel {
-        function isShow(): boolean;
-
-        function setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function): void;
-
-        function tweenExpand(show: boolean): void;
-
-        function resize(wid?: number, hei?: number): void;
-
-        function show(param?: any): void;
-
-        function update(param: any): void;
-
-        function hide(): void;
-
-        function destroy(): void;
-
+    interface IAbstractPanel extends phaserui.IAbstractUI{
+        isShow(): boolean;
+        setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function): void;
+        tweenExpand(show: boolean): void;
+        resize(wid?: number, hei?: number): void;
+        show(param?: any): void;
+        update(param: any): void;
+        hide(): void;
+        destroy(): void;
     }
 
     enum AlignType {
@@ -874,7 +790,7 @@ declare namespace phaserui {
         right,
     }
 
-    namespace ScrollerConfig {
+    interface ScrollerConfig {
     }
 
     enum SoundField {
@@ -883,34 +799,22 @@ declare namespace phaserui {
         Effect,
     }
 
-    namespace ISoundConfig {
-        var key: string;
-
-        var field: phaserui.SoundField;
-
-        var soundConfig: Phaser.Types.Sound.SoundConfig;
-
+    interface ISoundConfig {
+        key: string;
+        field: phaserui.SoundField;
+        soundConfig: Phaser.Types.Sound.SoundConfig;
     }
 
-    namespace ISoundGroup {
-        var open: phaserui.ISoundConfig;
-
-        var close: phaserui.ISoundConfig;
-
-        var click: phaserui.ISoundConfig;
-
-        var down: phaserui.ISoundConfig;
-
-        var up: phaserui.ISoundConfig;
-
-        var move: phaserui.ISoundConfig;
-
-        var disabled: phaserui.ISoundConfig;
-
-        var progress: phaserui.ISoundConfig;
-
-        var expand: phaserui.ISoundConfig;
-
+    interface ISoundGroup {
+        open: phaserui.ISoundConfig;
+        close: phaserui.ISoundConfig;
+        click: phaserui.ISoundConfig;
+        down: phaserui.ISoundConfig;
+        up: phaserui.ISoundConfig;
+        move: phaserui.ISoundConfig;
+        disabled: phaserui.ISoundConfig;
+        progress: phaserui.ISoundConfig;
+        expand: phaserui.ISoundConfig;
     }
 
     class MessageBox extends phaserui.Panel {

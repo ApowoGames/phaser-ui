@@ -19,12 +19,12 @@ Trace:
 
 npm manifest: 
   {
-    "name": "tooqingui",
+    "name": "phaserui",
     "version": "0.0.7",
-    "description": "tooqingui Plugins",
+    "description": "phaserui Plugins",
     "author": "Gxm",
     "main": "./dist/index.js",
-    "types": "./types/tooqingui.d.ts",
+    "types": "./types/phaserui.d.ts",
     "scripts": {
       "watch": "rimraf types && rimraf dist && webpack --config webpack.config.js",
       "build": "rimraf dist && rollup -c rollup.config.js",

@@ -47,7 +47,7 @@ class Parser {
     parseObjects(docs) {
         for (let i = 0; i < docs.length; i++) {
             let doclet = docs[i];
-            if (doclet.longname === "tooqingui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "phaserui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -74,28 +74,28 @@ class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'tooqingui.IButtonState':
-                case 'tooqingui.IMediator':
-                case 'tooqingui.IAbstractPanel':
-                case 'tooqingui.IAbstractInteractiveObject':
-                case 'tooqingui.IAbstractItem':
-                case 'tooqingui.IAbstractUI':
-                case 'tooqingui.ISetInteractive':
-                case 'tooqingui.ISound':
-                case 'tooqingui.Patchesconfig':
-                case 'tooqingui.ISoundConfig':
-                case 'tooqingui.ISoundGroup':
-                case 'tooqingui.IMaskConfig':
-                case 'tooqingui.GridTableConfig':
-                case 'tooqingui.SliderConfig':
-                case 'tooqingui.GridTableCoreConfig':
-                case 'tooqingui.ScrollerableConfig':
-                case 'tooqingui.NinePatchConfig':
-                case 'tooqingui.IPatchesConfig':
-                case 'tooqingui.ISelectCallItemdata':
-                case 'tooqingui.ScrollerConfig':
-                case 'tooqingui.ISelectCallUI':
-                case 'tooqingui.IComboboxConfig':
+                case 'phaserui.IButtonState':
+                case 'phaserui.IMediator':
+                case 'phaserui.IAbstractPanel':
+                case 'phaserui.IAbstractInteractiveObject':
+                case 'phaserui.IAbstractItem':
+                case 'phaserui.IAbstractUI':
+                case 'phaserui.ISetInteractive':
+                case 'phaserui.ISound':
+                case 'phaserui.Patchesconfig':
+                case 'phaserui.ISoundConfig':
+                case 'phaserui.ISoundGroup':
+                case 'phaserui.IMaskConfig':
+                case 'phaserui.GridTableConfig':
+                case 'phaserui.SliderConfig':
+                case 'phaserui.GridTableCoreConfig':
+                case 'phaserui.ScrollerableConfig':
+                case 'phaserui.NinePatchConfig':
+                case 'phaserui.IPatchesConfig':
+                case 'phaserui.ISelectCallItemdata':
+                case 'phaserui.ScrollerConfig':
+                case 'phaserui.ISelectCallUI':
+                case 'phaserui.IComboboxConfig':
                     doclet.kind = 'mixin';
                     break;
                 //  Because, sod you TypeScript
