@@ -1,4 +1,4 @@
-# 基于 Phaser3 引擎
+# ui项目基于 Phaser3 引擎
 
 ## 链接
 
@@ -14,7 +14,8 @@
 
 1. yarn add phaser-ui
 
-## phaser-rexui 部分demo(基于rexui https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
+### phaser-rexui 
+## 部分demo(基于rexui https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
 
 - Webgl shader effect
     - [Swirl](https://codepen.io/rexuirainbow/full/RBXQBo)

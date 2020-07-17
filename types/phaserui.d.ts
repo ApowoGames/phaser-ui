@@ -1287,8 +1287,5 @@ declare namespace phaserui.Utils {
 
 }
 
-declare module 'phaserui' {
-    export = phaserui;
-
-}
+export = phaserui;
 

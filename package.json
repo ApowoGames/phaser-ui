@@ -1,19 +1,19 @@
 {
   "name": "@apowo/phaserui",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "phaserui Plugins",
   "author": "Gxm",
   "main": "./dist/phaserui.js",
   "types": "./types/phaserui.d.ts",
   "scripts": {
     "watch": "rimraf dist && webpack --mode development --config webpack.config.js",
-    "build": "rimraf dist && rollup -c rollup.config.js",
     "build-tsc": "cd lib/ui && tsc",
     "build-tsgen": "cd scripts/tsgen && tsc",
     "tsgen": "rimraf types && cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"
   },
   "keywords": [
-    "phaser3"
+    "phaser3",
+    "rexui"
   ],
   "license": "MIT",
   "devDependencies": {
