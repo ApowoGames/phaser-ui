@@ -1,7 +1,7 @@
 {
-  "name": "phaser-ui",
-  "version": "0.0.1",
-  "description": "tooqingui Plugins",
+  "name": "@apowo/phaserui",
+  "version": "0.0.3",
+  "description": "phaserui Plugins",
   "author": "Gxm",
   "main": "./dist/tooqingui.js",
   "types": "./types/tooqingui.d.ts",

@@ -19,7 +19,7 @@ function publish(data, opts) {
         fs.mkdirSync(opts.destination);
     }
     var out = new Parser_1.Parser(data().get()).emit();
-    fs.writeFileSync(path.join(opts.destination, 'tooqingui.d.ts'), out);
+    fs.writeFileSync(path.join(opts.destination, 'phaserui.d.ts'), out);
 }
 exports.publish = publish;
 ;

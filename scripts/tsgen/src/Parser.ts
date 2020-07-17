@@ -26,8 +26,8 @@ export class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
         // add declare module
-        const phaserPkgModuleDOM = dom.create.module('tooqingui');
-        phaserPkgModuleDOM.members.push(dom.create.exportEquals('tooqingui'));
+        const phaserPkgModuleDOM = dom.create.module('phaserui');
+        phaserPkgModuleDOM.members.push(dom.create.exportEquals('phaserui'));
         this.topLevel.push(phaserPkgModuleDOM);
     }
 

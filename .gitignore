@@ -1,5 +1,8 @@
 node_modules/
 /dist/*
+scripts/
+/.babelrc
+/.eslintrc.json
 /index.html
 /lib/ui/**/*.ts
 /out

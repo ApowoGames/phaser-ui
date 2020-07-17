@@ -21,5 +21,5 @@ export function publish(data: any, opts: any) {
 
     var out = new Parser(data().get()).emit();
 
-    fs.writeFileSync(path.join(opts.destination, 'tooqingui.d.ts'), out);
+    fs.writeFileSync(path.join(opts.destination, 'phaserui.d.ts'), out);
 };

@@ -1,4 +1,4 @@
-declare namespace tooqingui {
+declare namespace phaserui {
     /**
      * BaseMediator
      */
@@ -72,7 +72,7 @@ declare namespace tooqingui {
         playSound(config: any): void;
 
         /**
-         * {key:string,field:tooqingui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
+         * {key:string,field:phaserui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
          */
         startPlay(config: any): void;
 
@@ -93,7 +93,7 @@ declare namespace tooqingui {
     /**
      * Base
      */
-    class Base extends tooqingui.Container {
+    class Base extends phaserui.Container {
         constructor(scene: Phaser.Scene, x?: number, y?: number, minWidth?: number, minHeight?: number, config?: any);
 
         destroy(fromScene?: any): void;
@@ -201,7 +201,7 @@ declare namespace tooqingui {
     /**
      * BBCodeText
      */
-    class BBCodeText extends tooqingui.Text {
+    class BBCodeText extends phaserui.Text {
         constructor(scene: Phaser.Scene, x?: number, y?: number, text?: string, style?: any);
 
     }
@@ -210,7 +210,7 @@ declare namespace tooqingui {
      * Text
      */
     class Text extends Phaser.GameObjects.GameObject implements Phaser.GameObjects.Components.Origin {
-        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: tooqingui.parser);
+        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: phaserui.parser);
 
         displayWidth: number;
 
@@ -309,8 +309,8 @@ declare namespace tooqingui {
     /**
      * Button
      */
-    class Button extends tooqingui.BaseUI implements tooqingui.IButtonState {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: tooqingui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+    class Button extends phaserui.IButtonState {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: phaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
 
         protected mDownTime: number;
 
@@ -331,7 +331,7 @@ declare namespace tooqingui {
 
         protected mText: Phaser.GameObjects.Text;
 
-        protected mBackground: Phaser.GameObjects.Image | tooqingui.NineSlicePatch;
+        protected mBackground: Phaser.GameObjects.Image | phaserui.NineSlicePatch;
 
         background: Phaser.GameObjects.Image;
 
@@ -363,7 +363,7 @@ declare namespace tooqingui {
 
         setBgFrame(frame: string | number): void;
 
-        buttonStateChange(state: tooqingui.ButtonState): void;
+        buttonStateChange(state: phaserui.ButtonState): void;
 
         onPointerMoveHandler(pointer: Phaser.Input.Pointer): void;
 
@@ -376,7 +376,7 @@ declare namespace tooqingui {
     /**
      * NineSliceButton
      */
-    class NineSliceButton extends tooqingui.BaseUI {
+    class NineSliceButton extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, dpr?: number, scale?: number, config?: any, music?: any, data?: any);
 
         protected mLabel: Phaser.GameObjects.Text;
@@ -464,7 +464,7 @@ declare namespace tooqingui {
     /**
      * ComboBox
      */
-    class ComboBox extends tooqingui.BaseUI {
+    class ComboBox extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any);
 
         itemList: any[];
@@ -564,64 +564,112 @@ declare namespace tooqingui {
 
     }
 
-    interface GridTableConfig {
-        x: number;
-        y: number;
-        type: string;
-        scrollMode: number;
-        background: any;
-        table: any;
-        slider: any;
-        scroller: any;
-        clamplChildOY: boolean;
-        header: any;
-        footer: any;
-        child: any;
-        space: any;
-        expand: any;
-        align: any;
-        createCellContainerCallback: Function;
-        items: any[];
-        name: string;
+    namespace GridTableConfig {
+        var x: number;
+
+        var y: number;
+
+        var type: string;
+
+        var scrollMode: number;
+
+        var background: any;
+
+        var table: any;
+
+        var slider: any;
+
+        var scroller: any;
+
+        var clamplChildOY: boolean;
+
+        var header: any;
+
+        var footer: any;
+
+        var child: any;
+
+        var space: any;
+
+        var expand: any;
+
+        var align: any;
+
+        var createCellContainerCallback: Function;
+
+        var items: any[];
+
+        var name: string;
+
     }
 
-    interface GridTableCoreConfig {
-        width: number;
-        height: number;
-        scrollMode: number;
-        cellWidth: number;
-        cellHeight: number;
-        cellsCount: number;
-        columns: number;
-        interactive: boolean;
-        reuseCellContainer: boolean;
-        tableOX: number;
-        tableOY: number;
-        cellVisibleCallback: Function;
-        cellVisibleCallbackScope: number[];
-        cellInvisibleCallback: Function;
-        cellInvisibleCallbackScope: number[];
-        cellOriginX: number;
-        cellOriginY: number;
-        cellPadX: number;
-        cellPadY: number;
-        zoom: number;
-        dpr: number;
-        clampTableOY: boolean;
-        mask: any;
+    namespace GridTableCoreConfig {
+        var width: number;
+
+        var height: number;
+
+        var scrollMode: number;
+
+        var cellWidth: number;
+
+        var cellHeight: number;
+
+        var cellsCount: number;
+
+        var columns: number;
+
+        var interactive: boolean;
+
+        var reuseCellContainer: boolean;
+
+        var tableOX: number;
+
+        var tableOY: number;
+
+        var cellVisibleCallback: Function;
+
+        var cellVisibleCallbackScope: number[];
+
+        var cellInvisibleCallback: Function;
+
+        var cellInvisibleCallbackScope: number[];
+
+        var cellOriginX: number;
+
+        var cellOriginY: number;
+
+        var cellPadX: number;
+
+        var cellPadY: number;
+
+        var zoom: number;
+
+        var dpr: number;
+
+        var clampTableOY: boolean;
+
+        var mask: any;
+
     }
 
-    interface SliderConfig {
-        background: any;
-        track: any;
-        thumb: any;
-        input: Phaser.Input.InputPlugin;
+    namespace SliderConfig {
+        var background: any;
+
+        var track: any;
+
+        var thumb: any;
+
+        var input: Phaser.Input.InputPlugin;
+
     }
 
-    interface ScrollerableConfig {
-        threshold: number;
-        slidingDeceleration: number;
-        backDeceleration: number;
+    namespace ScrollerableConfig {
+        var threshold: number;
+
+        var slidingDeceleration: number;
+
+        var backDeceleration: number;
+
     }
 
     /**
@@ -630,43 +678,43 @@ declare namespace tooqingui {
     class InputText extends Phaser.GameObjects.DOMElement {
         constructor(scene: Phaser.Scene, x: any, y?: number, width?: number, height?: number, config?: any);
 
-        resize(width: number, height: number): tooqingui.InputText;
+        resize(width: number, height: number): phaserui.InputText;
 
         text: any;
 
         setText(value: string): any;
 
-        selectText(): tooqingui.InputText;
+        selectText(): phaserui.InputText;
 
         placeholder: any;
 
-        setPlaceholder(value: any): tooqingui.InputText;
+        setPlaceholder(value: any): phaserui.InputText;
 
         tooltip: any;
 
-        setTooltip(value: any): tooqingui.InputText;
+        setTooltip(value: any): phaserui.InputText;
 
-        setTextChangedCallback(callback: Function): tooqingui.InputText;
+        setTextChangedCallback(callback: Function): phaserui.InputText;
 
         readOnly: any;
 
-        setReadOnly(value: boolean): tooqingui.InputText;
+        setReadOnly(value: boolean): phaserui.InputText;
 
         spellCheck: any;
 
-        setSpellCheck(value: any): tooqingui.InputText;
+        setSpellCheck(value: any): phaserui.InputText;
 
-        setStyle(key?: any, value?: any): tooqingui.InputText;
+        setStyle(key?: any, value?: any): phaserui.InputText;
 
         getStyle(key: string): any;
 
-        scrollToBottom(): tooqingui.InputText;
+        scrollToBottom(): phaserui.InputText;
 
-        setEnabled(enabled: boolean): tooqingui.InputText;
+        setEnabled(enabled: boolean): phaserui.InputText;
 
-        setBlur(): tooqingui.InputText;
+        setBlur(): phaserui.InputText;
 
-        setFocus(): tooqingui.InputText;
+        setFocus(): phaserui.InputText;
 
     }
 
@@ -676,33 +724,47 @@ declare namespace tooqingui {
 
     const ElementEvents: any;
 
-    interface IAbstractInteractiveObject {
-        selected: boolean;
-        enabled: boolean;
+    namespace IAbstractInteractiveObject {
+        var selected: boolean;
+
+        var enabled: boolean;
+
     }
 
-    interface IAbstractItem extends tooqingui.IAbstractInteractiveObject{
-        index: number;
+    namespace IAbstractItem {
+        var index: number;
+
     }
 
-    interface IAbstractUI {
-        id: number;
-        UIType: tooqingui.UIType;
+    namespace IAbstractUI {
+        var id: number;
+
+        var UIType: phaserui.UIType;
+
     }
 
-    interface ISetInteractive {
-        setInteractive(): void;
-        disInteractive(): void;
+    namespace ISetInteractive {
+        function setInteractive(): void;
+
+        function disInteractive(): void;
+
     }
 
-    interface ISound {
-        soundMap: any;
-        playSound(config: Phaser.Sound.BaseSound): void;
-        startPlay(config: Phaser.Sound.BaseSound): void;
-        stopSound(): void;
-        pauseSound(): void;
-        resumeSound(): void;
-        setSilent(boo: boolean): void;
+    namespace ISound {
+        var soundMap: any;
+
+        function playSound(config: Phaser.Sound.BaseSound): void;
+
+        function startPlay(config: Phaser.Sound.BaseSound): void;
+
+        function stopSound(): void;
+
+        function pauseSound(): void;
+
+        function resumeSound(): void;
+
+        function setSilent(boo: boolean): void;
+
     }
 
     enum UIType {
@@ -715,24 +777,38 @@ declare namespace tooqingui {
         Activity,
     }
 
-    interface IButtonState {
-        changeNormal(): void;
-        changeDown(): void;
+    namespace IButtonState {
+        function changeNormal(): void;
+
+        function changeDown(): void;
+
     }
 
-    interface IComboboxConfig {
-        wid: number;
-        hei: number;
-        resKey: string;
-        resPng: string;
-        resJson: string;
-        resBg: string;
-        resArrow: string;
-        fontStyle: any;
-        up: boolean;
-        clickCallBack: Function;
-        boxMusic: any;
-        itemMusic: any;
+    namespace IComboboxConfig {
+        var wid: number;
+
+        var hei: number;
+
+        var resKey: string;
+
+        var resPng: string;
+
+        var resJson: string;
+
+        var resBg: string;
+
+        var resArrow: string;
+
+        var fontStyle: any;
+
+        var up: boolean;
+
+        var clickCallBack: Function;
+
+        var boxMusic: any;
+
+        var itemMusic: any;
+
     }
 
     enum ClickEvent {
@@ -773,15 +849,23 @@ declare namespace tooqingui {
 
     }
 
-    interface IAbstractPanel extends tooqingui.IAbstractUI{
-        isShow(): boolean;
-        setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function): void;
-        tweenExpand(show: boolean): void;
-        resize(wid?: number, hei?: number): void;
-        show(param?: any): void;
-        update(param: any): void;
-        hide(): void;
-        destroy(): void;
+    namespace IAbstractPanel {
+        function isShow(): boolean;
+
+        function setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function): void;
+
+        function tweenExpand(show: boolean): void;
+
+        function resize(wid?: number, hei?: number): void;
+
+        function show(param?: any): void;
+
+        function update(param: any): void;
+
+        function hide(): void;
+
+        function destroy(): void;
+
     }
 
     enum AlignType {
@@ -790,7 +874,7 @@ declare namespace tooqingui {
         right,
     }
 
-    interface ScrollerConfig {
+    namespace ScrollerConfig {
     }
 
     enum SoundField {
@@ -799,25 +883,37 @@ declare namespace tooqingui {
         Effect,
     }
 
-    interface ISoundConfig {
-        key: string;
-        field: tooqingui.SoundField;
-        soundConfig: Phaser.Types.Sound.SoundConfig;
+    namespace ISoundConfig {
+        var key: string;
+
+        var field: phaserui.SoundField;
+
+        var soundConfig: Phaser.Types.Sound.SoundConfig;
+
     }
 
-    interface ISoundGroup {
-        open: tooqingui.ISoundConfig;
-        close: tooqingui.ISoundConfig;
-        click: tooqingui.ISoundConfig;
-        down: tooqingui.ISoundConfig;
-        up: tooqingui.ISoundConfig;
-        move: tooqingui.ISoundConfig;
-        disabled: tooqingui.ISoundConfig;
-        progress: tooqingui.ISoundConfig;
-        expand: tooqingui.ISoundConfig;
+    namespace ISoundGroup {
+        var open: phaserui.ISoundConfig;
+
+        var close: phaserui.ISoundConfig;
+
+        var click: phaserui.ISoundConfig;
+
+        var down: phaserui.ISoundConfig;
+
+        var up: phaserui.ISoundConfig;
+
+        var move: phaserui.ISoundConfig;
+
+        var disabled: phaserui.ISoundConfig;
+
+        var progress: phaserui.ISoundConfig;
+
+        var expand: phaserui.ISoundConfig;
+
     }
 
-    class MessageBox extends tooqingui.Panel {
+    class MessageBox extends phaserui.Panel {
     }
 
     /**
@@ -831,7 +927,7 @@ declare namespace tooqingui {
     /**
      * NineSlicePatch
      */
-    class NineSlicePatch extends tooqingui.BaseUI {
+    class NineSlicePatch extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame?: string, config?: any, dpr?: number, scale?: number);
 
         resize(width: number, height: number): void;
@@ -873,7 +969,7 @@ declare namespace tooqingui {
     /**
      * Panel
      */
-    class Panel extends tooqingui.BaseUI {
+    class Panel extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, world: any, music?: any);
 
         protected mPanelTween: Phaser.Tweens.Tween;
@@ -886,7 +982,7 @@ declare namespace tooqingui {
 
         id: number;
 
-        UIType: tooqingui.UIType;
+        UIType: phaserui.UIType;
 
         protected mPreLoad: boolean;
 
@@ -900,7 +996,7 @@ declare namespace tooqingui {
 
         protected mWorld: any;
 
-        protected soundGroup: tooqingui.ISoundGroup;
+        protected soundGroup: phaserui.ISoundGroup;
 
         addListen(): void;
 
@@ -966,7 +1062,7 @@ declare namespace tooqingui {
     /**
      * ProgressBar
      */
-    class ProgressBar extends tooqingui.BaseUI {
+    class ProgressBar extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, config?: any);
 
         setProgress(curVal: number, maxVal: number): void;
@@ -995,10 +1091,10 @@ declare namespace tooqingui {
     /**
      * GameScroller
      */
-    class GameScroller extends tooqingui.BaseUI {
+    class GameScroller extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        protected soundGroup: tooqingui.ISoundGroup;
+        protected soundGroup: phaserui.ISoundGroup;
 
         view: any;
 
@@ -1070,10 +1166,10 @@ declare namespace tooqingui {
     /**
      * BaseScroller
      */
-    class BaseScroller extends tooqingui.BaseUI {
+    class BaseScroller extends phaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        protected soundGroup: tooqingui.ISoundGroup;
+        protected soundGroup: phaserui.ISoundGroup;
 
         setEnable(enable: boolean): void;
 
@@ -1120,7 +1216,7 @@ declare namespace tooqingui {
     /**
      * Sizer
      */
-    class Sizer extends tooqingui.Base {
+    class Sizer extends phaserui.Base {
         constructor(scene: Phaser.Scene, x?: number, y?: number, minWidth?: number, minHeight?: number, orientation?: number, config?: any);
 
         destroy(fromScene?: any): void;
@@ -1144,7 +1240,7 @@ declare namespace tooqingui {
     /**
      * GameSlider
      */
-    class GameSlider extends tooqingui.Slider {
+    class GameSlider extends phaserui.Slider {
         constructor(scene: Phaser.Scene, config: any);
 
         setEnable(enable: boolean): any;
@@ -1161,7 +1257,7 @@ declare namespace tooqingui {
 
     }
 
-    class Slider extends tooqingui.Sizer {
+    class Slider extends phaserui.Sizer {
         constructor(scene: Phaser.Scene, config: any);
 
     }
@@ -1169,14 +1265,14 @@ declare namespace tooqingui {
     /**
      * NinePatchTabButton
      */
-    class NinePatchTabButton extends tooqingui.TabButton {
+    class NinePatchTabButton extends phaserui.TabButton {
         constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: any, dpr?: number, scale?: number, data?: any);
 
         protected mKey: string;
 
         protected btnData: any;
 
-        protected mBackground: tooqingui.NineSlicePatch;
+        protected mBackground: phaserui.NineSlicePatch;
 
         setSize(width: number, height: number): any;
 
@@ -1193,8 +1289,8 @@ declare namespace tooqingui {
     /**
      * TabButton
      */
-    class TabButton extends tooqingui.Button {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: tooqingui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+    class TabButton extends phaserui.Button {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: phaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
 
         selected: any;
 
@@ -1211,7 +1307,7 @@ declare namespace tooqingui {
     /**
      * TextArea
      */
-    class TextArea extends tooqingui.Scrollable {
+    class TextArea extends phaserui.Scrollable {
         constructor(scene: Phaser.Scene, config?: any);
 
         setText(text: string): any;
@@ -1223,7 +1319,7 @@ declare namespace tooqingui {
     /**
      * Scrollable
      */
-    class Scrollable extends tooqingui.Sizer {
+    class Scrollable extends phaserui.Sizer {
         constructor(scene: Phaser.Scene, config?: any);
 
         layout(parent?: any, newWidth?: number, newHeight?: number): any;
@@ -1240,12 +1336,12 @@ declare namespace tooqingui {
 
 }
 
-declare namespace tooqingui.basesizer {
+declare namespace phaserui.basesizer {
     function AddChildrenMap(key: any, gameObject: any): any;
 
 }
 
-declare namespace tooqingui.text {
+declare namespace phaserui.text {
     function setStyle(style: any): any;
 
 }
@@ -1258,18 +1354,18 @@ declare namespace FramesSkin {
 
 }
 
-declare namespace tooqingui.CoreUI {
+declare namespace phaserui.CoreUI {
     enum MouseEvent {
     }
 
 }
 
-declare namespace tooqingui.gameScroller {
+declare namespace phaserui.gameScroller {
     function onScrollValueChange(value: number): void;
 
 }
 
-declare namespace tooqingui.Tool {
+declare namespace phaserui.Tool {
     function checkPointerContains(gameObject: any, pointer: Phaser.Input.Pointer): boolean;
 
     function getTransfrom(config: any): any;
@@ -1280,15 +1376,15 @@ declare namespace tooqingui.Tool {
 
 }
 
-declare namespace tooqingui.Utils {
+declare namespace phaserui.Utils {
     function GetParentSizer(gameObject: any): any;
 
     function GetTopmostSizer(gameObject: any): any;
 
 }
 
-declare module 'tooqingui' {
-    export = tooqingui;
+declare module 'phaserui' {
+    export = phaserui;
 
 }
 
