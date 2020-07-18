@@ -14,8 +14,12 @@
 
 1. yarn add phaser-ui
 
-### phaser-rexui 
-## 部分demo(基于rexui https://rexrainbow.github.io/phaser3-rex-notes/docs/site/)
+### 使用
+
+1.项目入口类 import "@apowo/phaserui"
+2.对应组件 improt { Button } from "@apowo/phaserui" 其他组件可以通过rexui的api选择导入
+
+### phaser-rexui 部分demo
 
 - Webgl shader effect
     - [Swirl](https://codepen.io/rexuirainbow/full/RBXQBo)
