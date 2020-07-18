@@ -16,8 +16,8 @@
 
 ### 使用
 
-1.项目入口类 import "@apowo/phaserui"
-2.对应组件 improt { Button } from "@apowo/phaserui" 其他组件可以通过rexui的api选择导入
+    - 项目入口类 import "@apowo/phaserui"
+    - 对应组件 improt { Button } from "@apowo/phaserui" 其他组件可以通过rexui的api选择导入
 
 ### phaser-rexui 部分demo
 
