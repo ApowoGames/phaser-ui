@@ -874,7 +874,7 @@ declare namespace phaserui {
 
         destroy(): void;
 
-        resize(wid: number, hei: number): void;
+        resize(wid?: number, hei?: number): void;
 
         show(param?: any): void;
 
