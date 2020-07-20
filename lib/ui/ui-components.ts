@@ -28,7 +28,6 @@ import { Show, Hide, IsShown } from "./utils/Hide.js";
 import Edit from "../plugins/behaviors/textedit/Edit.js";
 import { WaitEvent, WaitComplete } from "./utils/WaitEvent.js";
 import BaseUI from "./baseUI/BaseUI.js";
-import BaseMediator from "./baseUI/BaseMediator.js";
 import { Button } from "./button/Button.js";
 import NineSliceButton from "./button/NineSliceButton.js";
 import { ComboBox } from "./combobox/Combobox.js";
@@ -58,7 +57,6 @@ export = {
   Sizer,
   GridSizer,
   BaseUI,
-  BaseMediator,
   Button,
   NineSliceButton,
   ComboBox,

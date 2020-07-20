@@ -1,6 +1,6 @@
 {
   "name": "@apowo/phaserui",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "phaserui Plugins",
   "author": "Gxm",
   "main": "./dist/phaserui.js",
