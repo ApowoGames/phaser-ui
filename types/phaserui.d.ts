@@ -1,45 +1,5 @@
 declare namespace phaserui {
     /**
-     * BaseMediator
-     */
-    class BaseMediator {
-        protected mParam: any;
-
-        protected mShow: boolean;
-
-        mUIType: any;
-
-        protected mView: any;
-
-        type: any;
-
-        updateViewPos(): void;
-
-        tweenExpand(show: boolean): void;
-
-        getView(): any;
-
-        hide(): void;
-
-        isSceneUI(): boolean;
-
-        isShow(): boolean;
-
-        resize(width: number, height: number): void;
-
-        show(param?: any): void;
-
-        update(param?: any): void;
-
-        setParam(param: any): void;
-
-        getParam(): any;
-
-        destroy(): void;
-
-    }
-
-    /**
      * BaseUI
      */
     class BaseUI extends Phaser.GameObjects.Container {
