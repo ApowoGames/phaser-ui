@@ -1,4 +1,4 @@
-declare namespace phaserui {
+declare namespace apowophaserui {
     /**
      * BaseUI
      */
@@ -32,7 +32,7 @@ declare namespace phaserui {
         playSound(config: any): void;
 
         /**
-         * {key:string,field:phaserui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
+         * {key:string,field:apowophaserui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
          */
         startPlay(config: any): void;
 
@@ -53,7 +53,7 @@ declare namespace phaserui {
     /**
      * Base
      */
-    class Base extends phaserui.Container {
+    class Base extends apowophaserui.Container {
         constructor(scene: Phaser.Scene, x?: number, y?: number, minWidth?: number, minHeight?: number, config?: any);
 
         destroy(fromScene?: any): void;
@@ -161,7 +161,7 @@ declare namespace phaserui {
     /**
      * BBCodeText
      */
-    class BBCodeText extends phaserui.Text {
+    class BBCodeText extends apowophaserui.Text {
         constructor(scene: Phaser.Scene, x?: number, y?: number, text?: string, style?: any);
 
     }
@@ -170,7 +170,7 @@ declare namespace phaserui {
      * Text
      */
     class Text extends Phaser.GameObjects.GameObject implements Phaser.GameObjects.Components.Origin {
-        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: phaserui.parser);
+        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: apowophaserui.parser);
 
         displayWidth: number;
 
@@ -269,8 +269,8 @@ declare namespace phaserui {
     /**
      * Button
      */
-    class Button extends phaserui.BaseUI implements phaserui.IButtonState {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: phaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+    class Button extends apowophaserui.BaseUI implements apowophaserui.IButtonState {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: apowophaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
 
         protected mDownTime: number;
 
@@ -291,7 +291,7 @@ declare namespace phaserui {
 
         protected mText: Phaser.GameObjects.Text;
 
-        protected mBackground: Phaser.GameObjects.Image | phaserui.NineSlicePatch;
+        protected mBackground: Phaser.GameObjects.Image | apowophaserui.NineSlicePatch;
 
         background: Phaser.GameObjects.Image;
 
@@ -323,7 +323,7 @@ declare namespace phaserui {
 
         setBgFrame(frame: string | number): void;
 
-        buttonStateChange(state: phaserui.ButtonState): void;
+        buttonStateChange(state: apowophaserui.ButtonState): void;
 
         onPointerMoveHandler(pointer: Phaser.Input.Pointer): void;
 
@@ -336,7 +336,7 @@ declare namespace phaserui {
     /**
      * NineSliceButton
      */
-    class NineSliceButton extends phaserui.BaseUI {
+    class NineSliceButton extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, dpr?: number, scale?: number, config?: any, music?: any, data?: any);
 
         protected mLabel: Phaser.GameObjects.Text;
@@ -424,7 +424,7 @@ declare namespace phaserui {
     /**
      * ComboBox
      */
-    class ComboBox extends phaserui.BaseUI {
+    class ComboBox extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any);
 
         itemList: any[];
@@ -590,43 +590,43 @@ declare namespace phaserui {
     class InputText extends Phaser.GameObjects.DOMElement {
         constructor(scene: Phaser.Scene, x: any, y?: number, width?: number, height?: number, config?: any);
 
-        resize(width: number, height: number): phaserui.InputText;
+        resize(width: number, height: number): apowophaserui.InputText;
 
         text: any;
 
         setText(value: string): any;
 
-        selectText(): phaserui.InputText;
+        selectText(): apowophaserui.InputText;
 
         placeholder: any;
 
-        setPlaceholder(value: any): phaserui.InputText;
+        setPlaceholder(value: any): apowophaserui.InputText;
 
         tooltip: any;
 
-        setTooltip(value: any): phaserui.InputText;
+        setTooltip(value: any): apowophaserui.InputText;
 
-        setTextChangedCallback(callback: Function): phaserui.InputText;
+        setTextChangedCallback(callback: Function): apowophaserui.InputText;
 
         readOnly: any;
 
-        setReadOnly(value: boolean): phaserui.InputText;
+        setReadOnly(value: boolean): apowophaserui.InputText;
 
         spellCheck: any;
 
-        setSpellCheck(value: any): phaserui.InputText;
+        setSpellCheck(value: any): apowophaserui.InputText;
 
-        setStyle(key?: any, value?: any): phaserui.InputText;
+        setStyle(key?: any, value?: any): apowophaserui.InputText;
 
         getStyle(key: string): any;
 
-        scrollToBottom(): phaserui.InputText;
+        scrollToBottom(): apowophaserui.InputText;
 
-        setEnabled(enabled: boolean): phaserui.InputText;
+        setEnabled(enabled: boolean): apowophaserui.InputText;
 
-        setBlur(): phaserui.InputText;
+        setBlur(): apowophaserui.InputText;
 
-        setFocus(): phaserui.InputText;
+        setFocus(): apowophaserui.InputText;
 
     }
 
@@ -641,13 +641,13 @@ declare namespace phaserui {
         enabled: boolean;
     }
 
-    interface IAbstractItem extends phaserui.IAbstractInteractiveObject{
+    interface IAbstractItem extends apowophaserui.IAbstractInteractiveObject{
         index: number;
     }
 
     interface IAbstractUI {
         id: number;
-        UIType: phaserui.UIType;
+        UIType: apowophaserui.UIType;
     }
 
     interface ISetInteractive {
@@ -733,7 +733,7 @@ declare namespace phaserui {
 
     }
 
-    interface IAbstractPanel extends phaserui.IAbstractUI{
+    interface IAbstractPanel extends apowophaserui.IAbstractUI{
         isShow(): boolean;
         setFollow(gameObject: any, fromScene: Phaser.Scene, callBack?: Function): void;
         tweenExpand(show: boolean): void;
@@ -761,23 +761,23 @@ declare namespace phaserui {
 
     interface ISoundConfig {
         key: string;
-        field: phaserui.SoundField;
+        field: apowophaserui.SoundField;
         soundConfig: Phaser.Types.Sound.SoundConfig;
     }
 
     interface ISoundGroup {
-        open: phaserui.ISoundConfig;
-        close: phaserui.ISoundConfig;
-        click: phaserui.ISoundConfig;
-        down: phaserui.ISoundConfig;
-        up: phaserui.ISoundConfig;
-        move: phaserui.ISoundConfig;
-        disabled: phaserui.ISoundConfig;
-        progress: phaserui.ISoundConfig;
-        expand: phaserui.ISoundConfig;
+        open: apowophaserui.ISoundConfig;
+        close: apowophaserui.ISoundConfig;
+        click: apowophaserui.ISoundConfig;
+        down: apowophaserui.ISoundConfig;
+        up: apowophaserui.ISoundConfig;
+        move: apowophaserui.ISoundConfig;
+        disabled: apowophaserui.ISoundConfig;
+        progress: apowophaserui.ISoundConfig;
+        expand: apowophaserui.ISoundConfig;
     }
 
-    class MessageBox extends phaserui.Panel {
+    class MessageBox extends apowophaserui.Panel {
     }
 
     /**
@@ -791,7 +791,7 @@ declare namespace phaserui {
     /**
      * NineSlicePatch
      */
-    class NineSlicePatch extends phaserui.BaseUI {
+    class NineSlicePatch extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame?: string, config?: any, dpr?: number, scale?: number);
 
         resize(width: number, height: number): void;
@@ -833,7 +833,7 @@ declare namespace phaserui {
     /**
      * Panel
      */
-    class Panel extends phaserui.BaseUI {
+    class Panel extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, world: any, music?: any);
 
         protected mPanelTween: Phaser.Tweens.Tween;
@@ -846,7 +846,7 @@ declare namespace phaserui {
 
         id: number;
 
-        UIType: phaserui.UIType;
+        UIType: apowophaserui.UIType;
 
         protected mPreLoad: boolean;
 
@@ -860,7 +860,7 @@ declare namespace phaserui {
 
         protected mWorld: any;
 
-        protected soundGroup: phaserui.ISoundGroup;
+        protected soundGroup: apowophaserui.ISoundGroup;
 
         addListen(): void;
 
@@ -926,7 +926,7 @@ declare namespace phaserui {
     /**
      * ProgressBar
      */
-    class ProgressBar extends phaserui.BaseUI {
+    class ProgressBar extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config?: any);
 
         setProgress(curVal: number, maxVal: number): void;
@@ -955,10 +955,10 @@ declare namespace phaserui {
     /**
      * GameScroller
      */
-    class GameScroller extends phaserui.BaseUI {
+    class GameScroller extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        protected soundGroup: phaserui.ISoundGroup;
+        protected soundGroup: apowophaserui.ISoundGroup;
 
         view: any;
 
@@ -1030,10 +1030,10 @@ declare namespace phaserui {
     /**
      * BaseScroller
      */
-    class BaseScroller extends phaserui.BaseUI {
+    class BaseScroller extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        protected soundGroup: phaserui.ISoundGroup;
+        protected soundGroup: apowophaserui.ISoundGroup;
 
         setEnable(enable: boolean): void;
 
@@ -1080,7 +1080,7 @@ declare namespace phaserui {
     /**
      * Sizer
      */
-    class Sizer extends phaserui.Base {
+    class Sizer extends apowophaserui.Base {
         constructor(scene: Phaser.Scene, x?: number, y?: number, minWidth?: number, minHeight?: number, orientation?: number, config?: any);
 
         destroy(fromScene?: any): void;
@@ -1104,7 +1104,7 @@ declare namespace phaserui {
     /**
      * GameSlider
      */
-    class GameSlider extends phaserui.Slider {
+    class GameSlider extends apowophaserui.Slider {
         constructor(scene: Phaser.Scene, config: any);
 
         setEnable(enable: boolean): any;
@@ -1121,7 +1121,7 @@ declare namespace phaserui {
 
     }
 
-    class Slider extends phaserui.Sizer {
+    class Slider extends apowophaserui.Sizer {
         constructor(scene: Phaser.Scene, config: any);
 
     }
@@ -1129,14 +1129,14 @@ declare namespace phaserui {
     /**
      * NinePatchTabButton
      */
-    class NinePatchTabButton extends phaserui.TabButton {
+    class NinePatchTabButton extends apowophaserui.TabButton {
         constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: any, dpr?: number, scale?: number, data?: any);
 
         protected mKey: string;
 
         protected btnData: any;
 
-        protected mBackground: phaserui.NineSlicePatch;
+        protected mBackground: apowophaserui.NineSlicePatch;
 
         setSize(width: number, height: number): any;
 
@@ -1153,8 +1153,8 @@ declare namespace phaserui {
     /**
      * TabButton
      */
-    class TabButton extends phaserui.Button {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: phaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+    class TabButton extends apowophaserui.Button {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: apowophaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
 
         selected: any;
 
@@ -1171,8 +1171,12 @@ declare namespace phaserui {
     /**
      * TextArea
      */
-    class TextArea extends phaserui.Scrollable {
+    class TextArea extends apowophaserui.Scrollable {
         constructor(scene: Phaser.Scene, config?: any);
+
+        text: any;
+
+        linesCount: any;
 
         setText(text: string): any;
 
@@ -1183,7 +1187,7 @@ declare namespace phaserui {
     /**
      * Scrollable
      */
-    class Scrollable extends phaserui.Sizer {
+    class Scrollable extends apowophaserui.Sizer {
         constructor(scene: Phaser.Scene, config?: any);
 
         layout(parent?: any, newWidth?: number, newHeight?: number): any;
@@ -1200,12 +1204,12 @@ declare namespace phaserui {
 
 }
 
-declare namespace phaserui.basesizer {
+declare namespace apowophaserui.basesizer {
     function AddChildrenMap(key: any, gameObject: any): any;
 
 }
 
-declare namespace phaserui.text {
+declare namespace apowophaserui.text {
     function setStyle(style: any): any;
 
 }
@@ -1218,18 +1222,18 @@ declare namespace FramesSkin {
 
 }
 
-declare namespace phaserui.CoreUI {
+declare namespace apowophaserui.CoreUI {
     enum MouseEvent {
     }
 
 }
 
-declare namespace phaserui.gameScroller {
+declare namespace apowophaserui.gameScroller {
     function onScrollValueChange(value: number): void;
 
 }
 
-declare namespace phaserui.Tool {
+declare namespace apowophaserui.Tool {
     function checkPointerContains(gameObject: any, pointer: Phaser.Input.Pointer): boolean;
 
     function getTransfrom(config: any): any;
@@ -1240,12 +1244,12 @@ declare namespace phaserui.Tool {
 
 }
 
-declare namespace phaserui.Utils {
+declare namespace apowophaserui.Utils {
     function GetParentSizer(gameObject: any): any;
 
     function GetTopmostSizer(gameObject: any): any;
 
 }
 
-export = phaserui;
+export = apowophaserui;
 

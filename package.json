@@ -1,10 +1,10 @@
 {
-  "name": "@apowo/phaserui",
-  "version": "0.1.2",
-  "description": "phaserui Plugins",
+  "name": "apowophaserui",
+  "version": "0.1.4",
+  "description": "apowophaserui Plugins",
   "author": "Gxm",
-  "main": "./dist/phaserui.js",
-  "types": "./types/phaserui.d.ts",
+  "main": "./dist/apowophaserui.js",
+  "types": "./types/apowophaserui.d.ts",
   "scripts": {
     "watch": "rimraf dist && webpack --mode development --config webpack.config.js",
     "build-tsc": "cd lib/ui && tsc",

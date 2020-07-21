@@ -16,8 +16,8 @@
 
 ### 使用
 
-    - 项目入口类 import "@apowo/phaserui"
-    - 对应组件 improt { Button } from "@apowo/phaserui" 其他组件可以通过rexui的api选择导入
+    - 项目入口类 import "apowophaserui"
+    - 对应组件 improt { Button } from "apowophaserui" 其他组件可以通过rexui的api选择导入
 
 ### phaser-rexui 部分demo
 
@@ -55,6 +55,6 @@
     
 ### 生成声明文件流程（Phaser3-ui项目）
 1. 利用tsc指令将ts脚本转换成js脚本
-2. 利用jsdoc的api对于js脚本属性和方法进行描述，再使用tsgen指令，生成phaserui.d.ts声明文件
-3. 利用watch指令将ui库的js脚本打包成phaserui.js
-4. 修改项目version，利用npm发布phaserui包
+2. 利用jsdoc的api对于js脚本属性和方法进行描述，再使用tsgen指令，生成apowophaserui.d.ts声明文件
+3. 利用watch指令将ui库的js脚本打包成apowophaserui.js
+4. 修改项目version，利用npm发布apowophaserui包

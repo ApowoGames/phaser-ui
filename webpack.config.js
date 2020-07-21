@@ -34,13 +34,13 @@ const htmlTemplate = process.env.htmltemplate || "./examples/index.tmpl";
 
 module.exports = {
   mode: "none",
-  entry: { phaserui: "./lib/ui/ui-components.ts" },
+  entry: { apowophaserui: "./lib/ui/ui-components.ts" },
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, "dist"),
-    library: "phaserui",
+    library: "apowophaserui",
     libraryTarget: "umd",
-    filename: "phaserui.js",
+    filename: "apowophaserui.js",
     umdNamedDefine: true
   },
   watch: true,

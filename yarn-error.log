@@ -19,12 +19,12 @@ Trace:
 
 npm manifest: 
   {
-    "name": "phaserui",
+    "name": "apowophaserui",
     "version": "0.0.7",
-    "description": "phaserui Plugins",
+    "description": "apowophaserui Plugins",
     "author": "Gxm",
     "main": "./dist/index.js",
-    "types": "./types/phaserui.d.ts",
+    "types": "./types/apowophaserui.d.ts",
     "scripts": {
       "watch": "rimraf types && rimraf dist && webpack --config webpack.config.js",
       "build": "rimraf dist && rollup -c rollup.config.js",

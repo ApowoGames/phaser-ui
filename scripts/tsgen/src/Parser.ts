@@ -26,10 +26,10 @@ export class Parser {
         // this.topLevel.push(dom.create.alias('integer', dom.type.number));
 
         // add declare module
-        dom.create.exportEquals('phaserui')
-        // const phaserPkgModuleDOM = dom.create.module('phaserui');
-        // phaserPkgModuleDOM.members.push(dom.create.exportEquals('phaserui'));
-        this.topLevel.push(dom.create.exportEquals('phaserui'));
+        dom.create.exportEquals('apowophaserui')
+        // const phaserPkgModuleDOM = dom.create.module('apowophaserui');
+        // phaserPkgModuleDOM.members.push(dom.create.exportEquals('apowophaserui'));
+        this.topLevel.push(dom.create.exportEquals('apowophaserui'));
     }
 
     emit() {
@@ -65,7 +65,7 @@ export class Parser {
         for (let i = 0; i < docs.length; i++) {
 
             let doclet = docs[i];
-            if (doclet.longname === "phaserui.BaseUI.BaseMediator.updateViewPos") {
+            if (doclet.longname === "apowophaserui.BaseUI.BaseMediator.updateViewPos") {
                 console.log(doclet);
             }
             // TODO: Custom temporary rules
@@ -92,28 +92,28 @@ export class Parser {
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
-                case 'phaserui.IButtonState':
-                case 'phaserui.IMediator':
-                case 'phaserui.IAbstractPanel':
-                case 'phaserui.IAbstractInteractiveObject':
-                case 'phaserui.IAbstractItem':
-                case 'phaserui.IAbstractUI':
-                case 'phaserui.ISetInteractive':
-                case 'phaserui.ISound':
-                case 'phaserui.Patchesconfig':
-                case 'phaserui.ISoundConfig':
-                case 'phaserui.ISoundGroup':
-                case 'phaserui.IMaskConfig':
-                case 'phaserui.GridTableConfig':
-                case 'phaserui.SliderConfig':
-                case 'phaserui.GridTableCoreConfig':
-                case 'phaserui.ScrollerableConfig':
-                case 'phaserui.NinePatchConfig':
-                case 'phaserui.IPatchesConfig':
-                case 'phaserui.ISelectCallItemdata':
-                case 'phaserui.ScrollerConfig':
-                case 'phaserui.ISelectCallUI':
-                case 'phaserui.IComboboxConfig':
+                case 'apowophaserui.IButtonState':
+                case 'apowophaserui.IMediator':
+                case 'apowophaserui.IAbstractPanel':
+                case 'apowophaserui.IAbstractInteractiveObject':
+                case 'apowophaserui.IAbstractItem':
+                case 'apowophaserui.IAbstractUI':
+                case 'apowophaserui.ISetInteractive':
+                case 'apowophaserui.ISound':
+                case 'apowophaserui.Patchesconfig':
+                case 'apowophaserui.ISoundConfig':
+                case 'apowophaserui.ISoundGroup':
+                case 'apowophaserui.IMaskConfig':
+                case 'apowophaserui.GridTableConfig':
+                case 'apowophaserui.SliderConfig':
+                case 'apowophaserui.GridTableCoreConfig':
+                case 'apowophaserui.ScrollerableConfig':
+                case 'apowophaserui.NinePatchConfig':
+                case 'apowophaserui.IPatchesConfig':
+                case 'apowophaserui.ISelectCallItemdata':
+                case 'apowophaserui.ScrollerConfig':
+                case 'apowophaserui.ISelectCallUI':
+                case 'apowophaserui.IComboboxConfig':
                     doclet.kind = 'mixin';
                     break;
 
