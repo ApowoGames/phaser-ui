@@ -170,7 +170,7 @@ declare namespace apowophaserui {
      * Text
      */
     class Text extends Phaser.GameObjects.GameObject implements Phaser.GameObjects.Components.Origin {
-        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: apowophaserui.Parser);
+        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: apowophaserui.parser);
 
         displayWidth: number;
 
