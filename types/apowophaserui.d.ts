@@ -525,63 +525,63 @@ declare namespace apowophaserui {
     }
 
     interface GridTableConfig {
-        x: number;
-        y: number;
-        type: string;
-        scrollMode: number;
-        background: any;
-        table: any;
-        slider: any;
-        scroller: any;
-        clamplChildOY: boolean;
-        header: any;
-        footer: any;
-        child: any;
-        space: any;
-        expand: any;
-        align: any;
-        createCellContainerCallback: Function;
-        items: any[];
-        name: string;
+        x?: number;
+        y?: number;
+        type?: string;
+        scrollMode?: number;
+        background?: any;
+        table?: any;
+        slider?: any;
+        scroller?: any;
+        clamplChildOY?: boolean;
+        header?: any;
+        footer?: any;
+        child?: any;
+        space?: any;
+        expand?: any;
+        align?: any;
+        createCellContainerCallback?: Function;
+        items?: any[];
+        name?: string;
     }
 
     interface GridTableCoreConfig {
-        width: number;
-        height: number;
-        scrollMode: number;
-        cellWidth: number;
-        cellHeight: number;
-        cellsCount: number;
-        columns: number;
-        interactive: boolean;
-        reuseCellContainer: boolean;
-        tableOX: number;
-        tableOY: number;
-        cellVisibleCallback: Function;
-        cellVisibleCallbackScope: number[];
-        cellInvisibleCallback: Function;
-        cellInvisibleCallbackScope: number[];
-        cellOriginX: number;
-        cellOriginY: number;
-        cellPadX: number;
-        cellPadY: number;
-        zoom: number;
-        dpr: number;
-        clampTableOY: boolean;
-        mask: any;
+        width?: number;
+        height?: number;
+        scrollMode?: number;
+        cellWidth?: number;
+        cellHeight?: number;
+        cellsCount?: number;
+        columns?: number;
+        interactive?: boolean;
+        reuseCellContainer?: boolean;
+        tableOX?: number;
+        tableOY?: number;
+        cellVisibleCallback?: Function;
+        cellVisibleCallbackScope?: number[];
+        cellInvisibleCallback?: Function;
+        cellInvisibleCallbackScope?: number[];
+        cellOriginX?: number;
+        cellOriginY?: number;
+        cellPadX?: number;
+        cellPadY?: number;
+        zoom?: number;
+        dpr?: number;
+        clampTableOY?: boolean;
+        mask?: any;
     }
 
     interface SliderConfig {
-        background: any;
-        track: any;
-        thumb: any;
-        input: Phaser.Input.InputPlugin;
+        background?: any;
+        track?: any;
+        thumb?: any;
+        input?: Phaser.Input.InputPlugin;
     }
 
     interface ScrollerableConfig {
-        threshold: number;
-        slidingDeceleration: number;
-        backDeceleration: number;
+        threshold?: number;
+        slidingDeceleration?: number;
+        backDeceleration?: number;
     }
 
     /**
@@ -637,17 +637,17 @@ declare namespace apowophaserui {
     const ElementEvents: any;
 
     interface IAbstractInteractiveObject {
-        selected: boolean;
-        enabled: boolean;
+        selected?: boolean;
+        enabled?: boolean;
     }
 
     interface IAbstractItem extends apowophaserui.IAbstractInteractiveObject{
-        index: number;
+        index?: number;
     }
 
     interface IAbstractUI {
-        id: number;
-        UIType: apowophaserui.UIType;
+        id?: number;
+        UIType?: apowophaserui.UIType;
     }
 
     interface ISetInteractive {
@@ -656,7 +656,7 @@ declare namespace apowophaserui {
     }
 
     interface ISound {
-        soundMap: any;
+        soundMap?: any;
         playSound(config: Phaser.Sound.BaseSound): void;
         startPlay(config: Phaser.Sound.BaseSound): void;
         stopSound(): void;
@@ -681,18 +681,18 @@ declare namespace apowophaserui {
     }
 
     interface IComboboxConfig {
-        wid: number;
-        hei: number;
-        resKey: string;
-        resPng: string;
-        resJson: string;
-        resBg: string;
-        resArrow: string;
-        fontStyle: any;
-        up: boolean;
-        clickCallBack: Function;
-        boxMusic: any;
-        itemMusic: any;
+        wid?: number;
+        hei?: number;
+        resKey?: string;
+        resPng?: string;
+        resJson?: string;
+        resBg?: string;
+        resArrow?: string;
+        fontStyle?: any;
+        up?: boolean;
+        clickCallBack?: Function;
+        boxMusic?: any;
+        itemMusic?: any;
     }
 
     enum ClickEvent {
@@ -760,21 +760,21 @@ declare namespace apowophaserui {
     }
 
     interface ISoundConfig {
-        key: string;
-        field: apowophaserui.SoundField;
-        soundConfig: Phaser.Types.Sound.SoundConfig;
+        key?: string;
+        field?: apowophaserui.SoundField;
+        soundConfig?: Phaser.Types.Sound.SoundConfig;
     }
 
     interface ISoundGroup {
-        open: apowophaserui.ISoundConfig;
-        close: apowophaserui.ISoundConfig;
-        click: apowophaserui.ISoundConfig;
-        down: apowophaserui.ISoundConfig;
-        up: apowophaserui.ISoundConfig;
-        move: apowophaserui.ISoundConfig;
-        disabled: apowophaserui.ISoundConfig;
-        progress: apowophaserui.ISoundConfig;
-        expand: apowophaserui.ISoundConfig;
+        open?: apowophaserui.ISoundConfig;
+        close?: apowophaserui.ISoundConfig;
+        click?: apowophaserui.ISoundConfig;
+        down?: apowophaserui.ISoundConfig;
+        up?: apowophaserui.ISoundConfig;
+        move?: apowophaserui.ISoundConfig;
+        disabled?: apowophaserui.ISoundConfig;
+        progress?: apowophaserui.ISoundConfig;
+        expand?: apowophaserui.ISoundConfig;
     }
 
     class MessageBox extends apowophaserui.Panel {
