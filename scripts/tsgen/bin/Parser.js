@@ -91,7 +91,7 @@ class Parser {
                 case 'apowophaserui.SliderConfig':
                 case 'apowophaserui.GridTableCoreConfig':
                 case 'apowophaserui.ScrollerableConfig':
-                case 'apowophaserui.NinePatchConfig':
+                case 'apowophaserui.INinePatchConfig':
                 case 'apowophaserui.IPatchesConfig':
                 case 'apowophaserui.ISelectCallItemdata':
                 case 'apowophaserui.ScrollerConfig':

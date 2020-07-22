@@ -170,7 +170,7 @@ declare namespace apowophaserui {
      * Text
      */
     class Text extends Phaser.GameObjects.GameObject implements Phaser.GameObjects.Components.Origin {
-        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: apowophaserui.parser);
+        constructor(scene: Phaser.Scene, x: number, y: number, text: string, style: any, type: string, parser: apowophaserui.Parser);
 
         displayWidth: number;
 
@@ -716,21 +716,14 @@ declare namespace apowophaserui {
         Blur,
     }
 
-    namespace INinePatchConfig {
-        var x: number;
-
-        var y: number;
-
-        var width: number;
-
-        var height: number;
-
-        var key: string;
-
-        var frame: string;
-
-        var config: any;
-
+    interface INinePatchConfig {
+        x?: number;
+        y?: number;
+        width?: number;
+        height?: number;
+        key?: string;
+        frame?: string;
+        config?: any;
     }
 
     interface IAbstractPanel extends apowophaserui.IAbstractUI{
@@ -1087,11 +1080,11 @@ declare namespace apowophaserui {
 
         setOrientation(orientation: any): any;
 
-        add(gameObject: any, proportion: any, align: any, paddingConfig: any, expand: any, childKey: any): any;
+        add(gameObject: any, proportion?: any, align?: any, paddingConfig?: any, expand?: any, childKey?: any): any;
 
-        addSpace(proportion: any): any;
+        addSpace(proportion?: any): any;
 
-        insert(index: number, gameObject: any, proportion: any, align: any, paddingConfig: any, expand: any): any;
+        insert(index: number, gameObject: any, proportion?: any, align?: any, paddingConfig?: any, expand?: any): any;
 
         remove(gameObject: any): any;
 
