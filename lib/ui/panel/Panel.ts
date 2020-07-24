@@ -24,7 +24,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mFollow: any;
     protected mShowData: any;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
-        super(scene, world.dpr, world.uiScaleNew);
+        super(scene, world.uiRadio, world.uiScale);
         this.soundMap = new Map();
         this.scene = scene;
         this.mWorld = world;
