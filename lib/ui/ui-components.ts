@@ -29,7 +29,7 @@ import Edit from "../plugins/behaviors/textedit/Edit.js";
 import { WaitEvent, WaitComplete } from "./utils/WaitEvent.js";
 import BaseUI from "./baseUI/BaseUI.js";
 import { Button } from "./button/Button.js";
-import NineSliceButton from "./button/NineSliceButton.js";
+import { NineSliceButton } from "./button/NineSliceButton.js";
 import { ComboBox } from "./combobox/Combobox.js";
 import { GameGridTable } from "./gridtable/GameGridTable.js";
 import { NinePatchSkin } from "./interface/ninepatch/NinePatchSkin.js";

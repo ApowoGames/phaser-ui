@@ -266,11 +266,30 @@ declare namespace apowophaserui {
         Disable,
     }
 
+    interface NinePatchConfig {
+        width?: number;
+        height?: number;
+        configlist?: any;
+    }
+
+    interface ButtonConfig {
+        key?: string;
+        normalFrame?: string;
+        downFrame?: string;
+        text?: string;
+        music?: apowophaserui.ISoundGroup;
+        dpr?: number;
+        scale?: number;
+        nineConfig?: apowophaserui.NinePatchConfig;
+    }
+
     /**
      * Button
      */
     class Button extends apowophaserui.BaseUI implements apowophaserui.IButtonState {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: apowophaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.ButtonConfig);
+
+        protected buttonConfig: apowophaserui.ButtonConfig;
 
         protected mDownTime: number;
 
@@ -333,11 +352,20 @@ declare namespace apowophaserui {
 
     }
 
+    interface NineSliceButtonConfig extends apowophaserui.ButtonConfig{
+        x?: number;
+        y?: number;
+        width?: number;
+        height?: number;
+        config?: apowophaserui.IPatchesConfig;
+        data?: any;
+    }
+
     /**
      * NineSliceButton
      */
     class NineSliceButton extends apowophaserui.BaseUI {
-        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, dpr?: number, scale?: number, config?: any, music?: any, data?: any);
+        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.NineSliceButtonConfig);
 
         protected mLabel: Phaser.GameObjects.Text;
 
@@ -541,7 +569,7 @@ declare namespace apowophaserui {
         expand?: any;
         align?: any;
         createCellContainerCallback?: Function;
-        items?: any[];
+        items?: any;
         name?: string;
     }
 
@@ -558,9 +586,9 @@ declare namespace apowophaserui {
         tableOX?: number;
         tableOY?: number;
         cellVisibleCallback?: Function;
-        cellVisibleCallbackScope?: number[];
+        cellVisibleCallbackScope?: any;
         cellInvisibleCallback?: Function;
-        cellInvisibleCallbackScope?: number[];
+        cellInvisibleCallbackScope?: any;
         cellOriginX?: number;
         cellOriginY?: number;
         cellPadX?: number;
@@ -656,13 +684,20 @@ declare namespace apowophaserui {
     }
 
     interface ISound {
-        soundMap?: any;
+        soundMap: any;
         playSound(config: Phaser.Sound.BaseSound): void;
         startPlay(config: Phaser.Sound.BaseSound): void;
         stopSound(): void;
         pauseSound(): void;
         resumeSound(): void;
         setSilent(boo: boolean): void;
+    }
+
+    interface IPatchesConfig {
+        top: number;
+        left?: number;
+        right?: number;
+        bottom?: number;
     }
 
     enum UIType {
@@ -1123,7 +1158,7 @@ declare namespace apowophaserui {
      * NinePatchTabButton
      */
     class NinePatchTabButton extends apowophaserui.TabButton {
-        constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: any, dpr?: number, scale?: number, data?: any);
+        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.NineSliceButtonConfig);
 
         protected mKey: string;
 
@@ -1147,7 +1182,7 @@ declare namespace apowophaserui {
      * TabButton
      */
     class TabButton extends apowophaserui.Button {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: apowophaserui.ISoundGroup, dpr?: number, scale?: number, nineConfig?: any);
+        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.ButtonConfig);
 
         selected: any;
 
