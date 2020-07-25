@@ -114,6 +114,9 @@ export class Parser {
                 case 'apowophaserui.ScrollerConfig':
                 case 'apowophaserui.ISelectCallUI':
                 case 'apowophaserui.IComboboxConfig':
+                case 'apowophaserui.NinePatchConfig':
+                case 'apowophaserui.ButtonConfig':
+                case 'apowophaserui.NineSliceButtonConfig':
                     doclet.kind = 'mixin';
                     break;
 
