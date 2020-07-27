@@ -281,6 +281,7 @@ declare namespace apowophaserui {
         dpr?: number;
         scale?: number;
         nineConfig?: apowophaserui.NinePatchConfig;
+        data?: any;
     }
 
     /**
@@ -358,7 +359,6 @@ declare namespace apowophaserui {
         width?: number;
         height?: number;
         config?: apowophaserui.IPatchesConfig;
-        data?: any;
     }
 
     /**
