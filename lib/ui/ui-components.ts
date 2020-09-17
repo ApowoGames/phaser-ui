@@ -45,8 +45,12 @@ import SetText from "../ui/textarea/SetText.js";
 import AppendText from "../ui/textarea/AppendText.js";
 import UIType from "../ui/interface/baseUI/UIType.js";
 import GameSlider from "../ui/slider/GameSlider";
+import BaseMediator from "../ui/baseUI/BaseMediator";
+import CheckBox from "../ui/checkbox/CheckBox";
 export = {
   UIType,
+  BaseMediator,
+  CheckBox,
   InputText,
   RoundRectangle,
   BBCodeText,

@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-04-14 17:17:15
  * @Last Modified by: gxm
- * @Last Modified time: 2020-06-12 15:54:25
+ * @Last Modified time: 2020-09-16 18:29:55
  */
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundConfig } from "../interface/sound/ISoundConfig";
@@ -15,6 +15,11 @@ export interface UIFollowConfig {
     baseY: number;
 }
 
+/**
+ * @class BaseUI
+ * @memberof TooqinUI
+ * @extends Phaser.GameObjects.Container
+ */
 export class BaseUI extends Phaser.GameObjects.Container implements ISound {
     /**
      * 声音map

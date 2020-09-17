@@ -45,7 +45,7 @@
     "lokijs": "^1.5.8",
     "node-gyp": "^6.1.0",
     "papaparse": "^4.6.3",
-    "phaser": "^3.23.0",
+    "phaser": "^3.24.1",
     "webfontloader": "^1.6.28"
   },
   "directories": {
