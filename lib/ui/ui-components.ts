@@ -29,14 +29,14 @@ import Edit from "../plugins/behaviors/textedit/Edit.js";
 import { WaitEvent, WaitComplete } from "./utils/WaitEvent.js";
 import BaseUI from "./baseUI/BaseUI.js";
 import { Button } from "./button/Button.js";
-import { NineSliceButton } from "./button/NineSliceButton.js";
+import NineSliceButton from "./button/NineSliceButton.js";
 import { ComboBox } from "./combobox/Combobox.js";
-import { GameGridTable } from "./gridtable/GameGridTable.js";
+import GameGridTable from "./gridtable/GameGridTable.js";
 import { NinePatchSkin } from "./interface/ninepatch/NinePatchSkin.js";
 import MessageBox from "./messageBox/MessageBox.js";
 import NinePatch from "./ninepatch/NinePatch.js";
 import Panel from "./panel/Panel.js";
-import ProgressBar from "./progressbar/ProgressBar.js";
+import { ProgressBar } from "./progressbar/ProgressBar.js";
 import GameScroller from "./scroller/GameScroller.js";
 import BaseScroller from "./scroller/Scroller.js";
 import NinePatchTabButton from "./tab/NinePatchTabButton.js";
@@ -47,7 +47,9 @@ import UIType from "../ui/interface/baseUI/UIType.js";
 import GameSlider from "../ui/slider/GameSlider";
 import BaseMediator from "../ui/baseUI/BaseMediator";
 import CheckBox from "../ui/checkbox/CheckBox";
+import { Tool } from "../ui/tool/Tool";
 export = {
+  Tool,
   UIType,
   BaseMediator,
   CheckBox,
@@ -99,4 +101,5 @@ export = {
   Edit,
   WaitEvent,
   WaitComplete,
+  TextBox,
 }

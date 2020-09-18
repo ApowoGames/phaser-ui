@@ -53,6 +53,7 @@ class Parser {
             }
             // TODO: Custom temporary rules
             switch (doclet.longname) {
+                case 'Phaser.GameObjects.Components':
                 case 'Phaser.GameObjects.Components.Alpha':
                 case 'Phaser.GameObjects.Components.AlphaSingle':
                 case 'Phaser.GameObjects.Components.Animation':
@@ -74,6 +75,13 @@ class Parser {
                 case 'Phaser.GameObjects.Components.ToJSON':
                 case 'Phaser.GameObjects.Components.Transform':
                 case 'Phaser.GameObjects.Components.Visible':
+                case 'Phaser.GameObjects.Container':
+                case 'Phaser.GameObjects.GameObject':
+                case 'Phaser.GameObjects.Zone':
+                case 'Phaser.Events.EventEmitter':
+                case 'Phaser.GameObjects.DOMElement':
+                case 'Phaser.GameObjects.RenderTexture':
+                case 'Phaser.GameObjects.Shape':
                 case 'Phaser.Renderer.WebGL.Pipelines.ModelViewProjection':
                 case 'apowophaserui.IButtonState':
                 case 'apowophaserui.IMediator':

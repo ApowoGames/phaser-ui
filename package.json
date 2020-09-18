@@ -1,12 +1,12 @@
 {
   "name": "apowophaserui",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "apowophaserui Plugins",
   "author": "Gxm",
   "main": "./dist/apowophaserui.js",
   "types": "./types/apowophaserui.d.ts",
   "scripts": {
-    "watch": "rimraf dist && webpack --mode development --config webpack.config.js",
+    "watch": "rimraf dist && webpack --mode production --config webpack.config.js",
     "build-tsc": "cd lib/ui && tsc",
     "build-tsgen": "cd scripts/tsgen && tsc",
     "tsgen": "rimraf types && cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"

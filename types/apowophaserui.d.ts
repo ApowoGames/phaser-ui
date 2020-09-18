@@ -1,5 +1,45 @@
 declare namespace apowophaserui {
     /**
+     * BaseMediator
+     */
+    class BaseMediator {
+        protected mView: apowophaserui.Panel;
+
+        mParam: any;
+
+        protected mShow: boolean;
+
+        protected mUIType: number;
+
+        UIType: number;
+
+        updateViewPos: any;
+
+        tweenExpand: any;
+
+        getView: any;
+
+        hide: any;
+
+        isSceneUI: any;
+
+        isShow: any;
+
+        resize: any;
+
+        show: any;
+
+        update: any;
+
+        setParam: any;
+
+        getParam: any;
+
+        destroy: any;
+
+    }
+
+    /**
      * BaseUI
      */
     class BaseUI extends Phaser.GameObjects.Container {
@@ -55,6 +95,8 @@ declare namespace apowophaserui {
      */
     class Base extends apowophaserui.Container {
         constructor(scene: Phaser.Scene, x?: number, y?: number, minWidth?: number, minHeight?: number, config?: any);
+
+        static AddChildrenMap(key: any, gameObject: any): any;
 
         destroy(fromScene?: any): void;
 
@@ -158,13 +200,7 @@ declare namespace apowophaserui {
 
     function onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void;
 
-    /**
-     * BBCodeText
-     */
-    class BBCodeText extends apowophaserui.Text {
-        constructor(scene: Phaser.Scene, x?: number, y?: number, text?: string, style?: any);
-
-    }
+    function BBCodeText(scene: Phaser.Scene, x: number, y: number, text: Phaser.GameObjects.Text, style: any): any;
 
     /**
      * Text
@@ -287,16 +323,18 @@ declare namespace apowophaserui {
     /**
      * Button
      */
-    class Button extends apowophaserui.BaseUI implements apowophaserui.IButtonState {
-        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.ButtonConfig);
-
-        protected buttonConfig: apowophaserui.ButtonConfig;
+    class Button extends apowophaserui.BaseUI {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: any, dpr?: number, scale?: number, nineConfig?: any);
 
         protected mDownTime: number;
 
         protected mPressDelay: number;
 
         protected mIsMove: boolean;
+
+        protected dpr: number;
+
+        protected zoom: number;
 
         /**
          * {width:number,height:number,configList:IPatchesConfig[](top:number,left?:number,right?:number,bottom?:number)}
@@ -321,6 +359,8 @@ declare namespace apowophaserui {
 
         removeListen(): void;
 
+        enable: boolean;
+
         mute(boo: boolean): void;
 
         changeNormal(): void;
@@ -339,82 +379,60 @@ declare namespace apowophaserui {
 
         setTextColor(color: string): void;
 
-        createBackground(): void;
+        setFrameNormal(color: string, down?: string, over?: string): void;
 
-        setBgFrame(frame: string | number): void;
+        protected createBackground(): void;
 
-        buttonStateChange(state: apowophaserui.ButtonState): void;
+        protected setBgFrame(frame: string): void;
 
-        onPointerMoveHandler(pointer: Phaser.Input.Pointer): void;
+        protected buttonStateChange(state: number): void;
 
-        onPointerUpHandler(pointer: Phaser.Input.Pointer): void;
+        protected onPointerMoveHandler(pointer?: Phaser.Input.Pointer): void;
 
-        onPointerDownHandler(pointer: Phaser.Input.Pointer): void;
+        protected onPointerUpHandler(pointer?: Phaser.Input.Pointer): void;
 
-    }
+        protected onPointerDownHandler(pointer?: Phaser.Input.Pointer): void;
 
-    interface NineSliceButtonConfig extends apowophaserui.ButtonConfig{
-        x?: number;
-        y?: number;
-        width?: number;
-        height?: number;
-        config?: apowophaserui.IPatchesConfig;
+        protected onPointerDcheckPointerInBoundsownHandler(gameObject: any, pointerx: number, pointery: number): boolean;
+
     }
 
     /**
      * NineSliceButton
      */
-    class NineSliceButton extends apowophaserui.BaseUI {
-        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.NineSliceButtonConfig);
-
-        protected mLabel: Phaser.GameObjects.Text;
-
-        addListen(): void;
-
-        removeListen(): void;
+    class NineSliceButton extends apowophaserui.Button {
+        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, text?: string, dpr?: number, scale?: number, config?: any, music?: any, data?: any);
 
         enable: boolean;
 
         getBtnData(): any;
 
-        setText(text: string): void;
-
-        getText(): string;
-
-        setTextStyle(style: any): void;
-
-        setFontStyle(val: string): void;
-
-        setTextOffset(x: number, y: number): void;
-
-        setFrame(frame: string | number): void;
-
-        destroy(): void;
-
-        setFrameNormal(normal: string, down?: string, over?: string): void;
-
-        changeNormal(): void;
-
-        changeDown(): void;
-
-        changeOver(): void;
+        createBackground(): void;
 
         isExists(frame: string): void;
-
-        onPointerDown(pointer: Phaser.Input.Pointer): void;
-
-        onPointerUp(pointer: Phaser.Input.Pointer): void;
-
-        label: any;
 
         initFrame(): void;
 
     }
 
     /**
+     * CheckBox
+     */
+    class CheckBox extends apowophaserui.Button {
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: any, dpr?: number, scale?: number, nineConfig?: any);
+
+        mSelected: boolean;
+
+        selected: boolean;
+
+        destroy(): void;
+
+    }
+
+    /**
      * SelectCallItem
      */
-    class SelectCallItem {
+    class SelectCallItem extends apowophaserui.BaseUI {
         /**
          * 
          * @param selectCallUI {selectCall(data:ISelectCallItemdata)} {IselectCallItemdata(text:string,data:any,index:number)}
@@ -439,7 +457,7 @@ declare namespace apowophaserui {
 
         selected: boolean;
 
-        setInteractive: boolean;
+        interactive: boolean;
 
         overHandler(): void;
 
@@ -495,13 +513,6 @@ declare namespace apowophaserui {
     class GameGridTable extends Phaser.Events.EventEmitter {
         constructor(scene: Phaser.Scene, config?: any);
 
-        adjustScrollMode(mode: any): void;
-
-        /**
-         * 调整gridtable遮照范围
-         */
-        adjustMask(width: number, height: number, x: number, y: number): void;
-
         gridTable: any;
 
         childrenMap: any;
@@ -534,10 +545,6 @@ declare namespace apowophaserui {
 
         removeListen(): void;
 
-        x: number;
-
-        y: number;
-
         refresh(): void;
 
         resetMask(x?: number, y?: number, width?: number, height?: number): void;
@@ -545,6 +552,8 @@ declare namespace apowophaserui {
         layout(): void;
 
         refreshPos(x: number, y: number, conx?: number, cony?: number): void;
+
+        setSize(width: number, height: number): any;
 
         destroy(): void;
 
@@ -710,11 +719,6 @@ declare namespace apowophaserui {
         Activity,
     }
 
-    interface IButtonState {
-        changeNormal(): void;
-        changeDown(): void;
-    }
-
     interface IComboboxConfig {
         wid?: number;
         hei?: number;
@@ -778,9 +782,6 @@ declare namespace apowophaserui {
         right,
     }
 
-    interface ScrollerConfig {
-    }
-
     enum SoundField {
         Background,
         Element,
@@ -806,6 +807,26 @@ declare namespace apowophaserui {
     }
 
     class MessageBox extends apowophaserui.Panel {
+        constructor(scene: Phaser.Scene, world: any, config?: any);
+
+        show(config: any): void;
+
+        preload(): void;
+
+        setText(str: string): void;
+
+        setTitle(str: string): void;
+
+        setbtnNum(btnNum: number): void;
+
+        addResources(key: string, resource: any): void;
+
+        init(): void;
+
+        onOkHandler(): void;
+
+        onCancelHandler(): void;
+
     }
 
     /**
@@ -816,45 +837,42 @@ declare namespace apowophaserui {
 
     }
 
-    /**
-     * NineSlicePatch
-     */
     class NineSlicePatch extends apowophaserui.BaseUI {
-        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame?: string, config?: any, dpr?: number, scale?: number);
+        constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, key: string, frame: string, config?: any, dpr?: number, scale?: number, correct?: number);
 
         resize(width: number, height: number): void;
 
+        correctValue: number;
+
         getConfig(): any;
 
-        setConfig(config: any): void;
+        setTexture(key: string, frame?: string): any;
 
-        setTexture(key: string, frame: string): void;
-
-        setFrame(frame: string): void;
+        setFrame(frame: string): any;
 
         setSize(width: number, height: number): any;
 
-        setTint(tint: any): void;
+        setTint(tint: number): any;
 
-        setTintFill(tint: any): void;
+        setTintFill(tint: number): any;
 
-        tintFill: any;
+        tintFill: boolean;
 
-        static isTinted: any;
+        tint: number;
 
-        clearTine(): void;
+        isTinted: any;
 
-        createPatches(): void;
+        clearTint(): void;
 
-        drawPatches(): void;
+        destroy(): void;
 
-        createPatchFrame(patch: string, x: number, y: number, width: number, height: number): void;
+        protected createPatches(): void;
 
-        getPatchNameByIndex(index: number): void;
+        protected drawPatches(): void;
 
-        calculScale(num0: number, num1: number): number;
+        protected createPatchFrame(patch: string, x: number, y: number, width: number, height: number): void;
 
-        normalizePatchesConfig(config: any): any;
+        protected getPatchNameByIndex(index: number): string;
 
     }
 
@@ -868,7 +886,7 @@ declare namespace apowophaserui {
 
         protected mResources: Map<string, any>;
 
-        protected mReloadTimes: Map<string, any>;
+        protected mReLoadResources: Map<string, any>;
 
         protected mShowData: any;
 
@@ -879,6 +897,8 @@ declare namespace apowophaserui {
         protected mPreLoad: boolean;
 
         protected mTweening: boolean;
+
+        protected mReloadTimes: number;
 
         protected mTweenBoo: boolean;
 
@@ -906,7 +926,9 @@ declare namespace apowophaserui {
 
         show(param?: any): void;
 
-        update(param: any): void;
+        update(param?: any): void;
+
+        updateUIState(activeUI?: any): void;
 
         tweenExpand(tweenBoo: boolean): void;
 
@@ -914,7 +936,7 @@ declare namespace apowophaserui {
 
         showData: any;
 
-        interactive: any;
+        interactive: boolean;
 
         protected showTween(show: boolean): void;
 
@@ -949,6 +971,9 @@ declare namespace apowophaserui {
     }
 
     enum ProgressBarEvent {
+        tweenStart,
+        tweenComplete,
+        tweenUpdate,
     }
 
     /**
@@ -960,6 +985,10 @@ declare namespace apowophaserui {
         setProgress(curVal: number, maxVal: number): void;
 
         setText(val: string): void;
+
+        text: Phaser.GameObjects.Text;
+
+        bar: Phaser.GameObjects.Image;
 
         destory(): void;
 
@@ -986,9 +1015,14 @@ declare namespace apowophaserui {
     class GameScroller extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        protected soundGroup: apowophaserui.ISoundGroup;
+        /**
+         * 是否在移动中
+         */
+        mMoveing: any;
 
-        view: any;
+        soundMap: any;
+
+        view: Phaser.GameObjects.Container;
 
         setEnable(enable: boolean): void;
 
@@ -1006,47 +1040,61 @@ declare namespace apowophaserui {
 
         updateScrollPos(pos: number): void;
 
+        setParent(parent: Phaser.GameObjects.Container): void;
+
+        resetSize(width: number, height: number): void;
+
         refreshMask(): void;
 
         addItem(item: Phaser.GameObjects.GameObject): void;
+
+        addItems(items: Phaser.GameObjects.GameObject[]): void;
 
         addItemAt(item: Phaser.GameObjects.GameObject, index: number): void;
 
         getItemList(): Phaser.GameObjects.GameObject[];
 
+        getItemAt(index: number): Phaser.GameObjects.GameObject;
+
         setBounds(value0: number, value1: number): void;
 
         /**
          * 
-         * @param align  Default 2.
+         * @param align 2 居左 1居中 0居右 默认居左 Default 2.
          */
         setAlign(align?: number): void;
 
-        Sort(isFixed?: boolean): void;
+        Sort(isFixed?: boolean, iscallValue?: boolean): void;
 
-        getScrollBound(): void;
+        getScrollBound(): number;
 
-        clearItems(): void;
+        clearItems(destroy: boolean): void;
 
         bounds: any;
 
         removeInteractiveObject(obj: any): void;
 
-        left: any;
+        addListen(): void;
 
-        right: any;
+        removeListen(): void;
 
-        top: any;
+        left: number;
 
-        bottom: any;
+        right: number;
+
+        top: number;
+
+        bottom: number;
 
         setInteractiveObject(obj: any): void;
 
-        clearInteractiveObject(): void;
-
-        checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: boolean): boolean;
+        destroy(): void;
 
     }
+
+    var isSliding: any;
+
+    var dragSpeed: any;
 
     enum BaseScrollerEvent {
         downinBound,
@@ -1059,9 +1107,9 @@ declare namespace apowophaserui {
      * BaseScroller
      */
     class BaseScroller extends apowophaserui.BaseUI {
-        constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
+        constructor(scene: Phaser.Scene, gameObject: any, config: any);
 
-        protected soundGroup: apowophaserui.ISoundGroup;
+        soundGroup: apowophaserui.ISoundGroup;
 
         setEnable(enable: boolean): void;
 
@@ -1079,7 +1127,7 @@ declare namespace apowophaserui {
 
         bounds: any;
 
-        resize(width: number, height: number, value0: number, value1: number): void;
+        resize(width?: number, height?: number, value0?: number, value1?: any): void;
 
         clearInteractiveObject(): void;
 
@@ -1087,21 +1135,25 @@ declare namespace apowophaserui {
 
         removeInteractiveObject(obj: any): void;
 
-        left: any;
+        addListen(): void;
 
-        right: any;
+        removeListen(): void;
 
-        top: any;
+        left: number;
 
-        bottom: any;
+        right: number;
 
-        boundPad0: any;
+        top: number;
 
-        boundPad1: any;
+        bottom: number;
+
+        boundPad0: number;
+
+        boundPad1: number;
+
+        destroy(): void;
 
         refreshBound(refreshSize?: number): void;
-
-        checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: boolean): boolean;
 
     }
 
@@ -1135,17 +1187,19 @@ declare namespace apowophaserui {
     class GameSlider extends apowophaserui.Slider {
         constructor(scene: Phaser.Scene, config: any);
 
-        setEnable(enable: boolean): any;
+        slider: any;
 
-        setGap(gap: any): any;
+        setEnable(enable: boolean): void;
 
-        setValue(value: number, min: number, max: number): any;
+        setGap(gap: number): void;
 
-        addValue(inc: number, min: number, max: number): any;
+        setValue(value: number, min?: number, max?: number): void;
 
-        getValue(min: number, max: number): number;
+        addValue(inc: number, min?: number, max?: number): void;
 
-        layout(parent: any, newWidth: number, newHeight: number): any;
+        getValue(min: number, max?: number): number;
+
+        layout(parent: any, newWidth: number, newHeight: number): void;
 
     }
 
@@ -1158,7 +1212,7 @@ declare namespace apowophaserui {
      * NinePatchTabButton
      */
     class NinePatchTabButton extends apowophaserui.TabButton {
-        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.NineSliceButtonConfig);
+        constructor(scene: Phaser.Scene, buttonConfig: any);
 
         protected mKey: string;
 
@@ -1182,9 +1236,17 @@ declare namespace apowophaserui {
      * TabButton
      */
     class TabButton extends apowophaserui.Button {
-        constructor(scene: Phaser.Scene, buttonConfig: apowophaserui.ButtonConfig);
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: any, dpr?: number, scale?: number, nineConfig?: any);
+
+        mSelected: boolean;
 
         selected: any;
+
+        destroy(): void;
+
+        onPointerUpHandler(pointer: Phaser.Input.Pointer): void;
+
+        onPointerDownHandler(pointer?: Phaser.Input.Pointer): void;
 
     }
 
@@ -1213,6 +1275,20 @@ declare namespace apowophaserui {
     }
 
     /**
+     * Tool
+     */
+    class Tool {
+        static checkPointerContains(gameObject: any, pointer: Phaser.Input.Pointer): boolean;
+
+        static getTransfrom(config: any): any;
+
+        static getPos(transform: any): void;
+
+        static checkNinePatch(align: any): boolean;
+
+    }
+
+    /**
      * Scrollable
      */
     class Scrollable extends apowophaserui.Sizer {
@@ -1232,49 +1308,12 @@ declare namespace apowophaserui {
 
 }
 
-declare namespace apowophaserui.basesizer {
-    function AddChildrenMap(key: any, gameObject: any): any;
-
-}
-
 declare namespace apowophaserui.text {
     function setStyle(style: any): any;
 
 }
 
-declare namespace FramesSkin {
-    /**
-     * 切换多帧对象frame
-     */
-    function changeFrame(frameState: any): void;
-
-}
-
-declare namespace apowophaserui.CoreUI {
-    enum MouseEvent {
-    }
-
-}
-
-declare namespace apowophaserui.gameScroller {
-    function onScrollValueChange(value: number): void;
-
-}
-
-declare namespace apowophaserui.Tool {
-    function checkPointerContains(gameObject: any, pointer: Phaser.Input.Pointer): boolean;
-
-    function getTransfrom(config: any): any;
-
-    function getPos(transform: any): void;
-
-    function checkNinePatch(align: any): boolean;
-
-}
-
 declare namespace apowophaserui.Utils {
-    function GetParentSizer(gameObject: any): any;
-
     function GetTopmostSizer(gameObject: any): any;
 
 }
