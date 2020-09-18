@@ -24,7 +24,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     protected mFollow: any;
     protected mShowData: any;
     constructor(scene: Phaser.Scene, world: any, music?: ISoundGroup) {
-        super(scene, world.uiRadio, world.uiScale);
+        super(scene, world.uiRatio, world.uiScale);
         this.soundMap = new Map();
         this.scene = scene;
         this.mWorld = world;
@@ -106,7 +106,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         this.mShowData = param;
     }
 
-    updateActiveUI(activeUI?: any) {
+    updateUIState(activeUI?: any) {
 
     }
 
@@ -203,6 +203,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
     }
 
     protected loadComplete(loader: Phaser.Loader.LoaderPlugin, totalComplete: integer, totalFailed: integer) {
+        if (!this.mPreLoad) return;
         this.mPreLoad = false;
         if (this.mInitialized) {
             return;
@@ -265,7 +266,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         if (!this.scene) {
             return;
         }
-        this.scene.load.on(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.on(Phaser.Loader.Events.FILE_COMPLETE, this.onFileKeyComplete, this);
         this.scene.load.once(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
         this.scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
         this.scene.load.start();
@@ -275,7 +276,7 @@ export class Panel extends BaseUI implements IAbstractPanel {
         if (!this.scene) {
             return;
         }
-        this.scene.load.off(Phaser.Loader.Events.FILE_KEY_COMPLETE, this.onFileKeyComplete, this);
+        this.scene.load.off(Phaser.Loader.Events.FILE_COMPLETE, this.onFileKeyComplete, this);
         this.scene.load.off(Phaser.Loader.Events.COMPLETE, this.loadComplete, this);
         this.scene.load.off(Phaser.Loader.Events.FILE_LOAD_ERROR, this.loadError, this);
     }

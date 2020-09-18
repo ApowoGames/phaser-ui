@@ -1,5 +1,5 @@
 import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
-import Scroller from "../../plugins/input/scroller/Scroller.js";
+import { Scroller } from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
@@ -27,6 +27,7 @@ export class GameScroller extends BaseUI implements ISound {
     private mInteractiveList: any[];
     private mLeftBound: number;
     private mRightBound: number;
+    private zoom: number = 1;
     constructor(scene: Phaser.Scene, config: ScrollerConfig, gameObject?: Phaser.GameObjects.Container) {
         super(scene);
         this.soundMap = new Map();
@@ -35,10 +36,10 @@ export class GameScroller extends BaseUI implements ISound {
         this.x = config.x; this.y = config.y;
         this.width = this.mConfig.width;
         this.height = this.mConfig.height;
-        const zoom = config.zoom;
+        this.zoom = config.zoom ? config.zoom : 1;
         this.maskGraphic = scene.make.graphics(undefined, false);
         this.maskGraphic.fillStyle(0);
-        this.maskGraphic.fillRect(-this.width * 0.5 * zoom, -this.height * 0.5 * zoom, this.width * zoom, this.height * zoom);
+        this.maskGraphic.fillRect(-this.width * 0.5 * this.zoom, -this.height * 0.5 * this.zoom, this.width * this.zoom, this.height * this.zoom);
         const worldpos = this.getWorldTransformMatrix();
         this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
         // this.add(this.maskGraphic);
@@ -49,13 +50,10 @@ export class GameScroller extends BaseUI implements ISound {
             this.add(this.mGameObject);
         }
         this.mGameObject.setMask(this.maskGraphic.createGeometryMask());
-        // const bg1 = scene.make.graphics(undefined, false);
-        // bg1.fillStyle(0, .2);
-        // bg1.fillRect(0, 0, config.width, config.height);
-        // bg1.setPosition(-config.width / 2, -config.height / 2);
-        // this.add(bg1);
-        if (!config.valuechangeCallback) config.valuechangeCallback = (value) => {
+        const valuechangeCallback = config.valuechangeCallback;
+        config.valuechangeCallback = (value) => {
             this.onScrollValueChange(value);
+            if (valuechangeCallback) valuechangeCallback(value);
         };
         this.mScroller = new Scroller(this, config);
         this.mDisDelection = GetValue(config, "interactivedisDetection", 10);
@@ -75,6 +73,18 @@ export class GameScroller extends BaseUI implements ISound {
 
     public setValue(value: number) {
         if (this.mScroller) this.mScroller.setValue(value);
+    }
+
+    public getValue() {
+        return this.mScroller.value;
+    }
+
+    public get isSliding() {
+        return this.mScroller.isSliding;
+    }
+
+    public get dragSpeed() {
+        return this.mScroller.dragSpeed;
     }
 
     public adjustBackDeceleration(deceler: number) {
@@ -104,6 +114,20 @@ export class GameScroller extends BaseUI implements ISound {
         }
     }
 
+    public setParent(parent: Phaser.GameObjects.Container) {
+        parent.add(this);
+        this.refreshMask();
+    }
+
+    public resetSize(width: number, height: number) {
+        this.setSize(width, height);
+        this.scene.input.setHitArea(this);
+        if (this.maskGraphic) {
+            this.maskGraphic.fillRect(-this.width * 0.5 * this.zoom, -this.height * 0.5 * this.zoom, this.width * this.zoom, this.height * this.zoom);
+            this.refreshMask();
+        }
+        this.Sort();
+    }
     public refreshMask() {
         const worldpos = this.getWorldTransformMatrix();
         this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
@@ -129,14 +153,24 @@ export class GameScroller extends BaseUI implements ISound {
         this.mGameObject.add(item);
         this.setInteractiveObject(item);
     }
+    public addItems(items: Phaser.GameObjects.GameObject[]) {
+        this.mGameObject.add(items);
+        for (const item of items) {
+            this.setInteractiveObject(item);
+        }
+    }
 
     public addItemAt(item: Phaser.GameObjects.GameObject, index: number) {
         this.mGameObject.addAt(item, index);
-        // this.setInteractiveObject(item);
+        this.setInteractiveObject(item);
     }
 
     public getItemList(): Phaser.GameObjects.GameObject[] {
         return this.mGameObject.list;
+    }
+
+    public getItemAt(index: number) {
+        return this.mGameObject.list[index];
     }
 
     public setBounds(value0: number, value1: number) {
@@ -150,8 +184,9 @@ export class GameScroller extends BaseUI implements ISound {
         this.mConfig.align = align;
         this.Sort();
     }
-    public Sort(isFixed: boolean = false) {
+    public Sort(isFixed: boolean = false, iscallValue: boolean = true) {
         let value = 0;
+        const offset = (isFixed ? this.getScrollBound() : 0);
         const space = (this.mConfig.space === undefined ? 0 : this.mConfig.space);
         const list: any = this.mGameObject.list;
         const activeArr: any[] = [];
@@ -169,6 +204,7 @@ export class GameScroller extends BaseUI implements ISound {
                 value += item.height + space;
             }
         }
+        value -= space;
         if (this.mConfig.orientation === 1) {
             this.mGameObject.width = value;
             for (const item of activeArr) {
@@ -208,24 +244,61 @@ export class GameScroller extends BaseUI implements ISound {
         this.mRightBound = rightBound;
         let value0 = bound;
         if (isFixed) {
-            value0 = (this.mConfig.orientation === 1 ? this.mGameObject.x : this.mGameObject.y);
-            if (value0 < bound) {
-                value0 += Math.abs(bound - value0);
-            } else if (value0 > bound) {
-                value0 -= Math.abs(bound - value0);
-            }
+            value0 += offset;
+            if (value0 < leftBound) value0 = leftBound;
+            if (value0 > rightBound) value0 = rightBound;
         }
 
         this.setBounds(leftBound, rightBound);
-        this.setValue(value0);
+        if (iscallValue) this.setValue(value0);
     }
 
-    public clearItems() {
+    public getScrollBound() {
+        let scrollValue = 0;
+        let contentValue = 0;
+        let bound = 0;
+        if (this.mConfig.orientation === 1) {
+            scrollValue = this.width;
+            contentValue = this.mGameObject.width;
+        } else {
+            scrollValue = this.height;
+            contentValue = this.mGameObject.height;
+        }
+        bound = contentValue - scrollValue;
+        if (bound < 0) {
+            if (this.mConfig.align === 0) {
+                bound = -bound / 2;
+            } else if (this.mConfig.align === 1) {
+                bound = 0;
+            } else {
+                bound = bound / 2;
+            }
+        } else {
+            if (this.mConfig.align === 0) {
+                bound = -bound / 2;
+            } else if (this.mConfig.align === 1) {
+                bound = 0;
+            } else {
+                bound = bound / 2;
+            }
+        }
+        let offset = 0;
+        if (this.mConfig.orientation === 1) {
+            offset = this.mGameObject.x - bound;
+        } else {
+            offset = this.mGameObject.y - bound;
+        }
+        return offset;
+    }
+
+    public clearItems(destroy: boolean = true) {
         const list = this.mGameObject.list;
         for (const item of list) {
-            item.destroy();
+            this.mGameObject.remove(item);
+            if (destroy) {
+                item.destroy();
+            }
         }
-        this.mGameObject.list.length = 0;
         this.clearInteractiveObject();
     }
 
@@ -243,18 +316,32 @@ export class GameScroller extends BaseUI implements ISound {
     public addListen() {
         if (!this.scene) return;
         this.removeListen();
-        this.scene.input.on("pointermove", this.pointerMoveHandler, this);
-        this.scene.input.on("pointerdown", this.pointerDownHandler, this);
-        this.scene.input.on("pointerup", this.pointerUpHandler, this);
-
+        const selfevent = this.mConfig.selfevent || false;
+        if (selfevent) {
+            this.on("pointermove", this.pointerMoveHandler, this);
+            this.on("pointerdown", this.pointerDownHandler, this);
+            this.on("pointerup", this.pointerUpHandler, this);
+        } else {
+            this.scene.input.on("pointermove", this.pointerMoveHandler, this);
+            this.scene.input.on("pointerdown", this.pointerDownHandler, this);
+            this.scene.input.on("pointerup", this.pointerUpHandler, this);
+        }
     }
 
     public removeListen() {
         this.mMoveing = false;
         if (!this.scene) return;
-        this.scene.input.off("pointerdown", this.pointerDownHandler, this);
-        this.scene.input.off("pointerup", this.pointerUpHandler, this);
-        this.scene.input.off("pointermove", this.pointerMoveHandler, this);
+
+        const selfevent = this.mConfig.selfevent || false;
+        if (selfevent) {
+            this.off("pointermove", this.pointerMoveHandler, this);
+            this.off("pointerdown", this.pointerDownHandler, this);
+            this.off("pointerup", this.pointerUpHandler, this);
+        } else {
+            this.scene.input.off("pointerdown", this.pointerDownHandler, this);
+            this.scene.input.off("pointerup", this.pointerUpHandler, this);
+            this.scene.input.off("pointermove", this.pointerMoveHandler, this);
+        }
     }
 
     public get left(): number {
@@ -316,14 +403,16 @@ export class GameScroller extends BaseUI implements ISound {
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
         if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
-        this.mMoveing = true;
+        // this.mMoveing = true;
     }
 
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {
         // this.scene.input.off("pointermove", this.pointerMoveHandler, this);
+        pointer.upX = pointer.downX;
+        pointer.upY = pointer.downY;
         if (this.soundGroup && this.soundGroup.down) this.playSound(this.soundGroup.down);
         const inBound: boolean = this.checkPointerInBounds(this, pointer);
-        if (inBound && this.checkPointerDelection(pointer)) {
+        if (inBound) {
             if (this.mCellDownHandler && !this.mMoveing) {
                 if (!this.mInteractiveList) return;
                 for (let i: number = 0, len = this.mInteractiveList.length; i < len; i++) {
@@ -360,17 +449,23 @@ export class GameScroller extends BaseUI implements ISound {
     }
 
     private checkPointerInBounds(gameObject: any, pointer: Phaser.Input.Pointer, isCell: Boolean = false): boolean {
+        // 移动超过30个单位，直接表示在移动，不必做点击处理
+        const offsetValue = this.mConfig.dpr * 30;
+        if (Math.abs(pointer.downX - pointer.upX) >= offsetValue || Math.abs(pointer.downY - pointer.upY) >= offsetValue) {
+            return false;
+        }
         if (!this.mRectangle) {
             this.mRectangle = new Phaser.Geom.Rectangle(0, 0, 0, 0);
         }
+        const zoom = this.mConfig.zoom ? this.mConfig.zoom : 1;
         this.mRectangle.left = -gameObject.width / 2;
         this.mRectangle.right = gameObject.width / 2;
         this.mRectangle.top = -gameObject.height / 2;
         this.mRectangle.bottom = gameObject.height / 2;
         if (pointer) {
             const worldMatrix: Phaser.GameObjects.Components.TransformMatrix = gameObject.getWorldTransformMatrix();
-            const x: number = pointer.x - worldMatrix.tx;
-            const y: number = pointer.y - worldMatrix.ty;
+            const x: number = (pointer.x - worldMatrix.tx) / zoom;
+            const y: number = (pointer.y - worldMatrix.ty) / zoom;
             if (this.mRectangle.left <= x && this.mRectangle.right >= x && this.mRectangle.top <= y && this.mRectangle.bottom >= y) {
                 return true;
             }

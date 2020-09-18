@@ -1,6 +1,5 @@
 import { Button, ButtonState, NinePatchConfig } from "../button/Button";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
-import { IPatchesConfig } from "../interface/baseUI/Patches.config";
 import { ClickEvent } from "../interface/event/ClickEvent";
 export class TabButton extends Button {
     protected mSelected: boolean = false;
@@ -29,13 +28,16 @@ export class TabButton extends Button {
             if (this.soundGroup && this.soundGroup.disabled) this.playSound(this.soundGroup.disabled);
             return;
         }
-        if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-            if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
-                if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(ClickEvent.Tap, pointer, this);
-                this.selected = true;
-            }
+        //  if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
+        //  if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
+        const isdown = this.checkPointerInBounds(this, pointer.downX, pointer.downY);
+        this.emit(ClickEvent.Up, this);
+        if (isdown) {
+            if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
+            this.emit(ClickEvent.Tap, pointer, this);
+            this.selected = true;
         }
+        //  }
         clearTimeout(this.mPressDelay);
         this.mIsMove = false;
         this.mDownTime = 0;

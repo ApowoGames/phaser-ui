@@ -1,5 +1,5 @@
 import { ScrollerConfig } from "../interface/scroller/ScrollerConfig";
-import Scroller from "../../plugins/input/scroller/Scroller.js";
+import { Scroller } from "../../plugins/input/scroller/Scroller.js";
 import { ISound } from "../interface/baseUI/ISound";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { BaseUI } from "../baseUI/BaseUI";
@@ -242,7 +242,7 @@ export class BaseScroller extends BaseUI implements ISound {
 
     private pointerMoveHandler(pointer: Phaser.Input.Pointer) {
         if (this.soundGroup && this.soundGroup.move) this.playSound(this.soundGroup.move);
-        this.mMoveing = true;
+        //  this.mMoveing = true;
     }
 
     private pointerDownHandler(pointer: Phaser.Input.Pointer) {

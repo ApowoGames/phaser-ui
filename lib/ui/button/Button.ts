@@ -1,9 +1,9 @@
 import { BaseUI } from "../baseUI/BaseUI";
 import { ISoundGroup } from "../interface/sound/ISoundConfig";
 import { IButtonState } from "../interface/button/IButtonState";
+import { ClickEvent } from "../interface/event/ClickEvent";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
 import { IPatchesConfig } from "../interface/baseUI/Patches.config";
-import { ClickEvent } from "../interface/event/ClickEvent";
 
 export enum ButtonState {
     Normal = "normal",
@@ -15,6 +15,7 @@ export enum ButtonState {
 export enum ButtonSoundKey {
 
 }
+const GetValue = Phaser.Utils.Objects.GetValue;
 export interface NinePatchConfig {
     width: number;
     height: number;
@@ -31,11 +32,15 @@ export class Button extends BaseUI implements IButtonState {
     protected mDownFrame: string;
     protected mText: Phaser.GameObjects.Text;
     protected mIsMove: boolean = false;
+    protected mIsDown: boolean;
     protected ninePatchConfig: NinePatchConfig;
+    private mRectangle: Phaser.Geom.Rectangle;
+    private zoom: number;
     constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: ISoundGroup, dpr?: number, scale?: number, nineConfig?: NinePatchConfig) {
         super(scene);
         this.dpr = dpr || 1;
-        this.scale = scale || 1;
+        // this.scale = scale || 1;
+        this.zoom = scale || 1;
         this.soundGroup = {
             up: {
                 key: "click",
@@ -45,14 +50,16 @@ export class Button extends BaseUI implements IButtonState {
         Object.assign(this.soundGroup, music);
         this.ninePatchConfig = nineConfig;
         this.mKey = key;
-        this.mFrame = frame;
+        this.mFrame = frame || "__BASE";
         this.mDownFrame = downFrame;
         this.createBackground();
         if (text) {
             this.mText = this.scene.make.text(undefined, false)
                 .setOrigin(0.5, 0.5)
-                .setText(text)
-                .setSize(this.mBackground.width, this.mBackground.height);
+                .setText(text);
+            if (this.mBackground) {
+                this.mText.setSize(this.mBackground.width, this.mBackground.height);
+            }
             this.add(this.mText);
         }
         this.setInteractive();
@@ -80,6 +87,22 @@ export class Button extends BaseUI implements IButtonState {
         this.off("pointermove", this.onPointerMoveHandler, this);
     }
 
+    public set enable(value) {
+        if (value) {
+            if (this.mBackground) {
+                this.mBackground.clearTint();
+                if (this.mText) this.mText.clearTint();
+            }
+            this.setInteractive();
+        } else {
+            if (this.mBackground) {
+                this.mBackground.setTintFill(0x666666);
+                if (this.mText) this.mText.setTintFill(0x777777);
+            }
+            this.removeInteractive();
+        }
+    }
+
     public mute(boo: boolean) {
         this.silent = boo;
     }
@@ -95,9 +118,7 @@ export class Button extends BaseUI implements IButtonState {
     }
 
     setFrame(frame: string) {
-        if (this.mBackground) {
-            this.setBgFrame(frame);
-        }
+        this.setBgFrame(frame);
     }
 
     setText(val: string) {
@@ -129,18 +150,27 @@ export class Button extends BaseUI implements IButtonState {
             this.mText.setColor(color);
         }
     }
-
+    public setFrameNormal(normal: string, down?: string, over?: string) {
+        this.mFrame = normal;
+        this.mDownFrame = (down ? down : normal);
+        this.changeNormal();
+        return this;
+    }
     protected createBackground() {
-        this.mBackground = this.scene.make.image({
-            key: this.mKey,
-            frame: this.mFrame
-        }, false);
-        this.setSize(this.mBackground.width, this.mBackground.height);
-        this.add(this.mBackground);
+        if (this.mFrame) {
+            this.mBackground = this.scene.make.image({
+                key: this.mKey,
+                frame: this.mFrame
+            }, false);
+            this.setSize(this.mBackground.width, this.mBackground.height);
+            this.add(this.mBackground);
+        }
     }
     protected setBgFrame(frame: string) {
-        this.mBackground.setFrame(frame);
-        this.setSize(this.mBackground.width, this.mBackground.height);
+        if (this.mBackground) {
+            this.mBackground.setFrame(frame);
+            this.setSize(this.mBackground.width, this.mBackground.height);
+        }
     }
 
     protected buttonStateChange(state: ButtonState) {
@@ -171,15 +201,19 @@ export class Button extends BaseUI implements IButtonState {
             return;
         }
         this.buttonStateChange(ButtonState.Normal);
-        if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
-            if (Math.abs(pointer.downX - pointer.upX) < 30 && Math.abs(pointer.downY - pointer.upY) < 30) {
-                if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
-                this.emit(ClickEvent.Tap, pointer, this);
-            }
+        // if (!this.mIsMove || (Date.now() - this.mDownTime > this.mPressTime)) {
+        const isdown = this.checkPointerInBounds(this, pointer.worldX, pointer.worldY);
+        this.emit(ClickEvent.Up, this);
+        // if (Math.abs(pointer.downX - pointer.upX) < this.width && Math.abs(pointer.downY - pointer.upY) < this.height) {
+        if (isdown && this.mIsDown) {
+            if (this.soundGroup && this.soundGroup.up) this.playSound(this.soundGroup.up);
+            this.emit(ClickEvent.Tap, pointer, this);
         }
+        // }
 
-        clearTimeout(this.mPressDelay);
+        clearTimeout(this.mPressTime);
         this.mIsMove = false;
+        this.mIsDown = false;
         this.mDownTime = 0;
     }
 
@@ -193,7 +227,27 @@ export class Button extends BaseUI implements IButtonState {
         this.mDownTime = Date.now();
         this.mPressTime = setTimeout(() => {
             this.emit(ClickEvent.Hold, this);
-        }, this.mPressTime);
+        }, this.mPressDelay);
         this.emit(ClickEvent.Down, this);
+        // this.mIsDownObject = this.checkPointerInBounds(this, pointer.worldX, pointer.worldY);
+        this.mIsDown = true;
+    }
+
+    protected checkPointerInBounds(gameObject: any, pointerx: number, pointery: number): boolean {
+        if (!this.mRectangle) {
+            this.mRectangle = new Phaser.Geom.Rectangle(0, 0, 0, 0);
+        }
+        const zoom = this.zoom ? this.zoom : 1;
+        this.mRectangle.left = -gameObject.width / 2;
+        this.mRectangle.right = gameObject.width / 2;
+        this.mRectangle.top = -gameObject.height / 2;
+        this.mRectangle.bottom = gameObject.height / 2;
+        const worldMatrix: Phaser.GameObjects.Components.TransformMatrix = gameObject.getWorldTransformMatrix();
+        const x: number = (pointerx - worldMatrix.tx) / zoom;
+        const y: number = (pointery - worldMatrix.ty) / zoom;
+        if (this.mRectangle.left <= x && this.mRectangle.right >= x && this.mRectangle.top <= y && this.mRectangle.bottom >= y) {
+            return true;
+        }
+        return false;
     }
 }

@@ -11,6 +11,8 @@ export class NineSlicePatch extends BaseUI {
     protected finalXs: number[];
     protected finalYs: number[];
     protected internalTint: number;
+    private patchKey: string;
+    private mCorrection: number = 4;
     constructor(
         scene: Phaser.Scene,
         x: number,
@@ -18,14 +20,17 @@ export class NineSlicePatch extends BaseUI {
         width: number,
         height: number,
         key: string, frame: string | number,
-        config?: IPatchesConfig, dpr?: number, scale?: number) {
+        config?: IPatchesConfig, dpr?: number, scale?: number, correct?: number) {
         super(scene, dpr, scale);
         this.dpr = dpr || 1;
         this.scale = scale || 1;
+        this.mCorrection = correct === undefined ? 4 : 0;
         this.patchesConfig = { top: 0, left: 0, right: 0, bottom: 0 };
+        this.patchKey = Math.random() * 1000 + "";
         this.setConfig(config);
         this.setSize(width, height);
         this.setTexture(key, frame);
+        this.setPosition(x, y);
     }
 
     public resize(width: number, height: number) {
@@ -44,6 +49,9 @@ export class NineSlicePatch extends BaseUI {
         return;
     }
 
+    public set correctValue(value) {
+        this.mCorrection = value;
+    }
     public getConfig(): IPatchesConfig {
         return this.patchesConfig;
     }
@@ -59,6 +67,7 @@ export class NineSlicePatch extends BaseUI {
 
     public setTexture(key: string, frame?: string | integer): this {
         this.originTexture = this.scene.textures.get(key);
+        this.originTexture.setFilter(Phaser.Textures.FilterMode.NEAREST);
         this.setFrame(frame);
         return this;
     }
@@ -72,10 +81,14 @@ export class NineSlicePatch extends BaseUI {
 
     public setSize(width: number, height: number): this {
         super.setSize(width, height);
+        let tempscalex = this.width / (this.patchesConfig.left + this.patchesConfig.right);
+        let tempscaley = this.width / (this.patchesConfig.top + this.patchesConfig.bottom);
+        tempscalex = tempscalex >= 1 ? 1 : tempscalex;
+        tempscaley = tempscaley >= 1 ? 1 : tempscaley;
         const right: number = this.width - this.patchesConfig.right > 0 ? this.width - this.patchesConfig.right : this.patchesConfig.right;
         const bottom: number = this.height - this.patchesConfig.bottom > 0 ? this.height - this.patchesConfig.bottom : this.patchesConfig.right;
-        this.finalXs = [0, this.patchesConfig.left, right, this.width];
-        this.finalYs = [0, this.patchesConfig.top, bottom, this.height];
+        this.finalXs = [0, this.patchesConfig.left * tempscalex, right * tempscalex, this.width];
+        this.finalYs = [0, this.patchesConfig.top * tempscaley, bottom * tempscaley, this.height];
         return this;
     }
 
@@ -113,19 +126,35 @@ export class NineSlicePatch extends BaseUI {
         this.tintFill = false;
     }
 
+    public destroy() {
+        if (this.originTexture) {
+            let patchIndex: number = 0;
+            for (let yi: number = 0; yi < 3; yi++) {
+                for (let xi: number = 0; xi < 3; xi++) {
+                    const patch = this.getPatchNameByIndex(patchIndex);
+                    if (this.originTexture.frames.hasOwnProperty(patch)) {
+                        this.originTexture.remove(patch);
+                    }
+                    ++patchIndex;
+                }
+            }
+        }
+        super.destroy();
+    }
+
     protected createPatches(): void {
         // The positions we want from the base texture
         // 保存有x轴和y轴9宫坐标信息，如果存在坐标信息相同，则表示某一部分的图片尺寸为0，需要查看原因
-        const textuTooqings: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
+        const textureXs: number[] = [0, this.patchesConfig.left, this.originFrame.width - this.patchesConfig.right, this.originFrame.width];
         const textureYs: number[] = [0, this.patchesConfig.top, this.originFrame.height - this.patchesConfig.bottom, this.originFrame.height];
         let patchIndex: number = 0;
         for (let yi: number = 0; yi < 3; yi++) {
             for (let xi: number = 0; xi < 3; xi++) {
                 this.createPatchFrame(
                     this.getPatchNameByIndex(patchIndex),
-                    textuTooqings[xi], // x
+                    textureXs[xi], // x
                     textureYs[yi], // y
-                    textuTooqings[xi + 1] - textuTooqings[xi], // width
+                    textureXs[xi + 1] - textureXs[xi], // width
                     textureYs[yi + 1] - textureYs[yi] // height
                 );
                 ++patchIndex;
@@ -138,21 +167,21 @@ export class NineSlicePatch extends BaseUI {
         this.removeAll(true);
         let patchIndex = 0;
         for (let yi = 0; yi < 3; yi++) {
-            // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两行不做处理
-            if (this.height < this.patchesConfig.bottom + this.patchesConfig.top && yi === 1) {
-                continue;
-            }
+            // // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两行不做处理
+            // if (this.height < this.patchesConfig.bottom + this.patchesConfig.top && yi === 1) {
+            //     continue;
+            // }
             for (let xi = 0; xi < 3; xi++) {
-                // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两列不做处理
-                if (this.width < this.patchesConfig.left + this.patchesConfig.right && xi === 1) {
-                    continue;
-                }
+                // // 当缩放后的尺寸小于初始尺寸，中间缩放部分肯定为0，则对1，2两列不做处理
+                // if (this.width < this.patchesConfig.left + this.patchesConfig.right && xi === 1) {
+                //     continue;
+                // }
                 const patch: Phaser.Textures.Frame = this.originTexture.frames[this.getPatchNameByIndex(patchIndex)];
                 const patchImg = new Phaser.GameObjects.Image(this.scene, 0, 0, patch.texture.key, patch.name);
                 patchImg.setOrigin(0);
                 patchImg.setPosition(
-                    (this.finalXs[xi] * 1000 - this.width * this.originX * 1000) / 1000,
-                    (this.finalYs[yi] * 1000 - this.height * this.originY * 1000) / 1000
+                    this.finalXs[xi] - this.width * this.originX,
+                    this.finalYs[yi] - this.height * this.originY
                 );
                 // let widScale: number = (this.finalXs[xi + 1] - this.finalXs[xi]) / patch.width;
                 // let heiScale: number = (this.finalYs[yi + 1] - this.finalYs[yi]) / patch.height;
@@ -164,8 +193,9 @@ export class NineSlicePatch extends BaseUI {
                 //     widScale,
                 //     heiScale
                 // );
-                patchImg.displayWidth = this.finalXs[xi + 1] - this.finalXs[xi];
-                patchImg.displayHeight = this.finalYs[yi + 1] - this.finalYs[yi];
+                patchImg.displayWidth = this.finalXs[xi + 1] - this.finalXs[xi] + (xi < 2 ? this.mCorrection : 0);
+                patchImg.displayHeight = this.finalYs[yi + 1] - this.finalYs[yi] + (yi < 2 ? this.mCorrection : 0);
+                patchImg.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
                 this.add(patchImg);
                 if (this.internalTint) patchImg.setTint(this.internalTint);
                 patchImg.tintFill = tintFill;
@@ -182,7 +212,7 @@ export class NineSlicePatch extends BaseUI {
     }
 
     protected getPatchNameByIndex(index: number): string {
-        return `${this.originFrame.name}|${NineSlicePatch.patches[index]}`;
+        return this.originFrame.name + NineSlicePatch.patches[index] + this.patchKey;
     }
 
     private calculScale(num0, num1): number {

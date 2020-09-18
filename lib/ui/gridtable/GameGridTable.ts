@@ -1,71 +1,45 @@
 import { GridTableConfig, GridTableCoreConfig } from "./GridTableConfig";
 import GridTable from "./GridTable.js";
-import ResizeGameObject from "../../plugins/utils/size/ResizeGameObject.js";
-import MaskToGameObject from "../../plugins/utils/mask/MaskToGameObject.js";
-/** 
- * @namespace tooqingui.IMaskConfig 
- */
 export interface IMaskConfig {
-    /**
-     * @name tooqingui.IMaskConfig#mask
-     * @type {boolean}
-     */
     mask: boolean;
-    /**
-     * @name tooqingui.IMaskConfig#padding
-     * @type {number}
-     */
     padding: number;
 }
 const GetValue = Phaser.Utils.Objects.GetValue;
-export class GameGridTable extends Phaser.Events.EventEmitter {
+export class GameGridTable extends Phaser.GameObjects.Container {
     private mGridTable: GridTable;
-    private mConfig: GridTableConfig;
-    constructor(scene: Phaser.Scene, config?: GridTableConfig) {
-        super();
-        this.mGridTable = new GridTable(scene, config);
-        this.mConfig = config;
-        this.addListen();
-    }
-
-    public adjustScrollMode(mode: number) {
-        // // Pre-process cell size
-        // this.mConfig.scrollMode = mode;
-        // const tableCoreConfig: GridTableCoreConfig;
-        // let cellWidth: number;
-        // let cellHeight: number;
-        // if (mode === 0) { // scroll y
-        //     cellWidth = GetValue(tableCoreConfig, "cellWidth", undefined);
-        //     this.expandCellSize = (cellWidth === undefined);
-        //     if (cellWidth === undefined) {
-        //         var columns = GetValue(tableCoreConfig, "columns", 1);
-        //         this.mConfig.cellWidth = this.width / columns;
-        //     }
-        // } else { // scroll x
-        //     // Swap cell width and cell height
-        //     cellWidth = GetValue(tableCoreConfig, "cellHeight", undefined);
-        //     cellHeight = GetValue(tableCoreConfig, 'cellWidth', undefined);
-        //     this.expandCellSize = (cellWidth === undefined);
-        //     config.cellWidth = cellWidth;
-        //     config.cellHeight = cellHeight;
-        // }
-        // this.table = new Table(this, config);
-    }
-
-    /**
-     * 调整gridtable遮照范围
-     * @param width
-     * @param height
-     * @param x
-     * @param y
-     */
-    public adjustMask(x: number = this.mConfig.x, y: number = this.mConfig.y, width?: number, height?: number) {
-        if (!this.mGridTable) return;
-        this.mGridTable.x = x;
-        this.mGridTable.y = y;
-        if (width !== this.mGridTable.width || height !== this.mGridTable.height) {
-            this.mGridTable.resize(width, height);
+    private maskGraphic: Phaser.GameObjects.Graphics;
+    private zoom: number = 1;
+    constructor(scene: Phaser.Scene, config: GridTableConfig) {
+        super(scene);
+        const x = config.x, y = config.y, width = config.table.width, height = config.table.height;
+        this.setPosition(x, y);
+        this.setSize(width, height);
+        config.x = 0; config.y = 0;
+        const createCellContainerCallback = config.createCellContainerCallback;
+        config.createCellContainerCallback = (cell, cellContainer) => {
+            const isAdd = !cellContainer ? true : false;
+            cellContainer = createCellContainerCallback(cell, cellContainer);
+            if (isAdd) this.add(cellContainer);
+            return cellContainer;
+        };
+        const mask = config.table.mask;
+        config.table.mask = false;
+        if (mask === undefined || mask === true) {
+            const zoom = config.table.zoom ? config.table.zoom : 1;
+            this.zoom = zoom;
+            this.maskGraphic = scene.make.graphics(undefined, false);
+            this.maskGraphic.fillStyle(0);
+            const maskWidth = this.width * this.zoom;
+            const maskHeight = this.height * this.zoom;
+            this.maskGraphic.fillRect(-maskWidth * 0.5, -maskHeight * 0.5, maskWidth, maskHeight);
+            const worldpos = this.getWorldTransformMatrix();
+            this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
+            this.setMask(this.maskGraphic.createGeometryMask());
         }
+        this.mGridTable = new GridTable(scene, config);
+        // this.add(this.maskGraphic);
+        this.add(this.table);
+        this.addListen();
     }
 
     public get gridTable(): GridTable {
@@ -136,26 +110,18 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
             this.mGridTable.off("cell.1tap", this.cellTapHandler, this);
         }
     }
-    public set x(value: number) {
-        if (this.mGridTable) this.mGridTable.x = value;
-    }
-
-    public get x(): number {
-        if (!this.mGridTable) return 0;
-        return this.mGridTable.x;
-    }
-
-    public set y(value: number) {
-        if (this.mGridTable) this.mGridTable.y = value;
-    }
-
-    public get y(): number {
-        if (!this.mGridTable) return 0;
-        return this.mGridTable.y;
-    }
 
     public refresh() {
         if (this.mGridTable) this.mGridTable.refresh();
+    }
+
+    resetMask() {
+        if (this.mGridTable) this.mGridTable.resetMask();
+        if (this.maskGraphic) {
+            const worldpos = this.getWorldTransformMatrix();
+            this.maskGraphic.setPosition(worldpos.tx, worldpos.ty);
+        }
+
     }
 
     public layout() {
@@ -164,14 +130,27 @@ export class GameGridTable extends Phaser.Events.EventEmitter {
 
     public refreshPos(x: number, y: number, conx?: number, cony?: number) {
         if (!this.mGridTable) return;
-        this.mGridTable.x = x;
-        this.mGridTable.y = y;
+        this.x = x;
+        this.y = y;
         if (this.table && conx !== undefined && cony !== undefined) {
             this.table.tableOX = conx;
             this.table.tableOY = cony;
         }
-        this.adjustMask(x, y);
         this.mGridTable.layout();
+        this.resetMask();
+    }
+    public setSize(width: number, height: number) {
+        super.setSize(width, height);
+        if (this.maskGraphic) {
+            const maskWidth = this.width * this.zoom;
+            const maskHeight = this.height * this.zoom;
+            this.maskGraphic.fillRect(-maskWidth * 0.5, -maskHeight * 0.5, maskWidth, maskHeight);
+        }
+        if (this.mGridTable) {
+            this.mGridTable.resetSize(width, height);
+        }
+        this.resetMask();
+        return this;
     }
 
     public destroy() {

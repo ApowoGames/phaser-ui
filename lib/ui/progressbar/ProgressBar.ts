@@ -3,7 +3,7 @@
  * @Author: gxm
  * @Date: 2020-03-17 20:59:46
  * @Last Modified by: gxm
- * @Last Modified time: 2020-05-20 18:48:06
+ * @Last Modified time: 2020-09-17 15:57:18
  */
 import { ProgressBarConfig } from "../interface/progressbar/IProgressBarConfig";
 import { NineSlicePatch } from "../ninepatch/NineSlicePatch";
@@ -58,7 +58,10 @@ export class ProgressBar extends BaseUI {
     }
 
     public setProgress(curVal: number, maxVal: number) {
-        this.curWid = (curVal / maxVal) * this.barWid;
+        let value = curVal / maxVal;
+        if (value > 1) value = 1;
+        else if (value < 0) value = 0;
+        this.curWid = (value) * this.barWid;
         const hei: number = this.mBarSkin.height;
         this.mBarSkin.resize(this.curWid, hei);
         this.mBarSkin.x = -this.barWid / 2 + this.curWid / 2;
@@ -92,6 +95,14 @@ export class ProgressBar extends BaseUI {
             this.mText.text = val;
             if (!this.mText.parentContainer) this.add(this.mText);
         }
+    }
+
+    public get text() {
+        return this.mText;
+    }
+
+    public get bar() {
+        return this.mBarSkin;
     }
 
     public destory() {

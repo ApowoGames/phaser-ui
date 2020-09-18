@@ -5,9 +5,10 @@ export interface ScrollerConfig {
     y: number;
     width: number;
     height: number;
+    dpr: number;
     clickX?: number;
     clickY?: number;
-    zoom?: number;
+    zoom: number;
     /**
      * 0 居左 1居中 2居右
      */
@@ -59,4 +60,5 @@ export interface ScrollerConfig {
     overmaxCallBackScope?: Function;
     celldownCallBack?: Function; // 子对象pointerdown 事件 可以把点击的对象抛出
     cellupCallBack?: Function; // 子对象pointerup 事件 可以把点击的对象抛出
+    selfevent?: boolean; // 事件冒泡排序
 }
