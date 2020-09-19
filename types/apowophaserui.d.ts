@@ -13,29 +13,29 @@ declare namespace apowophaserui {
 
         UIType: number;
 
-        updateViewPos: any;
+        updateViewPos(): void;
 
-        tweenExpand: any;
+        tweenExpand(show: boolean): void;
 
-        getView: any;
+        getView(): apowophaserui.Panel;
 
-        hide: any;
+        hide(): void;
 
-        isSceneUI: any;
+        isSceneUI(): boolean;
 
-        isShow: any;
+        isShow(): boolean;
 
-        resize: any;
+        resize(width?: number, height?: number): void;
 
-        show: any;
+        show(param?: any): void;
 
-        update: any;
+        update(param?: any): void;
 
-        setParam: any;
+        setParam(param: any): void;
 
-        getParam: any;
+        getParam(): any;
 
-        destroy: any;
+        destroy(): void;
 
     }
 
@@ -98,6 +98,8 @@ declare namespace apowophaserui {
 
         static AddChildrenMap(key: any, gameObject: any): any;
 
+        childrenMap: any;
+
         destroy(fromScene?: any): void;
 
         setMinSize(minWidth: number, minHeight: number): any;
@@ -138,6 +140,12 @@ declare namespace apowophaserui {
 
         addBackground(gameObject: any, childKey: any): any;
 
+        static GetElement(mapNameList: string[]): any;
+
+        static GetElementByName(children: any, name: string): any;
+
+        static TestName(gameObject: any, name: string): any;
+
     }
 
     function DrawBounds(graphics: Phaser.GameObjects.Graphics, config: any): void;
@@ -163,12 +171,6 @@ declare namespace apowophaserui {
     function GetChildrenSizers(out: any[]): any[];
 
     function GetChildrenWidth(): number;
-
-    function GetElement(mapNameList: string[]): any;
-
-    function GetElementByName(children: any, name: string): any;
-
-    function TestName(gameObject: any, name: string): any;
 
     function IsInTouching(gameObject: any, pointer: Phaser.Input.Pointer): boolean;
 
@@ -200,7 +202,13 @@ declare namespace apowophaserui {
 
     function onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void;
 
-    function BBCodeText(scene: Phaser.Scene, x: number, y: number, text: Phaser.GameObjects.Text, style: any): any;
+    /**
+     * BBCodeText
+     */
+    class BBCodeText extends apowophaserui.Text {
+        constructor(scene: Phaser.Scene, x?: number, y?: number, text?: string, style?: any);
+
+    }
 
     /**
      * Text
@@ -510,7 +518,7 @@ declare namespace apowophaserui {
     /**
      * GameGridTable
      */
-    class GameGridTable extends Phaser.Events.EventEmitter {
+    class GameGridTable extends Phaser.GameObjects.Container {
         constructor(scene: Phaser.Scene, config?: any);
 
         gridTable: any;
@@ -558,6 +566,14 @@ declare namespace apowophaserui {
         destroy(): void;
 
         cellTapHandler(cell: any): void;
+
+    }
+
+    /**
+     * GridTable
+     */
+    class GridTable extends apowophaserui.Scrollable {
+        constructor(scene: Phaser.Scene, config: any);
 
     }
 
@@ -790,7 +806,7 @@ declare namespace apowophaserui {
 
     interface ISoundConfig {
         key?: string;
-        field?: apowophaserui.SoundField;
+        field?: number;
         soundConfig?: Phaser.Types.Sound.SoundConfig;
     }
 
@@ -833,7 +849,7 @@ declare namespace apowophaserui {
      * NinePatch
      */
     class NinePatch extends Phaser.GameObjects.RenderTexture {
-        constructor(scene: Phaser.Scene, x?: number, y?: number, width?: number, height?: number, key?: string, baseFrame?: string, columns?: number, rows?: number, config?: any);
+        constructor(scene: Phaser.Scene, x?: any, y?: number, width?: number, height?: number, key?: string, baseFrame?: string, columns?: number, rows?: number, config?: any);
 
     }
 
@@ -1212,7 +1228,7 @@ declare namespace apowophaserui {
      * NinePatchTabButton
      */
     class NinePatchTabButton extends apowophaserui.TabButton {
-        constructor(scene: Phaser.Scene, buttonConfig: any);
+        constructor(scene: Phaser.Scene, width: number, height: number, key: string, normalFrame: string, downFrame?: string, text?: string, configlist?: any, dpr?: number, scale?: number, data?: any);
 
         protected mKey: string;
 
@@ -1220,7 +1236,11 @@ declare namespace apowophaserui {
 
         protected mBackground: apowophaserui.NineSlicePatch;
 
-        setSize(width: number, height: number): any;
+        changeNormal(): void;
+
+        changeDown(): void;
+
+        setSize(width?: number, height?: number): any;
 
         getBtnData(): any;
 
@@ -1263,6 +1283,8 @@ declare namespace apowophaserui {
      */
     class TextArea extends apowophaserui.Scrollable {
         constructor(scene: Phaser.Scene, config?: any);
+
+        childrenMap: any;
 
         text: any;
 
@@ -1310,6 +1332,14 @@ declare namespace apowophaserui {
 
 declare namespace apowophaserui.text {
     function setStyle(style: any): any;
+
+}
+
+declare namespace apowophaserui.utils {
+    class GetSizerConfig {
+        constructor(gameObject: any);
+
+    }
 
 }
 

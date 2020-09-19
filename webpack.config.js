@@ -43,6 +43,7 @@ module.exports = {
     filename: "apowophaserui.js",
     umdNamedDefine: true
   },
+  devtool: false,
   watch: true,
   module: {
     rules: [
@@ -62,7 +63,7 @@ module.exports = {
     extensions: [".js"],
   },
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [
       new TerserPlugin({
         sourceMap: true,
