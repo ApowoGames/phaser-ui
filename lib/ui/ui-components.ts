@@ -48,7 +48,11 @@ import GameSlider from "../ui/slider/GameSlider";
 import BaseMediator from "../ui/baseUI/BaseMediator";
 import CheckBox from "../ui/checkbox/CheckBox";
 import { Tool } from "../ui/tool/Tool";
+import { Patches_config } from "../ui/interface/baseUI/Patches.config";
+import ClickEvent from "../ui/interface/event/ClickEvent";
 export = {
+  ClickEvent,
+  Patches_config,
   Tool,
   UIType,
   BaseMediator,
@@ -101,5 +105,5 @@ export = {
   Edit,
   WaitEvent,
   WaitComplete,
-  TextBox,
+  TextBox
 }

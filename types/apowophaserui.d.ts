@@ -725,6 +725,16 @@ declare namespace apowophaserui {
         bottom?: number;
     }
 
+    /**
+     * Patches_config
+     */
+    class Patches_config {
+        static normalizePatchesConfig(config: any): any;
+
+        static resetPatchesConfig(config: any): any;
+
+    }
+
     enum UIType {
         None,
         Scene,
