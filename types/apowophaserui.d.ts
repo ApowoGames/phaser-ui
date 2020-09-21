@@ -1294,15 +1294,13 @@ declare namespace apowophaserui {
     class TextArea extends apowophaserui.Scrollable {
         constructor(scene: Phaser.Scene, config?: any);
 
-        childrenMap: any;
+        appendText(text: string): any;
+
+        setText(text: string): any;
 
         text: any;
 
         linesCount: any;
-
-        setText(text: string): any;
-
-        appendText(text: string): any;
 
     }
 

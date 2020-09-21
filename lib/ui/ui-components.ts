@@ -51,6 +51,8 @@ import { Tool } from "../ui/tool/Tool";
 import { Patches_config } from "../ui/interface/baseUI/Patches.config";
 import ClickEvent from "../ui/interface/event/ClickEvent";
 export = {
+  AppendText,
+  SetText,
   ClickEvent,
   Patches_config,
   Tool,
@@ -80,8 +82,6 @@ export = {
   BaseScroller,
   NinePatchTabButton,
   TabButton,
-  AppendText,
-  SetText,
   Label,
   Buttons,
   Slider,
