@@ -683,12 +683,6 @@ declare namespace apowophaserui {
 
     }
 
-    const ElementProperties: any;
-
-    const StyleProperties: any;
-
-    const ElementEvents: any;
-
     interface IAbstractInteractiveObject {
         selected?: boolean;
         enabled?: boolean;
@@ -808,28 +802,28 @@ declare namespace apowophaserui {
         right,
     }
 
+    interface ISoundConfig {
+        key: string;
+        field: number;
+        soundConfig: Phaser.Types.Sound.SoundConfig;
+    }
+
+    interface ISoundGroup {
+        open: apowophaserui.ISoundConfig;
+        close: apowophaserui.ISoundConfig;
+        click: apowophaserui.ISoundConfig;
+        down: apowophaserui.ISoundConfig;
+        up: apowophaserui.ISoundConfig;
+        move: apowophaserui.ISoundConfig;
+        disabled: apowophaserui.ISoundConfig;
+        progress: apowophaserui.ISoundConfig;
+        expand: apowophaserui.ISoundConfig;
+    }
+
     enum SoundField {
         Background,
         Element,
         Effect,
-    }
-
-    interface ISoundConfig {
-        key?: string;
-        field?: number;
-        soundConfig?: Phaser.Types.Sound.SoundConfig;
-    }
-
-    interface ISoundGroup {
-        open?: apowophaserui.ISoundConfig;
-        close?: apowophaserui.ISoundConfig;
-        click?: apowophaserui.ISoundConfig;
-        down?: apowophaserui.ISoundConfig;
-        up?: apowophaserui.ISoundConfig;
-        move?: apowophaserui.ISoundConfig;
-        disabled?: apowophaserui.ISoundConfig;
-        progress?: apowophaserui.ISoundConfig;
-        expand?: apowophaserui.ISoundConfig;
     }
 
     class MessageBox extends apowophaserui.Panel {

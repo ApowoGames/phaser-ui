@@ -50,7 +50,11 @@ import CheckBox from "../ui/checkbox/CheckBox";
 import { Tool } from "../ui/tool/Tool";
 import { Patches_config } from "../ui/interface/baseUI/Patches.config";
 import ClickEvent from "../ui/interface/event/ClickEvent";
+import { ISoundConfig } from "../ui/interface/sound/ISoundConfig";
+import SoundField from "../ui/interface/sound/SoundField";
 export = {
+  SoundField,
+  ISoundConfig,
   AppendText,
   SetText,
   ClickEvent,
