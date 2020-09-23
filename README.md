@@ -12,7 +12,7 @@
 
 ### 安装
 
-1. yarn add a
+1. yarn add apowophaserui
 
 ### 使用
 
