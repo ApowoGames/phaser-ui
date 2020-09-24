@@ -16,7 +16,7 @@ import TextBlock from "./textblock/TextBlock.js";
 import TextArea from "./textarea/TextArea.js";
 import ScrollableBlock from "./scrollableblock/ScrollableBlock.js";
 import ScrollablePanel from "./scrollablepanel/ScrollablePanel.js";
-import InputText from "../ui/inputText/InputText.js";
+import InputText from "../plugins/gameobjects/inputtext/InputText";
 import Tap from "./tap/Tap.js";
 import Press from "./press/Press.js";
 import Rotate from "./rotate/Rotate.js";

@@ -637,52 +637,6 @@ declare namespace apowophaserui {
         backDeceleration?: number;
     }
 
-    /**
-     * InputText
-     */
-    class InputText extends Phaser.GameObjects.DOMElement {
-        constructor(scene: Phaser.Scene, x: any, y?: number, width?: number, height?: number, config?: any);
-
-        resize(width: number, height: number): apowophaserui.InputText;
-
-        text: any;
-
-        setText(value: string): any;
-
-        selectText(): apowophaserui.InputText;
-
-        placeholder: any;
-
-        setPlaceholder(value: any): apowophaserui.InputText;
-
-        tooltip: any;
-
-        setTooltip(value: any): apowophaserui.InputText;
-
-        setTextChangedCallback(callback: Function): apowophaserui.InputText;
-
-        readOnly: any;
-
-        setReadOnly(value: boolean): apowophaserui.InputText;
-
-        spellCheck: any;
-
-        setSpellCheck(value: any): apowophaserui.InputText;
-
-        setStyle(key?: any, value?: any): apowophaserui.InputText;
-
-        getStyle(key: string): any;
-
-        scrollToBottom(): apowophaserui.InputText;
-
-        setEnabled(enabled: boolean): apowophaserui.InputText;
-
-        setBlur(): apowophaserui.InputText;
-
-        setFocus(): apowophaserui.InputText;
-
-    }
-
     interface IAbstractInteractiveObject {
         selected?: boolean;
         enabled?: boolean;
@@ -1327,6 +1281,52 @@ declare namespace apowophaserui {
         setSliderEnable(enabled: boolean): any;
 
         setScrollerEnable(enabled: boolean): any;
+
+    }
+
+    /**
+     * InputText
+     */
+    class InputText extends Phaser.GameObjects.DOMElement {
+        constructor(scene: Phaser.Scene, x: any, y?: number, width?: number, height?: number, config?: any);
+
+        text: any;
+
+        setText(value: string): any;
+
+        selectText(): apowophaserui.InputText;
+
+        placeholder: any;
+
+        setPlaceholder(value: any): apowophaserui.InputText;
+
+        tooltip: any;
+
+        setTooltip(value: any): apowophaserui.InputText;
+
+        setTextChangedCallback(callback: Function): apowophaserui.InputText;
+
+        readOnly: any;
+
+        setReadOnly(value: boolean): apowophaserui.InputText;
+
+        spellCheck: any;
+
+        setSpellCheck(value: any): apowophaserui.InputText;
+
+        setStyle(key?: any, value?: any): apowophaserui.InputText;
+
+        getStyle(key: string): any;
+
+        scrollToBottom(): apowophaserui.InputText;
+
+        setEnabled(enabled: boolean): apowophaserui.InputText;
+
+        setBlur(): apowophaserui.InputText;
+
+        setFocus(): apowophaserui.InputText;
+
+        resize(width: number, height: number): any;
 
     }
 

@@ -4,7 +4,8 @@
     },
     "source": {
         "include": [
-            "../../lib/ui/"
+            "../../lib/ui/",
+            "../../lib/plugins/gameobjects/inputtext/"
         ],
         "exclude": [
         ],
