@@ -12,7 +12,7 @@
 
 ### 安装
 
-1. yarn add phaser-ui
+1. yarn add apowophaserui
 
 ### 使用
 
