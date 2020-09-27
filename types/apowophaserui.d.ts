@@ -708,17 +708,28 @@ declare namespace apowophaserui {
         itemMusic?: any;
     }
 
-    enum ClickEvent {
-        Click,
-        Up,
-        Down,
-        Hold,
-        Tap,
-        Move,
-        Over,
-        Out,
-        DragStart,
-        DragStop,
+    /**
+     * ClickEvent
+     */
+    class ClickEvent {
+        static Click: string;
+
+        static Tap: string;
+
+        static Down: string;
+
+        static Over: string;
+
+        static Out: string;
+
+        static Hold: string;
+
+        static Move: string;
+
+        static DragStart: string;
+
+        static DragStop: string;
+
     }
 
     enum InputTextEvent {
