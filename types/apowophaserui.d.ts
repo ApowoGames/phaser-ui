@@ -716,6 +716,8 @@ declare namespace apowophaserui {
 
         static Tap: string;
 
+        static Up: string;
+
         static Down: string;
 
         static Over: string;
@@ -729,6 +731,8 @@ declare namespace apowophaserui {
         static DragStart: string;
 
         static DragStop: string;
+
+        static Selected: string;
 
     }
 
