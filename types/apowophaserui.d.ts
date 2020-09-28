@@ -57,6 +57,8 @@ declare namespace apowophaserui {
 
         soundMap: Map<string, Phaser.Sound.BaseSound>;
 
+        protected mTween: Phaser.Tweens.Tween;
+
         setFollow(gameObject: any, froscene: Phaser.Scene, posFunc: Function): void;
 
         updatePos(): void;
@@ -332,7 +334,7 @@ declare namespace apowophaserui {
      * Button
      */
     class Button extends apowophaserui.BaseUI {
-        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: any, dpr?: number, scale?: number, nineConfig?: any);
+        constructor(scene: Phaser.Scene, key: string, frame?: string, downFrame?: string, text?: string, music?: any, dpr?: number, scale?: number, nineConfig?: any, tweenBoo?: boolean);
 
         protected mDownTime: number;
 
@@ -358,6 +360,8 @@ declare namespace apowophaserui {
         protected mText: Phaser.GameObjects.Text;
 
         protected mBackground: Phaser.GameObjects.Image | apowophaserui.NineSlicePatch;
+
+        protected tweenScale: number;
 
         background: Phaser.GameObjects.Image;
 
@@ -402,6 +406,10 @@ declare namespace apowophaserui {
         protected onPointerDownHandler(pointer?: Phaser.Input.Pointer): void;
 
         protected onPointerDcheckPointerInBoundsownHandler(gameObject: any, pointerx: number, pointery: number): boolean;
+
+        protected tween(show: boolean): void;
+
+        protected tweenComplete(show: boolean): void;
 
     }
 
@@ -871,7 +879,9 @@ declare namespace apowophaserui {
     class Panel extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, world: any, music?: any);
 
-        protected mPanelTween: Phaser.Tweens.Tween;
+        protected mTweening: boolean;
+
+        protected mTweenBoo: boolean;
 
         protected mResources: Map<string, any>;
 
@@ -885,11 +895,7 @@ declare namespace apowophaserui {
 
         protected mPreLoad: boolean;
 
-        protected mTweening: boolean;
-
         protected mReloadTimes: number;
-
-        protected mTweenBoo: boolean;
 
         protected mMute: boolean;
 
