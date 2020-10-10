@@ -575,6 +575,8 @@ declare namespace apowophaserui {
 
         cellTapHandler(cell: any): void;
 
+        cellStartHandler(cell: any): void;
+
     }
 
     /**
