@@ -1,98 +1,5 @@
 declare namespace apowophaserui {
     /**
-     * BaseMediator
-     */
-    class BaseMediator {
-        protected mView: apowophaserui.Panel;
-
-        mParam: any;
-
-        protected mShow: boolean;
-
-        protected mUIType: number;
-
-        UIType: number;
-
-        updateViewPos(): void;
-
-        tweenExpand(show: boolean): void;
-
-        getView(): apowophaserui.Panel;
-
-        hide(): void;
-
-        isSceneUI(): boolean;
-
-        isShow(): boolean;
-
-        resize(width?: number, height?: number): void;
-
-        show(param?: any): void;
-
-        update(param?: any): void;
-
-        setParam(param: any): void;
-
-        getParam(): any;
-
-        destroy(): void;
-
-    }
-
-    /**
-     * BaseUI
-     */
-    class BaseUI extends Phaser.GameObjects.Container {
-        constructor(scene: Phaser.Scene, dpr?: number, scale?: number);
-
-        protected silent: boolean;
-
-        protected mInitialized: boolean;
-
-        protected interactiveBoo: boolean;
-
-        protected mShow: boolean;
-
-        protected dpr: number;
-
-        soundMap: Map<string, Phaser.Sound.BaseSound>;
-
-        protected mTween: Phaser.Tweens.Tween;
-
-        setFollow(gameObject: any, froscene: Phaser.Scene, posFunc: Function): void;
-
-        updatePos(): void;
-
-        setInteractive(shape?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): any;
-
-        disInteractive(): void;
-
-        addListen(): void;
-
-        removeListen(): void;
-
-        playSound(config: any): void;
-
-        /**
-         * {key:string,field:apowophaserui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
-         */
-        startPlay(config: any): void;
-
-        stopSound(): void;
-
-        pauseSound(): void;
-
-        resumeSound(): void;
-
-        setSilent(boo: boolean): void;
-
-        destroy(): void;
-
-        checkPointerDelection(pointer: Phaser.Input.Pointer): void;
-
-    }
-
-    /**
      * Base
      */
     class Base extends apowophaserui.Container {
@@ -205,10 +112,110 @@ declare namespace apowophaserui {
     function onDrag(pointer: Phaser.Input.Pointer, dragX: number, dragY: number): void;
 
     /**
+     * BaseMediator
+     */
+    class BaseMediator {
+        protected mView: apowophaserui.Panel;
+
+        mParam: any;
+
+        protected mShow: boolean;
+
+        protected mUIType: number;
+
+        UIType: number;
+
+        updateViewPos(): void;
+
+        tweenExpand(show: boolean): void;
+
+        getView(): apowophaserui.Panel;
+
+        hide(): void;
+
+        isSceneUI(): boolean;
+
+        isShow(): boolean;
+
+        resize(width?: number, height?: number): void;
+
+        show(param?: any): void;
+
+        update(param?: any): void;
+
+        setParam(param: any): void;
+
+        getParam(): any;
+
+        destroy(): void;
+
+    }
+
+    /**
+     * BaseUI
+     */
+    class BaseUI extends Phaser.GameObjects.Container {
+        constructor(scene: Phaser.Scene, dpr?: number, scale?: number);
+
+        protected silent: boolean;
+
+        protected mInitialized: boolean;
+
+        protected interactiveBoo: boolean;
+
+        protected mShow: boolean;
+
+        protected dpr: number;
+
+        soundMap: Map<string, Phaser.Sound.BaseSound>;
+
+        protected mTween: Phaser.Tweens.Tween;
+
+        setFollow(gameObject: any, froscene: Phaser.Scene, posFunc: Function): void;
+
+        updatePos(): void;
+
+        setInteractive(shape?: Phaser.Types.Input.InputConfiguration | any, callback?: Phaser.Types.Input.HitAreaCallback, dropZone?: boolean): any;
+
+        disInteractive(): void;
+
+        addListen(): void;
+
+        removeListen(): void;
+
+        playSound(config: any): void;
+
+        /**
+         * {key:string,field:apowophaserui.Interface.Sound.SoundField,soundConfig:Phaser.Types.sound.soundConfig}
+         */
+        startPlay(config: any): void;
+
+        stopSound(): void;
+
+        pauseSound(): void;
+
+        resumeSound(): void;
+
+        setSilent(boo: boolean): void;
+
+        destroy(): void;
+
+        checkPointerDelection(pointer: Phaser.Input.Pointer): void;
+
+    }
+
+    /**
      * BBCodeText
      */
     class BBCodeText extends apowophaserui.Text {
         constructor(scene: Phaser.Scene, x?: number, y?: number, text?: string, style?: any);
+
+    }
+
+    class parser {
+        splitText(text: string, mode: any): any[];
+
+        tagTextToProp(text: string, prevProp: any): any;
 
     }
 
@@ -295,13 +302,6 @@ declare namespace apowophaserui {
         setDisplayOrigin(x: number, y: number): any;
 
         updateDisplayOrigin(): any;
-
-    }
-
-    class parser {
-        splitText(text: string, mode: any): any[];
-
-        tagTextToProp(text: string, prevProp: any): any;
 
     }
 
@@ -574,6 +574,8 @@ declare namespace apowophaserui {
         destroy(): void;
 
         cellTapHandler(cell: any): void;
+
+        cellStartHandler(cell: any): void;
 
     }
 
@@ -1250,14 +1252,6 @@ declare namespace apowophaserui {
     }
 
     /**
-     * TextBox
-     */
-    class TextBox extends Phaser.Events.EventEmitter {
-        constructor(scene: Phaser.Scene, config?: any);
-
-    }
-
-    /**
      * TextArea
      */
     class TextArea extends apowophaserui.Scrollable {
@@ -1270,6 +1264,14 @@ declare namespace apowophaserui {
         text: any;
 
         linesCount: any;
+
+    }
+
+    /**
+     * TextBox
+     */
+    class TextBox extends Phaser.Events.EventEmitter {
+        constructor(scene: Phaser.Scene, config?: any);
 
     }
 
