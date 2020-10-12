@@ -373,6 +373,8 @@ declare namespace apowophaserui {
 
         enable: boolean;
 
+        tweenEnable: boolean;
+
         mute(boo: boolean): void;
 
         changeNormal(): void;
@@ -402,6 +404,8 @@ declare namespace apowophaserui {
         protected onPointerMoveHandler(pointer?: Phaser.Input.Pointer): void;
 
         protected onPointerUpHandler(pointer?: Phaser.Input.Pointer): void;
+
+        protected onPointerOutHandler(pointer: Phaser.Input.Pointer): void;
 
         protected onPointerDownHandler(pointer?: Phaser.Input.Pointer): void;
 
