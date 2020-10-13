@@ -361,7 +361,7 @@ declare namespace apowophaserui {
 
         protected mBackground: Phaser.GameObjects.Image | apowophaserui.NineSlicePatch;
 
-        protected tweenScale: number;
+        tweenScale: number;
 
         background: Phaser.GameObjects.Image;
 
