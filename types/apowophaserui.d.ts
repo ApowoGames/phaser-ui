@@ -1251,7 +1251,7 @@ declare namespace apowophaserui {
 
         onPointerUpHandler(pointer: Phaser.Input.Pointer): void;
 
-        onPointerDownHandler(pointer?: Phaser.Input.Pointer): void;
+        protected onPointerOutHandler(pointer: Phaser.Input.Pointer): void;
 
     }
 
