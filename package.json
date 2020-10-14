@@ -1,6 +1,6 @@
 {
   "name": "apowophaserui",
-  "version": "0.7.6",
+  "version": "0.7.8",
   "description": "apowophaserui Plugins",
   "author": "Gxm",
   "main": "./dist/apowophaserui.js",
