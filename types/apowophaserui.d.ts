@@ -579,12 +579,10 @@ declare namespace apowophaserui {
 
         cellTapHandler(cell: any): void;
 
-        cellStartHandler(cell: any): void;
-
     }
 
     /**
-     * GridTable
+     * config.table.interacitve boolean||object{cellclick,celltap,cellover,cellpress,cellswipe}
      */
     class GridTable extends apowophaserui.Scrollable {
         constructor(scene: Phaser.Scene, config: any);
