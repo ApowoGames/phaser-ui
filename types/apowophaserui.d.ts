@@ -1020,13 +1020,6 @@ declare namespace apowophaserui {
     class GameScroller extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
 
-        /**
-         * 是否在移动中
-         */
-        mMoveing: any;
-
-        soundMap: any;
-
         view: Phaser.GameObjects.Container;
 
         setEnable(enable: boolean): void;
