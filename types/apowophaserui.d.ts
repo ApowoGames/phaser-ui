@@ -1,4 +1,9 @@
 declare namespace apowophaserui {
+    class BaseImage extends Phaser.GameObjects.Image {
+        constructor(scene: Phaser.Scene, x: number, y: number, texture?: string, frame?: string);
+
+    }
+
     /**
      * BaseMediator
      */
@@ -579,12 +584,16 @@ declare namespace apowophaserui {
 
         cellTapHandler(cell: any): void;
 
-        cellStartHandler(cell: any): void;
+        cellOutHandler(table: any, index: number): void;
+
+        cellOverHandler(table: any, index: number): void;
+
+        cellDownHandler(table: any, index: number): void;
 
     }
 
     /**
-     * GridTable
+     * config.table.interacitve boolean||object{cellclick,celltap,cellover,cellpress,cellswipe}
      */
     class GridTable extends apowophaserui.Scrollable {
         constructor(scene: Phaser.Scene, config: any);
@@ -1015,13 +1024,6 @@ declare namespace apowophaserui {
      */
     class GameScroller extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any, gameObject?: Phaser.GameObjects.Container);
-
-        /**
-         * 是否在移动中
-         */
-        mMoveing: any;
-
-        soundMap: any;
 
         view: Phaser.GameObjects.Container;
 

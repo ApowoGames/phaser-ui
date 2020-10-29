@@ -52,7 +52,9 @@ import { Patches_config } from "../ui/interface/baseUI/Patches.config";
 import ClickEvent from "../ui/interface/event/ClickEvent";
 import { ISoundConfig } from "../ui/interface/sound/ISoundConfig";
 import SoundField from "../ui/interface/sound/SoundField";
+import BaseImage from "../ui/baseUI/BaseImage";
 export = {
+  BaseImage,
   SoundField,
   ISoundConfig,
   AppendText,
