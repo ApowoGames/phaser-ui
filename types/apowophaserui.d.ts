@@ -558,7 +558,7 @@ declare namespace apowophaserui {
 
         setItems(items: any): void;
 
-        setpartItems(items: any): void;
+        setPartItems(items: any): void;
 
         setColumnCount(cnt: number): void;
 
