@@ -386,6 +386,8 @@ declare namespace apowophaserui {
 
         changeDown(): void;
 
+        setInteractiveSize(width: number, height: number): void;
+
         setFrame(frame: string | number): void;
 
         setText(val: string): void;
@@ -398,7 +400,7 @@ declare namespace apowophaserui {
 
         setTextColor(color: string): void;
 
-        setFrameNormal(color: string, down?: string, over?: string): void;
+        setFrameNormal(normal: string, down?: string, over?: string): void;
 
         protected createBackground(): void;
 
