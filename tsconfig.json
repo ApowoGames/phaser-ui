@@ -22,6 +22,6 @@
     "node_modules","dist"
   ],
   "files": [
-    "node_modules/phaser/types/phaser.d.ts"
+    "node_modules/@PixelPai/tooqingphaser/types/tooqingphaser.d.ts"
   ]
 }

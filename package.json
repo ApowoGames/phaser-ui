@@ -1,8 +1,7 @@
 {
   "name": "apowophaserui",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "apowophaserui Plugins",
-
   "author": "Gxm",
   "main": "./dist/apowophaserui.js",
   "types": "./types/apowophaserui.d.ts",
@@ -13,12 +12,12 @@
     "tsgen": "rimraf types && cd scripts/tsgen && jsdoc -c jsdoc-tsd.conf.json"
   },
   "keywords": [
-
     "phaser3",
     "rexui"
   ],
   "license": "MIT",
   "devDependencies": {
+    "@PixelPai/tooqingphaser": "git+ssh://git@code.apowo.com:opensource/phaser.git",
     "@babel/core": "^7.9.0",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.5",
@@ -48,7 +47,6 @@
     "lokijs": "^1.5.8",
     "node-gyp": "^6.1.0",
     "papaparse": "^4.6.3",
-    "phaser": "^3.24.1",
     "webfontloader": "^1.6.28"
   },
   "directories": {
@@ -56,8 +54,6 @@
   },
   "repository": {
     "type": "git",
-    
-
     "url": "git+https://github.com/ApowoGames/phaser-ui.git"
   },
   "bugs": {
