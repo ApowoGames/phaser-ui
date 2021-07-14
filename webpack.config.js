@@ -41,6 +41,7 @@ module.exports = {
     library: "apowophaserui",
     libraryTarget: "umd",
     filename: "apowophaserui.js",
+    globalObject: "this",
     umdNamedDefine: true
   },
   devtool: false,
