@@ -64,10 +64,11 @@ module.exports = {
     extensions: [".js"],
   },
   optimization: {
-    minimize: false,
+    minimize: true,
     minimizer: [
       new TerserPlugin({
-        sourceMap: true,
+        sourceMap: false,
+        extractComments: false,
         terserOptions: {
           parrallel: 4,
           ecma: undefined,
