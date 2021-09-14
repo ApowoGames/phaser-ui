@@ -470,9 +470,11 @@ declare namespace apowophaserui {
 
         protected soundGroup: any;
 
-        protected text: Phaser.GameObjects.Text;
+        protected mText: Phaser.GameObjects.Text;
 
         protected mSelectBG: Phaser.GameObjects.Graphics;
+
+        text: Phaser.GameObjects.Text;
 
         addListen(): void;
 
