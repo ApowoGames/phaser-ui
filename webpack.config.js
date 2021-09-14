@@ -68,7 +68,6 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         sourceMap: false,
-        extractComments: false,
         terserOptions: {
           parrallel: 4,
           ecma: undefined,
