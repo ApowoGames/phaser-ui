@@ -518,7 +518,7 @@ declare namespace apowophaserui {
 
         text: string[];
 
-        setText(): string[];
+        setText(value: string[]): void;
 
         destroy(): void;
 
