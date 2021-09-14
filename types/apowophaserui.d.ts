@@ -466,6 +466,8 @@ declare namespace apowophaserui {
          */
         constructor(scene: Phaser.Scene, selectCallUI: any, wid: number, hei: number, music: any);
 
+        protected mSelect: boolean;
+
         protected mSelectCallUI: any;
 
         protected soundGroup: any;
@@ -502,7 +504,11 @@ declare namespace apowophaserui {
     class ComboBox extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config: any);
 
+        mIsopen: boolean;
+
         itemList: any[];
+
+        mConfig: any;
 
         selectCall(itemData: any): void;
 
@@ -511,6 +517,8 @@ declare namespace apowophaserui {
         removeListen(): void;
 
         text: string[];
+
+        setText(): string[];
 
         destroy(): void;
 
