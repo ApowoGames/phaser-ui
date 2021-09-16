@@ -443,6 +443,14 @@ declare namespace apowophaserui {
     }
 
     /**
+     * Buttons
+     */
+    class Buttons extends Sizer {
+        constructor(scene: Phaser.Scene, config: any);
+
+    }
+
+    /**
      * CheckBox
      */
     class CheckBox extends apowophaserui.Button {
