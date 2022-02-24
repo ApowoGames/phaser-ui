@@ -323,6 +323,9 @@ declare namespace apowophaserui {
         configlist?: any;
     }
 
+    namespace ClickInterval {
+    }
+
     interface ButtonConfig {
         key?: string;
         normalFrame?: string;
@@ -976,9 +979,17 @@ declare namespace apowophaserui {
 
         protected init(): void;
 
-        protected addAtlas(key: string, texture: string, data: any): void;
+        /**
+         * 
+         * @param isStatic  Default false.
+         */
+        protected addAtlas(key: string, texture: string, data: any, isStatic?: boolean): void;
 
-        protected addImage(key: string, value: any): void;
+        /**
+         * 
+         * @param isStatic  Default false.
+         */
+        protected addImage(key: string, value: any, isStatic?: boolean): void;
 
         protected preload(): void;
 
