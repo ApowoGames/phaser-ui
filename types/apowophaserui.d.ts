@@ -1025,6 +1025,18 @@ declare namespace apowophaserui {
     class ProgressBar extends apowophaserui.BaseUI {
         constructor(scene: Phaser.Scene, config?: any);
 
+        protected mConfig: any;
+
+        protected mBgSkin: any;
+
+        protected mBarSkin: any;
+
+        protected mText: any;
+
+        protected barWid: any;
+
+        protected mBarMaskGraphics: any;
+
         setProgress(curVal: number, maxVal: number): void;
 
         setText(val: string): void;
@@ -1254,7 +1266,7 @@ declare namespace apowophaserui {
 
         protected btnData: any;
 
-        protected mBackground: apowophaserui.NineSlicePatch;
+        protected mBackground: any;
 
         changeNormal(): void;
 
