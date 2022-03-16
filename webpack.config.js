@@ -64,7 +64,7 @@ module.exports = {
     extensions: [".js"],
   },
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [
       new TerserPlugin({
         sourceMap: false,
